@@ -1,0 +1,139 @@
+/*
+- colors
+	- white: #F9FFF2
+	- light green: #B5E655
+	- green: #96CA2D
+	- blue: #4BB5C1
+	- dark: #00191C
+
+- order (experimental):
+	1. Positioning
+	2. Display & Box Model
+	3. Color
+	4. Text
+	5. Interaction
+	6. Other
+*/
+
+body {
+	background-color: #fefefe;
+	color: #00191C;
+	font-family: "Quattrocento Sans";
+	font-size: 62.5%;
+}
+
+header {
+	margin: 0 auto;
+	width: 450px;
+}
+
+header h1 {
+	margin: 1em 0 0 0;
+	text-align: center;
+}
+
+header h3 {
+	margin: 0.5em 0 1em 0;
+	text-align: right;
+}
+
+h2, h3 { margin: 0.3em 0 0.2em 0; }
+
+h1 { font-size: 4.5em; }
+
+h2 { font-size: 3em; }
+
+h3 { font-size: 1.8em; }
+
+.search, .course-results {
+	margin: 0 auto;
+	width: 450px;
+}
+
+.search input {
+	margin: 1em 0;
+	width: 100%;
+	height: 1.8em;
+	padding: 0.5em;
+    color: #00191C;
+	font-size: 2em;	
+	-webkit-border-radius: 10px;
+    border-radius: 10px;
+    outline: 0;
+}
+
+.course {
+	margin: 0.5em 0;
+	height: 8em;
+	-webkit-border-radius: 4px;
+    border-radius: 4px;
+    background-color: #e7e7e7;
+    background-image: -webkit-linear-gradient(top, #fff, #e7e7e7);
+    background-image: -o-linear-gradient(top, #fff, #e7e7e7);
+    background-image: linear-gradient(top, #fff, #e7e7e7)
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e7e7e7', GradientType=0);
+    cursor: pointer;
+}
+
+.course .title { margin: 0 2em 0 10em; }
+
+.icon-wrapper {
+	height: 100%;
+	width: 8em;
+	float: left;
+	-webkit-border-radius: 2px 0 0 2px;
+    border-radius: 2px 0 0 2px;
+    -webkit-box-shadow: inset -1px -1px 0 rgba(255,255,255,0.3),inset 1px 1px 0 rgba(255,255,255,0.3);
+    box-shadow: inset -1px -1px 0 rgba(255,255,255,0.3),inset 1px 1px 0 rgba(255,255,255,0.3);
+}
+
+.icon {
+	margin: 1em;
+	height: 6em;
+	width: 6em;
+	float: left;
+	background-repeat: no-repeat;
+	background-size: 6em 6em;
+}
+
+.search input, .course {
+	border: 1px solid #adadad;
+	-webkit-box-shadow:  0 1px 1px rgba(0,0,0,0.2),inset -1px -1px 0 #fff;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.2),inset -1px -1px 0 #fff;
+}
+
+#CS135 .icon-wrapper, #MATH135 .icon-wrapper {
+	background: #ff7fd0; /* Old browsers */
+	background: -moz-linear-gradient(top,  #ff7fd0 0%, #ff66c6 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff7fd0), color-stop(100%,#ff66c6)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #ff7fd0 0%,#ff66c6 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #ff7fd0 0%,#ff66c6 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ff7fd0 0%,#ff66c6 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #ff7fd0 0%,#ff66c6 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff7fd0', endColorstr='#ff66c6',GradientType=0 ); /* IE6-9 */
+}
+
+#ECON101 .icon-wrapper {
+	background: #ffc57f; /* Old browsers */
+	background: -moz-linear-gradient(top,  #ffc57f 0%, #ffb766 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffc57f), color-stop(100%,#ffb766)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #ffc57f 0%,#ffb766 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #ffc57f 0%,#ffb766 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ffc57f 0%,#ffb766 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #ffc57f 0%,#ffb766 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffc57f', endColorstr='#ffb766',GradientType=0 ); /* IE6-9 */
+}
+
+#CS135 .icon, #MATH135 .icon { background-image: url("../img/course-icons/CS.svg"); }
+
+#ECON101 .icon { background-image: url("../img/course-icons/ECON.svg"); }
+
+@media only screen and (max-width : 475px) {
+	header, .search, .course-results { width: 400px; }
+	h2 { font-size: 2.5em; }
+	h3 { font-size: 1.5em; }
+}
+
+@media only screen and (max-width : 425px) {
+	header, .search, .course-results { width: 350px; }
+}
