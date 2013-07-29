@@ -96,6 +96,7 @@ a {
 
 .subject .header {
 	height: 8em;
+	cursor: pointer;
 }
 
 .course .header {
@@ -173,7 +174,7 @@ a {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4e5ff', endColorstr='#e9ccff',GradientType=0 ); /* IE6-9 */
 }
 
-#CHEM {
+#CHEM, #PHYS121.opened .header {
 	background: #e5f3ff; /* Old browsers */
 	background: -moz-linear-gradient(top,  #e5f3ff 0%, #cce8ff 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e5f3ff), color-stop(100%,#cce8ff)); /* Chrome,Safari4+ */
@@ -184,7 +185,7 @@ a {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5f3ff', endColorstr='#cce8ff',GradientType=0 ); /* IE6-9 */
 }
 
-#CHINA {
+#CHINA, #ECON101.opened .header {
 	background: #fff3e5; /* Old browsers */
 	background: -moz-linear-gradient(top,  #fff3e5 0%, #ffe8cc 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff3e5), color-stop(100%,#ffe8cc)); /* Chrome,Safari4+ */
@@ -329,7 +330,18 @@ a {
 	border: 1px solid #adadad;
 	-webkit-border-radius: 0;
     border-radius: 0;
+    cursor: default;
+}
 
+#CS135.opened .header, #MATH135.opened .header {
+	background: #fff3e5; /* Old browsers */
+	background: -moz-linear-gradient(top,  #fff3e5 0%, #ffccec 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff3e5), color-stop(100%,#ffccec)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #fff3e5 0%,#ffccec 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #fff3e5 0%,#ffccec 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #fff3e5 0%,#ffccec 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #fff3e5 0%,#ffccec 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff3e5', endColorstr='#ffccec',GradientType=0 ); /* IE6-9 */
 }
 
 /*CSS wrapper effect*/
