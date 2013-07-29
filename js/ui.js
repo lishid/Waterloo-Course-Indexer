@@ -6,7 +6,7 @@ var courses = {
         code: 'CS 135',
         title: 'Designing Functional Programs',
         description: 'An introduction to the fundamentals of computer science through the application of elementary programming patterns in the functional style of programming. Syntax and semantics of a functional programming language. Tracing via substitution. Design, testing, and documentation. Linear and nonlinear data structures. Recursive data definitions. Abstraction and encapsulation. Generative and structural recursion. Historical context.',
-        offered: { fall: true, winter: true, spring: false },
+        offered: [ 'F', 'W' ],
         offered_online: false,
         only_offered_online: false,
         restrictions: {
@@ -20,7 +20,7 @@ var courses = {
         code: 'ECON 101',
         title: 'Introduction to Microeconomics',
         description: 'This course provides an introduction to microeconomic analysis relevant for understanding the Canadian economy. The behaviour of individual consumers and producers, the determination of market prices for commodities and resources, and the role of government policy in the functioning of the market system are the main topics covered.',
-        offered: { fall: true, winter: true, spring: true },
+        offered: [ 'F', 'W', 'S' ],
         offered_online: true,
         only_offered_online: false,
         restrictions: {
@@ -34,7 +34,7 @@ var courses = {
         code: 'MATH 135',
         title: 'Algebra for Honours Mathematics',
         description: 'A study of the basic algebraic systems of mathematics: the integers, the integers modulo n, the rational numbers, the real numbers, the complex numbers and polynomials.',
-        offered: { fall: true, winter: true, spring: true },
+        offered: [ 'F', 'W', 'S' ],
         offered_online: true,
         only_offered_online: false,
         restrictions: {
@@ -48,7 +48,7 @@ var courses = {
         code: 'PHYS 121',
         title: 'Mechanics',
         description: 'An introductory course in physics for students intending to concentrate their future studies in the physical sciences, optometry or mathematics; includes particle kinematics and dynamics, forces in nature, work and energy, conservation of energy and linear momentum, rotational kinematics and dynamics, and conservation of angular momentum.',
-        offered: { fall: true, winter: true, spring: true },
+        offered: [ 'F', 'W', 'S' ],
         offered_online: true,
         only_offered_online: false,
         restrictions: {
@@ -64,7 +64,7 @@ var courses = {
         code: 'PD 2',
         title: 'Critical Reflection and Report Writing',
         description: 'This course will develop students\' analytical, critical thinking, and report writing skills by focusing on critical reflection and thinking, analysis, and best practices in report writing. This course will lead students through the creation of a report to the co-op guidelines for work-term reports.',
-        offered: { fall: true, winter: true, spring: true },
+        offered: [ 'F', 'W', 'S' ],
         offered_online: true,
         only_offered_online: true,
         restrictions: {
@@ -81,11 +81,11 @@ function loadCourses () {
     for (var courseCode in courses) {
         var course = courses[courseCode];
         var HTML = '';
-        HTML += '<a href="#' + courseCode + '"><div class="course" id="' + courseCode + '">';
+        HTML += '<div class="course" id="' + courseCode + '">';
         HTML += '<div class="header"><div class="icon-wrapper"><div class="icon"></div></div>';
         HTML += '<div class="title"><h2><span class="code">' + course.code + '</span></h2>';
         HTML += '<h3><span class="name">' + course.title + '</span></h3></div></div>';
-        HTML += '<div class="details"></div></div></a>';
+        HTML += '<div class="details"></div></div>';
         $('.course-results').append(HTML);
     }
 };
@@ -97,11 +97,26 @@ function showCourse (courseCode) {
         }
     });
     var courseContainer = $('#' + courseCode);
+    var course = courses[courseCode];
+
     courseContainer.off('click');
 
-    var description = courses[courseCode].description;
     var HTML = '<h2>Description</h2>';
-    HTML += '<p>' + description.trunc(DESC_MAX_LENGTH) + '</p>';
+    HTML += '<p>' + course.description.trunc(DESC_MAX_LENGTH) + '</p>';
+
+    var note = '';
+    for (var i in course.offered) {
+        var term = course.offered[i];
+        if (term !== 'F' && term !== 'W' && term !== 'S') note = term; 
+    }
+
+    var terms = ['Fall', 'Winter', 'Spring'];
+    var abbrs = ['F', 'W', 'S'];
+    HTML += '<h2>Availability</h2><p class="offered">';
+    for (var i in abbrs) {
+        HTML += (jQuery.inArray(abbrs[i], course.offered) !== -1) ? '<span class="offered">' + terms[i] + '</span>' : '';
+    }
+    HTML += '</p>';
 
     courseContainer.find('.details').empty().append(HTML).show();
     courseContainer.addClass('opened');
@@ -123,6 +138,7 @@ $(document).ready(function () {
         var bgImage = 'url("img/course-icons/' + department + '.svg")';
         $('#' + id + ' .icon').css('background-image', bgImage);
         $(this).click(function () {
+            window.location.href = window.location.href.split('#')[0] + '#' + id;
             showCourse(id);
         });
     });
@@ -130,12 +146,10 @@ $(document).ready(function () {
         $(this).click(function () {
             var id = $(this).attr('id');
             $('.search input').val(id + ' ').focus();
-            $('.subject').hide();   
+            $('.subject').hide();
         });
     });
 });
-
-
 
 String.prototype.trunc = function (n) {
     return this.substr(0,n-1)+(this.length>n?'&hellip;':'');

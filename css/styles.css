@@ -63,17 +63,21 @@ a {
 .search input {
 	margin: 1em 0;
 	width: 100%;
-	height: 1.8em;
-	padding: 0.5em;
+	height: 2.4em;
+	padding: 0.5em 0 0.5em 2.6em;
     color: #00191C;
-	font-size: 2em;	
+	font-size: 1.8em;	
 	-webkit-border-radius: 10px;
     border-radius: 10px;
     outline: 0;
+    background-image: url('../img/search.svg');
+    background-repeat: no-repeat;
+    background-size: 1.6em;
+    background-position: 0.6em 0.4em;
 }
 
 .course-results {
-	margin-bottom: 5em;
+	margin-bottom: 10em;
 }
 
 .course, .subject {
@@ -225,21 +229,32 @@ a {
 }
 
 .details {
-	padding: 1em;
+	padding: 1em 2em;
 }
 
 .details h2 {
-	margin: 0 0 0.1em 0;
+	margin: 0;
 	font-size: 2.2em;
 	font-weight: 400;
 }
 
 .details p { 
+	margin: 0.2em 0;
 	font-size: 1.6em;
-	margin: 0;
+	line-height: 1.4em;
 }
 
-#CS135 .icon-wrapper, #MATH135 .icon-wrapper {
+p.offered {
+	margin: 0.5em 0 0 0;
+}
+
+.offered span {
+	margin: 0 0.5em 0 0;
+	padding: 0.1em 0.5em;
+	border-radius: 0.3em;
+}
+
+#CS135 .icon-wrapper, #MATH135 .icon-wrapper, #CS135 span.offered, #MATH135 span.offered {
 	background: #ff7fd0; /* Old browsers */
 	background: -moz-linear-gradient(top,  #ff7fd0 0%, #ff66c6 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff7fd0), color-stop(100%,#ff66c6)); /* Chrome,Safari4+ */
@@ -250,7 +265,7 @@ a {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff7fd0', endColorstr='#ff66c6',GradientType=0 ); /* IE6-9 */
 }
 
-#ECON101 .icon-wrapper, #CHINA .icon-wrapper {
+#ECON101 .icon-wrapper, #CHINA .icon-wrapper, #ECON101 span.offered {
 	background: #ffc57f; /* Old browsers */
 	background: -moz-linear-gradient(top,  #ffc57f 0%, #ffb766 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffc57f), color-stop(100%,#ffb766)); /* Chrome,Safari4+ */
@@ -261,7 +276,7 @@ a {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffc57f', endColorstr='#ffb766',GradientType=0 ); /* IE6-9 */
 }
 
-#PHYS121 .icon-wrapper, #CHEM .icon-wrapper {
+#PHYS121 .icon-wrapper, #CHEM .icon-wrapper, #PHYS121 span.offered {
 	background: #7fc7ff; /* Old browsers */
 	background: -moz-linear-gradient(top,  #7fc7ff 0%, #66bcff 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7fc7ff), color-stop(100%,#66bcff)); /* Chrome,Safari4+ */
@@ -272,7 +287,7 @@ a {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7fc7ff', endColorstr='#66bcff',GradientType=0 ); /* IE6-9 */
 }
 
-#PD2 .icon-wrapper {
+#PD2 .icon-wrapper, #PD2 span.offered {
 	background: #dbdbdb; /* Old browsers */
 	background: -moz-linear-gradient(top,  #dbdbdb 0%, #aaaaaa 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dbdbdb), color-stop(100%,#aaaaaa)); /* Chrome,Safari4+ */
@@ -351,15 +366,15 @@ a {
 	display: block;
 	border-style: solid;
 	border-color: #666 transparent transparent transparent;
-	bottom: -10px;
+	bottom: -11px;
 }
 
 .course.opened .header:before {
-	border-width: 10px 0 0 10px;
+	border-width: 11px 0 0 11px;
 	left: -1px;
 }
 .course.opened .header:after {
-	border-width: 10px 10px 0 0;
+	border-width: 11px 11px 0 0;
 	right: -1px;
 }
 
