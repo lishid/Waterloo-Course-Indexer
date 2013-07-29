@@ -91,43 +91,52 @@ function loadCourses () {
 };
 
 function showCourse (courseCode) {
-    $('.course').each(function () {
-        if ($(this).attr('id') !== courseCode) {
-            $(this).hide();
-        }
-    });
     var courseContainer = $('#' + courseCode);
-    var course = courses[courseCode];
+    if (!courseContainer.hasClass('opened')) {
+        $('.course').each(function () {
+            if ($(this).attr('id') !== courseCode) {
+                $(this).hide();
+            }
+        });
+        var course = courses[courseCode];
+        courseContainer.off('click');
 
-    courseContainer.off('click');
+        var HTML = '<h2>Description</h2>';
+        HTML += '<p>' + course.description.trunc(DESC_MAX_LENGTH) + '</p>';
 
-    var HTML = '<h2>Description</h2>';
-    HTML += '<p>' + course.description.trunc(DESC_MAX_LENGTH) + '</p>';
+        var note = '';
+        for (var i in course.offered) {
+            var term = course.offered[i];
+            if (term !== 'F' && term !== 'W' && term !== 'S') note = term; 
+        }
 
-    var note = '';
-    for (var i in course.offered) {
-        var term = course.offered[i];
-        if (term !== 'F' && term !== 'W' && term !== 'S') note = term; 
+        var terms = ['Fall', 'Winter', 'Spring'];
+        var abbrs = ['F', 'W', 'S'];
+        HTML += '<h2>Availability</h2><p class="offered">';
+        for (var i in abbrs) {
+            HTML += (jQuery.inArray(abbrs[i], course.offered) !== -1) ? '<span class="offered">' + terms[i] + '</span>' : '';
+        }
+        HTML += '</p>';
+
+        courseContainer.find('.details').empty().append(HTML).show();
+        courseContainer.addClass('opened');
+
+        // transformation
+        var width = courseContainer.find('.header').width();
+        courseContainer.find('.header').width(width + 22);
     }
 
-    var terms = ['Fall', 'Winter', 'Spring'];
-    var abbrs = ['F', 'W', 'S'];
-    HTML += '<h2>Availability</h2><p class="offered">';
-    for (var i in abbrs) {
-        HTML += (jQuery.inArray(abbrs[i], course.offered) !== -1) ? '<span class="offered">' + terms[i] + '</span>' : '';
-    }
-    HTML += '</p>';
-
-    courseContainer.find('.details').empty().append(HTML).show();
-    courseContainer.addClass('opened');
-
-    // transformation
-    var width = courseContainer.find('.header').width();
-    courseContainer.find('.header').width(width + 22);
-
-    var height = $('#' + courseCode).height();
-    // $('#' + courseCode).height(height*3);
 }; 
+
+function reset () {
+    if ($('.opened').length > 0) {
+        var width = $('.opened .header').width();
+        $('.opened .header').width(width - 22);
+        $('.opened .details').empty().hide();
+        $('.opened').removeClass('opened');
+        $('.course').show();
+    }
+};
 
 $(document).ready(function () {
     loadCourses();
@@ -148,6 +157,15 @@ $(document).ready(function () {
             $('.search input').val(id + ' ').focus();
             $('.subject').hide();
         });
+    });
+    window.addEventListener('popstate', function(event) {
+        var href = window.location.href;
+        if (href.indexOf('#') !== -1) {
+            var id = href.split('#')[1];
+            showCourse(id);
+        } else {
+            reset();
+        }
     });
 });
 
