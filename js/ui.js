@@ -1,108 +1,98 @@
-var DESC_MAX_LENGTH = 200;
+var DESC_LENGTH = 200;
+var COURSES_SHOWN = 5;
 
-var courses = {
-    'CS135': {
-        id: '012040',
-        code: 'CS 135',
-        title: 'Designing Functional Programs',
-        description: 'An introduction to the fundamentals of computer science through the application of elementary programming patterns in the functional style of programming. Syntax and semantics of a functional programming language. Tracing via substitution. Design, testing, and documentation. Linear and nonlinear data structures. Recursive data definitions. Abstraction and encapsulation. Generative and structural recursion. Historical context.',
-        offered: [ 'F', 'W' ],
-        offered_online: false,
-        only_offered_online: false,
-        restrictions: {
-            prereq: [],
-            antireq: [ 'CS115', 'CS121', 'CS122', 'CS123', 'CS125', 'CS131', 'CS132', 'CS133', 'CS134', 'CS137', 'CS138', 'CS145', 'CHE121', 'CIVE121', 'ECE150', 'GENE121', 'PHYS139', 'SYDE121' ],
-            coreq: []
+
+var facultyToSubjectMap = {
+    'AHS': [ 'AHS', 'GERON', 'HLTH', 'KIN', 'REC' ],
+    'ART': [ 'AFM', 'ANTH', 'APPLS', 'ARTS', 'ARBUS', 'BUS', 'CHINA', 'CMW', 'CLAS', 'CROAT', 'DAC', 'DRAMA', 'DUTCH', 'EASIA', 'ECON', 'ENGL', 'ESL', 'EFAS', 'FINE', 'FR', 'GER', 'GBDA', 'GRK', 'HIST', 'HRM', 'HUMSC', 'IS', 'INTST', 'INTTS', 'ITAL', 'ITALST', 'JAPAN', 'JS', 'MEDVL', 'MUSIC', 'NATST', 'PACS', 'PHIL', 'POLSH', 'PSCI', 'PORT', 'PSYCH', 'RS', 'RUSS', 'RESS', 'SMF', 'SOCWK', 'SOC', 'SPAN', 'SPCOM', 'SI', 'STV', 'VCULT', 'WS' ],
+    'ENG': [ 'ARCH', 'BET', 'CHE', 'CIVE', 'ECE', 'ENVE', 'GENE', 'GEOE', 'MSCI', 'ME', 'MTE', 'NE', 'SE', 'SYDE' ],
+    'ENV': [ 'ENBUS', 'ERS', 'ENVS', 'GEOG', 'INDEV', 'INTEG', 'PLAN' ],
+    'MAT': [ 'ACTSC', 'AMATH', 'CO', 'COMM', 'CS', 'MATBUS', 'MATH', 'MTHEL', 'PMATH', 'STAT' ],
+    'SCI': [ 'BIOL', 'CHEM', 'EARTH', 'MNS', 'OPTOM', 'PHARM', 'PHYS', 'PDPHRM', 'SCI', 'SCBUS' ],
+    'OTHER': [ 'AVIA', 'COOP', 'PD', 'UNIV' ]
+};
+
+var subjectToFacultyMap = {};
+
+for (var faculty in facultyToSubjectMap) {
+    for (var i in facultyToSubjectMap[faculty])
+        subjectToFacultyMap[facultyToSubjectMap[faculty][i]] = faculty;
+}
+
+var langMap = {
+    'CROAT': 'HR',
+    'DUTCH': 'NL',
+    'EFAS': 'EN',
+    'ENGL': 'EN',
+    'ESL': 'EN',
+    'FR': 'FR',
+    'GRK': 'EL',
+    'ITAL': 'IT',
+    'KOREA': 'KO',
+    'POLSH': 'PL',
+    'PORT': 'PT',
+    'RUSS': 'RU',
+    'SPAN': 'ES'
+};
+
+var noIcon = {
+    'ITALST': 'generic'
+}
+
+for (var lang in langMap) {
+    noIcon[lang] = 'lang';
+}
+function loadCourses () {
+    for (var subject in courses) {
+        for (var number in courses[subject]) {
+            loadCourse(subject, number)
         }
-    },
-    'ECON101': {
-        id: '004874',
-        code: 'ECON 101',
-        title: 'Introduction to Microeconomics',
-        description: 'This course provides an introduction to microeconomic analysis relevant for understanding the Canadian economy. The behaviour of individual consumers and producers, the determination of market prices for commodities and resources, and the role of government policy in the functioning of the market system are the main topics covered.',
-        offered: [ 'F', 'W', 'S' ],
-        offered_online: true,
-        only_offered_online: false,
-        restrictions: {
-            prereq: [],
-            antireq: [],
-            coreq: []
-        }
-    },
-    'MATH135': {
-        id: '006878',
-        code: 'MATH 135',
-        title: 'Algebra for Honours Mathematics',
-        description: 'A study of the basic algebraic systems of mathematics: the integers, the integers modulo n, the rational numbers, the real numbers, the complex numbers and polynomials.',
-        offered: [ 'F', 'W', 'S' ],
-        offered_online: true,
-        only_offered_online: false,
-        restrictions: {
-            prereq: [ '4U Calculus and Vectors or 4U Geometry and Discrete Mathematics', 'Honours Mathematics or Mathematics/ELAS or Software Engineering students only' ],
-            antireq: [ 'MATH145' ],
-            coreq: []
-        }
-    },
-    'PHYS121': {
-        id: '007393',
-        code: 'PHYS 121',
-        title: 'Mechanics',
-        description: 'An introductory course in physics for students intending to concentrate their future studies in the physical sciences, optometry or mathematics; includes particle kinematics and dynamics, forces in nature, work and energy, conservation of energy and linear momentum, rotational kinematics and dynamics, and conservation of angular momentum.',
-        offered: [ 'F', 'W', 'S' ],
-        offered_online: true,
-        only_offered_online: false,
-        restrictions: {
-            prereq: [ '4U Calculus and Vectors', '4U Advanced Functions', '4U Physics'],
-            antireq: [ 'PHYS111', 'PHYS115', 'ECE105' ],
-            coreq: [ { relation: 'or',
-                       courses: [ 'MATH104', 'MATH 127', 'MATH137', 'MATH147' ] }
-                   ] 
-        }
-    },
-    'PD2': {
-        id: '012636',
-        code: 'PD 2',
-        title: 'Critical Reflection and Report Writing',
-        description: 'This course will develop students\' analytical, critical thinking, and report writing skills by focusing on critical reflection and thinking, analysis, and best practices in report writing. This course will lead students through the creation of a report to the co-op guidelines for work-term reports.',
-        offered: [ 'F', 'W', 'S' ],
-        offered_online: true,
-        only_offered_online: true,
-        restrictions: {
-            prereq: [ 'Co-op students only', 'Not open to Engineering students' ],
-            antireq: [ 'PHYS111', 'PHYS115', 'ECE105' ],
-            coreq: [ { relation: 'or',
-                       courses: [ 'MATH104', 'MATH 127', 'MATH137', 'MATH147' ] }
-                   ] 
-        }
+    }
+    $('.details').hide();
+    $('.course').each(function () {
+        var id = $(this).attr('id');
+        var subject = $(this).data('subject');
+        var number = $(this).data('number');
+        $('#' + id + ' .icon').css('background-image', decideIconFileName(subject));
+        $(this).click(function () {
+            window.location.href = window.location.href.split('#')[0] + '#' + subject + '-' + number;
+        });
+    });
+    if($('.course:visible').length > COURSES_SHOWN) {
+        $('.course:visible:gt(' + (COURSES_SHOWN - 1) + ')').hide();
     }
 }
 
-function loadCourses () {
-    for (var courseCode in courses) {
-        var course = courses[courseCode];
-        var HTML = '';
-        HTML += '<div class="course" id="' + courseCode + '">';
+function loadCourse (subject, number) {
+    var course = courses[subject][number];
+    if (course.subject != null && course.number != null) {
+        var container = $('<div>').data('subject', subject).data('number', number);
+        HTML = '<div class="course ' + subjectToFacultyMap[subject] + '" id="' + subject + number + '" data-subject="'+ subject +'" data-number="' + number + '">';
         HTML += '<div class="header"><div class="icon-wrapper"><div class="icon"></div></div>';
-        HTML += '<div class="title"><h2><span class="code">' + course.code + '</span></h2>';
-        HTML += '<h3><span class="name">' + course.title + '</span></h3></div></div>';
+        HTML += '<div class="title"><h2><span class="code">' + subject + " " + number + '</span></h2>';
+        HTML += '<h3><span class="name">' + (course.title != null ? course.title.trunc(50) : '') + '</span></h3></div></div>';
         HTML += '<div class="details"></div></div>';
         $('.course-results').append(HTML);
     }
-};
+}
 
-function showCourse (courseCode) {
-    var courseContainer = $('#' + courseCode);
-    if (!courseContainer.hasClass('opened')) {
-        $('.course').each(function () {
-            if ($(this).attr('id') !== courseCode) {
-                $(this).hide();
-            }
-        });
-        var course = courses[courseCode];
-        courseContainer.off('click');
+function showCourse (subject, number) {
+    var code = subject + number;
+    var container = $('#' + code);
+    var href = window.location.href;
+    if (!container.hasClass('opened')) {
+        var subject, number;
+        $('.course').remove();
+        if (!container.length > 0) {
+            loadCourse(subject, number);
+            container = $('#' + subject + number);
+        }
+
+        var course = courses[subject][number];
+        container.off('click');
 
         var HTML = '<h2>Description</h2>';
-        HTML += '<p>' + course.description.trunc(DESC_MAX_LENGTH) + '</p>';
+        HTML += '<p>' + course.description.trunc(DESC_LENGTH) + '</p>';
 
         var note = '';
         for (var i in course.offered) {
@@ -117,58 +107,85 @@ function showCourse (courseCode) {
             HTML += (jQuery.inArray(abbrs[i], course.offered) !== -1) ? '<span class="offered">' + terms[i] + '</span>' : '';
         }
         HTML += '</p>';
-
-        courseContainer.find('.details').empty().append(HTML).show();
-        courseContainer.addClass('opened');
+        container.find('.details').empty().append(HTML).show();
+        container.addClass('opened');
 
         // transformation
-        var width = courseContainer.find('.header').width();
-        courseContainer.find('.header').width(width + 22);
+        var width = container.find('.header').width();
+        container.find('.header').width(width + 22);
     }
-
 }; 
 
-function reset () {
-    if ($('.opened').length > 0) {
-        var width = $('.opened .header').width();
-        $('.opened .header').width(width - 22);
-        $('.opened .details').empty().hide();
-        $('.opened').removeClass('opened');
-        $('.course').show();
+function filter (query) {
+    var sortFn = function (a, b) { return $(a).attr('id') - $(b).attr('id'); };
+    $('.course').each(function () {
+        if ($(this).find('.code').text().replaceAll(' ', '').toLowerCase().indexOf(query.toLowerCase()) == -1) {
+            $(this).hide();
+        } else $(this).show()
+    });
+    if($('.course:visible').length > COURSES_SHOWN) {
+        $('.course:visible:gt(' + (COURSES_SHOWN - 1) + ')').hide();
     }
-};
+}
+
+function enableSearch() {
+    $('.search input').keyup(function (e) {
+        if (e.keyCode !== 13) {
+        var query = $(this).val().replaceAll(' ', '');
+            if (window.location.href.indexOf('#') !== -1) {
+                $('.course').remove();
+                loadCourses();
+            }
+            filter(query);
+        } else {
+            var target = $('.course:visible').first();
+            showCourse(target.attr('id'));
+        }
+    });
+}
 
 $(document).ready(function () {
-    loadCourses();
-    $('.details').hide();
-    $('.course').each(function () {
-        var id = $(this).attr('id');
-        var department = courses[id].code.split(" ")[0];
-        var bgImage = 'url("img/course-icons/' + department + '.svg")';
-        $('#' + id + ' .icon').css('background-image', bgImage);
-        $(this).click(function () {
-            window.location.href = window.location.href.split('#')[0] + '#' + id;
-            showCourse(id);
-        });
-    });
-    $('.subject').each(function () {
-        $(this).click(function () {
-            var id = $(this).attr('id');
-            $('.search input').val(id + ' ').focus();
-            $('.subject').hide();
-        });
-    });
+    if (history && history.pushState) {
+       history.pushState(null, document.title, this.href);
+    }
+    $("body").addClass("historyPushed");
     window.addEventListener('popstate', function(event) {
-        var href = window.location.href;
-        if (href.indexOf('#') !== -1) {
-            var id = href.split('#')[1];
-            showCourse(id);
-        } else {
-            reset();
+        if($("body").hasClass("historyPushed")) {
+            var href = window.location.href;
+            $('.course-results').empty(); 
+            if (href.indexOf('#') !== -1) {
+                var subject = href.split('#')[1].split('-')[0];
+                var number = href.split('#')[1].split('-')[1];
+                showCourse(subject, number);
+                $('#' + subject + number + ' .icon').css('background-image', decideIconFileName(subject));
+            } else {  
+                loadCourses();
+                $('.subject').each(function () {
+                    $(this).click(function () {
+                        var id = $(this).attr('id');
+                        $('.search input').val(id + ' ').focus();
+                        $('.subject').hide();
+                    });
+                });
+            }
+            enableSearch();
         }
     });
 });
 
+function decideIconFileName (subject) {
+    if (typeof noIcon[subject] === 'undefined') fileName = subject;
+    else if (noIcon[subject] === 'generic') fileName = 'generic';
+    else if (noIcon[subject] === 'lang') fileName = langMap[subject];
+    return 'url("img/course-icons/' + fileName + '.svg")';
+}
+
+
+// utils
 String.prototype.trunc = function (n) {
     return this.substr(0,n-1)+(this.length>n?'&hellip;':'');
 };
+
+String.prototype.replaceAll = function (find, replace) {
+    return this.replace(new RegExp(find, 'g'), replace);
+}
