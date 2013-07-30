@@ -14,5 +14,8 @@ else if(isset($_GET["course"])) {
 		echo json_encode(getCourseData($subject, $number));
 	}
 }
+else {
+	echo json_encode(apiGetPrerequisites("CS", "136"));
+}
 
 ?>
