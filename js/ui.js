@@ -64,16 +64,14 @@ function loadCourses () {
 }
 
 function loadCourse (subject, number) {
-    var course = courses[subject][number];
-    if (course.subject != null && course.number != null) {
-        var container = $('<div>').data('subject', subject).data('number', number);
-        HTML = '<div class="course ' + subjectToFacultyMap[subject] + '" id="' + subject + number + '" data-subject="'+ subject +'" data-number="' + number + '">';
-        HTML += '<div class="header"><div class="icon-wrapper"><div class="icon"></div></div>';
-        HTML += '<div class="title"><h2><span class="code">' + subject + " " + number + '</span></h2>';
-        HTML += '<h3><span class="name">' + (course.title != null ? course.title.trunc(50) : '') + '</span></h3></div></div>';
-        HTML += '<div class="details"></div></div>';
-        $('.course-results').append(HTML);
-    }
+    var title = courses[subject][number];
+    var container = $('<div>').data('subject', subject).data('number', number);
+    HTML = '<div class="course ' + subjectToFacultyMap[subject] + '" id="' + subject + number + '" data-subject="'+ subject +'" data-number="' + number + '">';
+    HTML += '<div class="header"><div class="icon-wrapper"><div class="icon"></div></div>';
+    HTML += '<div class="title"><h2><span class="code">' + subject + " " + number + '</span></h2>';
+    HTML += '<h3><span class="name">' + title.trunc(50) + '</span></h3></div></div>';
+    HTML += '<div class="details"></div></div>';
+    $('.course-results').append(HTML);
 }
 
 function showCourse (subject, number) {
@@ -92,7 +90,8 @@ function showCourse (subject, number) {
         container.off('click');
 
         var HTML = '<h2>Description</h2>';
-        HTML += '<p>' + course.description.trunc(DESC_LENGTH) + '</p>';
+        // HTML += '<p>' + course.description.trunc(DESC_LENGTH) + '</p>';
+        HTML += '<p>SampleDescription</p>';
 
         var note = '';
         for (var i in course.offered) {
