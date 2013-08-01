@@ -33,6 +33,21 @@ function attachCourseHandlers () {
     });
 }
 
+function loadCourses (results, limit) {
+    var count = 0;
+    for (var subject in results) {
+        for (var number in results[subject]) {
+            loadCourse (subject, number);
+            count++;
+            if (count >= limit) {
+                attachCourseHandlers();
+                return;
+            }
+        }
+    }
+    attachCourseHandlers();
+}
+
 function loadCourse (subject, number) {
     var title = courses[subject][number] || '';
     HTML = '<div class="course ' + subjectToFacultyMap[subject] + '" id="' + subject + number + '" data-subject="'+ subject +'" data-number="' + number + '">';
@@ -107,18 +122,49 @@ function enableSearch() {
                 // loadCourses();
                 window.location.href = href.split('#')[0];
             }
-            filter(query);
-        } else {
-            // console.log(getCoursesByQuery($(this).val()));
-        }
-    }).focus();
+            getCoursesByQuery($(this).val());
+        }}).focus();
     $('.search input').on('focus', function() {
         $('.course.selected').removeClass('selected');
     });
 }
 
 function getCoursesByQuery(query) {
-
+    var re = /([A-Za-z]+)\s*([0-9]*)/;
+    var result = query.match(re);
+    if (result && result[0]) {
+        if (!result[1]) return;
+        // subject only
+        else if (!result[2]) {
+            var queriedSubject = result[1];
+            var len = queriedSubject.length;
+            if (subjectCache[queriedSubject]){
+            } else if (len > 1 && subjectCache[queriedSubject.substring(0, len-1)]) {
+                var results = {};
+                for (var subject in subjectCache[queriedSubject.substring(0, len-1)]) {
+                    if (subject.startWith(queriedSubject)) {
+                        results[subject] = courses[subject];
+                    }
+                }
+                subjectCache[queriedSubject] = results;
+            } else {
+                var results = {};
+                for (var subject in courses) {
+                    if (subject.startWith(queriedSubject)) {
+                        results[subject] = courses[subject];
+                    }
+                } 
+                subjectCache[queriedSubject] = results;
+            }
+            $('.course').remove();
+            loadCourses(subjectCache[queriedSubject], 5);
+        } else {
+            var queriedSubject = result[1];
+            var queriedNumber = result[2];
+        }
+    } else if (query === '') {
+        $('.course').remove();
+    }
 };
 
 function addArrowKeyListener() {
@@ -153,7 +199,6 @@ function addArrowKeyListener() {
      });
 }
 
-
 $(document).ready(function() {
     if (history && history.pushState) {
        history.pushState(null, document.title, this.href);
@@ -168,13 +213,7 @@ $(document).ready(function() {
                 var number = href.split('#')[1].split('-')[1];
                 showCourse(subject, number);
                 $('#' + subject + number + ' .icon').css('background-image', getIconUrl(subject));
-            } else {  
-                for (var subject in courses) {
-                    for (var number in courses[subject]) {
-                        loadCourse(subject, number);
-                    }
-                }
-                attachCourseHandlers(); 
+            } else {
                 if($('.course:visible').length > COURSES_SHOWN) {
                     $('.course:visible:gt(' + (COURSES_SHOWN - 1) + ')').hide();
                 }
@@ -194,6 +233,11 @@ $(document).ready(function() {
 
 
 // utils
+
+String.prototype.startWith = function (str) {
+    var re = new RegExp('^' + str);
+    return re.test(this);
+}
 
 function getIconUrl (filename) {
     return 'url("img/course-icons/' + filename + '.svg")';
