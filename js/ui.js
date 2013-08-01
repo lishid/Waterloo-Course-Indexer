@@ -19,58 +19,27 @@ for (var faculty in facultyToSubjectMap) {
         subjectToFacultyMap[facultyToSubjectMap[faculty][i]] = faculty;
 }
 
-var langMap = {
-    'CROAT': 'HR',
-    'DUTCH': 'NL',
-    'EFAS': 'EN',
-    'ENGL': 'EN',
-    'ESL': 'EN',
-    'FR': 'FR',
-    'GRK': 'EL',
-    'ITAL': 'IT',
-    'KOREA': 'KO',
-    'POLSH': 'PL',
-    'PORT': 'PT',
-    'RUSS': 'RU',
-    'SPAN': 'ES'
-};
+var subjectCache = {}, courseCache = {};
 
-var noIcon = {
-    'ITALST': 'generic'
-}
-
-for (var lang in langMap) {
-    noIcon[lang] = 'lang';
-}
-function loadCourses () {
-    for (var subject in courses) {
-        for (var number in courses[subject]) {
-            loadCourse(subject, number)
-        }
-    }
-    $('.details').hide();
+function attachCourseHandlers () {
     $('.course').each(function () {
         var id = $(this).attr('id');
         var subject = $(this).data('subject');
         var number = $(this).data('number');
-        $('#' + id + ' .icon').css('background-image', decideIconFileName(subject));
+        $('#' + id + ' .icon').css('background-image', getIconUrl(subject));
         $(this).click(function () {
             window.location.href = window.location.href.split('#')[0] + '#' + subject + '-' + number;
         });
     });
-    if($('.course:visible').length > COURSES_SHOWN) {
-        $('.course:visible:gt(' + (COURSES_SHOWN - 1) + ')').hide();
-    }
 }
 
 function loadCourse (subject, number) {
-    var title = courses[subject][number];
-    var container = $('<div>').data('subject', subject).data('number', number);
+    var title = courses[subject][number] || '';
     HTML = '<div class="course ' + subjectToFacultyMap[subject] + '" id="' + subject + number + '" data-subject="'+ subject +'" data-number="' + number + '">';
     HTML += '<div class="header"><div class="icon-wrapper"><div class="icon"></div></div>';
     HTML += '<div class="title"><h2><span class="code">' + subject + " " + number + '</span></h2>';
     HTML += '<h3><span class="name">' + title.trunc(50) + '</span></h3></div></div>';
-    HTML += '<div class="details"></div></div>';
+    HTML += '<div class="details" style="display: none"></div></div>';
     $('.course-results').append(HTML);
 }
 
@@ -90,7 +59,7 @@ function showCourse (subject, number) {
         container.off('click');
 
         var HTML = '<h2>Description</h2>';
-        // HTML += '<p>' + course.description.trunc(DESC_LENGTH) + '</p>';
+        // HTML += '<p>' + course.description + '</p>';
         HTML += '<p>SampleDescription</p>';
 
         var note = '';
@@ -128,22 +97,64 @@ function filter (query) {
 }
 
 function enableSearch() {
-    $('.search input').keyup(function (e) {
+    $('.search input').on('keyup', function (e) {
         if (e.keyCode !== 13) {
-        var query = $(this).val().replaceAll(' ', '');
-            if (window.location.href.indexOf('#') !== -1) {
-                $('.course').remove();
-                loadCourses();
+            $(this).val($(this).val().toUpperCase());
+            var query = $(this).val().replaceAll(' ', '');
+            var href = window.location.href;
+            if (href.indexOf('#') !== -1) {
+                // $('.course').remove();
+                // loadCourses();
+                window.location.href = href.split('#')[0];
             }
             filter(query);
         } else {
-            var target = $('.course:visible').first();
-            showCourse(target.attr('id'));
+            // console.log(getCoursesByQuery($(this).val()));
         }
+    }).focus();
+    $('.search input').on('focus', function() {
+        $('.course.selected').removeClass('selected');
     });
 }
 
-$(document).ready(function () {
+function getCoursesByQuery(query) {
+
+};
+
+function addArrowKeyListener() {
+    $(document).keydown(function(e) {
+        if (e.keyCode === 38) {     // up key
+            if ($('.selected').length > 0) {
+                if ($('.selected').is(':first-child')) {
+                    $('.selected').removeClass('selected');
+                    $('.search input').focus();
+                } else {
+                    $('.selected').removeClass('selected').prev().addClass('selected');
+                }
+            } else {
+                $(':visible').last().addClass('selected');
+                $('.search input').blur();
+            } 
+        } else if (e.keyCode === 40) {     // down key
+            if ($('.selected').length > 0) {
+                if ($('.selected').is(':visible'))
+                    $('.selected').removeClass('selected').next().addClass('selected');
+                else
+                    $('.selected').removeClass('selected');
+            } else {
+                $('.course:visible').first().addClass('selected');
+                $('.search input').blur();
+            } 
+        } else if (e.keyCode === 13 && $('.selected').length > 0) {
+            var subject = $('.selected').data('subject');
+            var number = $('.selected').data('number');
+            window.location.href += '#' + subject + '-' + number;
+        }
+     });
+}
+
+
+$(document).ready(function() {
     if (history && history.pushState) {
        history.pushState(null, document.title, this.href);
     }
@@ -156,9 +167,17 @@ $(document).ready(function () {
                 var subject = href.split('#')[1].split('-')[0];
                 var number = href.split('#')[1].split('-')[1];
                 showCourse(subject, number);
-                $('#' + subject + number + ' .icon').css('background-image', decideIconFileName(subject));
+                $('#' + subject + number + ' .icon').css('background-image', getIconUrl(subject));
             } else {  
-                loadCourses();
+                for (var subject in courses) {
+                    for (var number in courses[subject]) {
+                        loadCourse(subject, number);
+                    }
+                }
+                attachCourseHandlers(); 
+                if($('.course:visible').length > COURSES_SHOWN) {
+                    $('.course:visible:gt(' + (COURSES_SHOWN - 1) + ')').hide();
+                }
                 $('.subject').each(function () {
                     $(this).click(function () {
                         var id = $(this).attr('id');
@@ -168,19 +187,17 @@ $(document).ready(function () {
                 });
             }
             enableSearch();
+            addArrowKeyListener();
         }
     });
 });
 
-function decideIconFileName (subject) {
-    if (typeof noIcon[subject] === 'undefined') fileName = subject;
-    else if (noIcon[subject] === 'generic') fileName = 'generic';
-    else if (noIcon[subject] === 'lang') fileName = langMap[subject];
-    return 'url("img/course-icons/' + fileName + '.svg")';
-}
-
 
 // utils
+
+function getIconUrl (filename) {
+    return 'url("img/course-icons/' + filename + '.svg")';
+}
 String.prototype.trunc = function (n) {
     return this.substr(0,n-1)+(this.length>n?'&hellip;':'');
 };
