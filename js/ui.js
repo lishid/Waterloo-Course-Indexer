@@ -128,6 +128,7 @@ function enableSearch() {
 }
 
 function getCoursesByQuery(query) {
+	var start = new Date();
 	query = query.toUpperCase().replaceAll(' ', '');
 	var re = /([A-Za-z]+)\s*([0-9]*)/;
 	var result = query.match(re);
@@ -161,6 +162,8 @@ function getCoursesByQuery(query) {
 			var queriedSubject = result[1];
 			var queriedNumber = result[2];
 		}
+		var end = new Date();
+		console.log('Search completed in ' + (end.getTime() - start.getTime()) + ' ms for query ' + query);
 	} else if (query === '') {
 		$('.course').remove();
 	}
