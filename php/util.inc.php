@@ -3,7 +3,7 @@
 function utilCreateDir($filename) {
 	$dir = dirname($filename);
 	if (!file_exists($dir)) {
-	    mkdir($dir, 0777, true);
+		mkdir($dir, 0777, true);
 	}
 }
 
@@ -20,23 +20,23 @@ function utilCacheWrite($filename, $data) {
 }
 
 function findInArray($array, $start, $end, $prefix) {
-    for ($i = $end; $i >= $start; $i--) {
-        if(strpos($array[$i], $prefix) === 0) {
-            $value = $array[$i];
-            $array[$i] = "";
-            return $value;
-        }
-    }
-    return "";
+	for ($i = $end; $i >= $start; $i--) {
+		if(strpos($array[$i], $prefix) === 0) {
+			$value = $array[$i];
+			$array[$i] = "";
+			return $value;
+		}
+	}
+	return "";
 }
 
 function array_merge_assoc() {
 	$array = array();
-    foreach (func_get_args() as $param) {
-    	foreach($param as $key => $value) {
-    		$array[$key] = $value;
-    	}
-    }
-    return $array;
+	foreach (func_get_args() as $param) {
+		foreach($param as $key => $value) {
+			$array[$key] = $value;
+		}
+	}
+	return $array;
 }
 ?>

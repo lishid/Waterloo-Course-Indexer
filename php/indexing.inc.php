@@ -10,12 +10,11 @@ function getAllSubjectIndex() {
 	foreach($subjects as $subject) {
 		$courseIndex[$subject] = getSubjectIndex($subject);
 	}
-
 	return $courseIndex;
 }
 
 function getSubjectIndex($subject) {
-	$filename = getcwd() . "/index/subject-index/" . $subject;
+	$filename = getcwd() . "/cache/index/subject-index/" . $subject;
 	$data = utilCacheGet($filename);
 	if(!$data) {
 		$data = generateSubjectIndex($subject);
@@ -35,10 +34,10 @@ function generateSubjectIndex($subject) {
 }
 
 function getCourseData($subject, $number) {
-	$filename = getcwd() . "/index/course/" . $subject . "/" . $number;
+	$filename = getcwd() . "/cache/index/course/" . $subject . "/" . $number;
 	$data = utilCacheGet($filename);
 	if(!$data) {
-		$data = apiGenerateCourseData($subject, $number);
+		$data = generateCourseData($subject, $number);
 		utilCacheWrite($filename, json_encode($data));
 	}
 	else {
@@ -47,5 +46,11 @@ function getCourseData($subject, $number) {
 	return $data;
 }
 
+function generateCourseData($subject, $number) {
+	$apiData = apiGetCourseData($subject, $number);
+	$ucalendarData = ucalendarGetCourseData($subject, $number);
+	$data = array_merge_assoc($apiData, $ucalendarData);
+	return $data;
+}
 
 ?>
