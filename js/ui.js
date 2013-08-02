@@ -112,18 +112,17 @@ function filter (query) {
 }
 
 function enableSearch() {
-    $('.search input').on('keyup', function (e) {
-        if (e.keyCode !== 13) {
-            $(this).val($(this).val().toUpperCase());
-            var query = $(this).val().replaceAll(' ', '');
-            var href = window.location.href;
-            if (href.indexOf('#') !== -1) {
-                // $('.course').remove();
-                // loadCourses();
-                window.location.href = href.split('#')[0];
-            }
-            getCoursesByQuery($(this).val());
-        }}).focus();
+    $('.search input').on("input", function (e) {
+        var val = $(this).val().toUpperCase();
+        var query = val.replaceAll(' ', '');
+        var href = window.location.href;
+        if (href.indexOf('#') !== -1) {
+            // $('.course').remove();
+            // loadCourses();
+            window.location.href = href.split('#')[0];
+        }
+        getCoursesByQuery(val);
+    });
     $('.search input').on('focus', function() {
         $('.course.selected').removeClass('selected');
     });
