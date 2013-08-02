@@ -12,8 +12,8 @@ function ucalendarSubjectUrl($subject) {
 	return ucalendarBaseUrl() . "course-" . $subject . ".html";
 }
 
-function ucalendarGetSubjectPage($subject) {
-	$filename = getcwd() . "/cache/ucalendar/" . $subject;
+function ucalendarDownloadSubjectPage($subject) {
+	$filename = getcwd() . "/cache/ucalendar/raw/" . $subject;
 	$data = utilCacheGet($filename);
 	if(!$data) {
 		$data = file_get_contents(ucalendarSubjectUrl($subject));
@@ -22,35 +22,23 @@ function ucalendarGetSubjectPage($subject) {
 	return $data;
 }
 
-function ucalendarGetSubjectList($subject) {
-	
-}
-
 function ucalendarGetSubjectIndex($subject) {
-	$filename = getcwd() . "/cache/ucalendar/index/" . $subject;
-	$data = utilCacheGet($filename);
-	if(!$data) {
-		$data = ucalendarGenerateSubjectIndex($subject);
-		utilCacheWrite($filename, json_encode($data));
-	}
-	else {
-		$data = json_decode($data, true);
-	}
-	return $data;
-}
-
-function ucalendarGenerateSubjectIndex($subject) {
-	$courses = ucalendarGenerateSubjectListData($subject);
+	$courses = ucalendarGenerateSubjectData($subject);
 	$subjectIndex = array();
-	foreach($courses as $course) {
+	foreach($courses as $number => $course) {
 		$course = ucalendarGenerateCourseIndex($course);
-		$subjectIndex[$course["number"]] = $course["title"];
+		$subjectIndex[$number] = $course["title"];
 	}
 	return $subjectIndex;
 }
 
-function ucalendarGenerateSubjectListData($subject) {
-	$data = ucalendarGetSubjectPage($subject);
+function ucalendarGetCourseData($subject, $number) {
+	$courses = ucalendarGenerateSubjectData($subject);
+	return $courses[$number];
+}
+
+function ucalendarGenerateSubjectData($subject) {
+	$data = ucalendarDownloadSubjectPage($subject);
 	$lines = explode("\n", $data);
 	$values = preg_grep("/<center><table.+table><\\/center>/", $lines);
 	
@@ -61,7 +49,8 @@ function ucalendarGenerateSubjectListData($subject) {
 		foreach($fields as $key => $field) {
 			$fields[$key] = trim(preg_replace("/<[^\\>]*>/", "", $field));
 		}
-		array_push($courses, ucalendarGenerateCourseData($fields));
+		$course = ucalendarGenerateCourseData($fields);
+		$courses[$course["number"]] = $course;
 	}
 	return $courses;
 }
@@ -75,64 +64,61 @@ function ucalendarGenerateCourseIndex($course) {
 }
 
 function ucalendarGenerateCourseData($fields) {
-	$course = array();
-	// Course object data:
-	// subject
-	// number
-	// title
-	// description
-	// components
-	// credits
-	// type
-	// consentDepartment
-	// consentInstructor
-	// prereqDesc
-	// antireqDesc
-	// crosslistDesc
-	// coreqDesc
-	// notes
-	// offered
-	// url
-
 	// fields data type
-    // (*)CS 499T LAB,LEF,TST,TUT,PRJ 0.50
-    // (*)Course ID: 000000
-    // (*)Title
-    // Description
-    // (+)[Note: note]
-    // (+)Department Consent Required
-    // (+)Prereq: 
-    // (+)Coreq: 
-    // (+)Antireq: 
-    // (+)(Cross-listed with )
-    // (-)offered
+	// (*)CS 499T LAB,LEF,TST,TUT,PRJ 0.50
+	// (*)Course ID: 000000
+	// (*)Title
+	// Description
+	// (+)[Note: note]
+	// (+)Department Consent Required
+	// (+)Prereq: 
+	// (+)Coreq: 
+	// (+)Antireq: 
+	// (+)(Cross-listed with )
+	// (-)offered
 
 	$courseCodeTokens = explode(" ", $fields[0]);
-	$course["subject"] = $courseCodeTokens[0];
-	$course["number"] = $courseCodeTokens[1];
-	$course["components"] = $courseCodeTokens[2];
-	$course["credits"] = $courseCodeTokens[3];
-	$course["title"] = $fields[2];
-	$course["type"] = "UGRAD";
+	$course = array();
 
+	$subject = $courseCodeTokens[0];
+	$number = $courseCodeTokens[1];
+	$title = $fields[2];
+	$components = $courseCodeTokens[2];
+	$credits = $courseCodeTokens[3];
+	$type = "UGRAD";
+	$consentDepartment = findInArray($fields, 3, count($fields) - 1, "Department Consent");
+	$consentInstructor = findInArray($fields, 3, count($fields) - 1, "Instructor Consent");
+	$prereqDesc = findInArray($fields, 3, count($fields) - 1, "Prereq:");
+	$antireqDesc = findInArray($fields, 3, count($fields) - 1, "Antireq:");
+	$crosslistDesc = findInArray($fields, 3, count($fields) - 1, "(Cross-listed");
+	$coreqDesc = findInArray($fields, 3, count($fields) - 1, "Coreq:");
 	$notes = findInArray($fields, 3, count($fields) - 1, "[Note: ");
-	$course["consentDepartment"] = findInArray($fields, 3, count($fields) - 1, "Department Consent");
-	$course["consentInstructor"] = findInArray($fields, 3, count($fields) - 1, "Instructor Consent");
-	$course["prereqDesc"] = findInArray($fields, 3, count($fields) - 1, "Prereq:");
-	$course["coreqDesc"] = findInArray($fields, 3, count($fields) - 1, "Coreq:");
-	$course["antireqDesc"] = findInArray($fields, 3, count($fields) - 1, "Antireq:");
-	$course["crosslistDesc"] = findInArray($fields, 3, count($fields) - 1, "(Cross-listed");
+	$offered = array();
+	$url = ucalendarSubjectUrl($course["subject"]) . "#" . $course["subject"] . $course["number"];
+
 	$description = $fields[3];
 
-	//Find offered from Note and Description
-
-	$offered = array();
 	$offered = commonParseOfferedFromDescription($description, $offered);
 	$offered = commonParseOfferedFromNote($notes, $offered);
-	$course["note"] = $notes;
+	$offered = commonFinalizeOffered($offered);
+
+
+	$course["subject"] = $subject;
+	$course["number"] = $number;
+	$course["title"] = $title;
 	$course["description"] = $description;
-	$course["offered"] = commonFinalizeOffered($offered);
-	$course["url"] = ucalendarSubjectUrl($course["subject"]) . "#" . $course["subject"] . $course["number"];
+	$course["components"] = $components;
+	$course["credits"] = $credits;
+	$course["type"] = $type;
+	$course["consentDepartment"] = $consentDepartment;
+	$course["consentInstructor"] = $consentInstructor;
+	$course["prereqDesc"] = $prereqDesc;
+	$course["antireqDesc"] = $antireqDesc;
+	$course["crosslistDesc"] = $crosslistDesc;
+	$course["coreqDesc"] = $coreqDesc;
+	$course["notes"] = $notes;
+	$course["offered"] = $offered;
+	$course["url"] = $url;
 
 	return $course;
 }
