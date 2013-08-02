@@ -165,7 +165,9 @@ function getCoursesByQuery(query) {
 				subjectCount++;
 			}
 			$('.course').remove();
-			$('.results-count').text('Found ' + resultCount + ' results' + (subjectCount > 1 ? ' in ' + subjectCount + ' subjects:' : ':'));
+			if (resultCount > 1) {
+				$('.results-count').text('Found ' + resultCount + ' results' + (subjectCount > 1 ? ' in ' + subjectCount + ' subjects:' : ':'));
+			}
 			loadCourses(subjectCache[queriedSubject], 5);
 		} else {
 			var queriedSubject = result[1];
