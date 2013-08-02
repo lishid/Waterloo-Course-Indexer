@@ -18,24 +18,33 @@ function apiDownloadPage($filename, $urlSuffix) {
 	return json_decode($data, true);
 }
 
-function apiDownloadCourseList($code) {
-	$page = apiDownloadPage("course-list/" . $code, "service=CourseSearch&q=" . $code);
-	return $page["response"]["data"]["result"];
+function apiDownloadSubject($subject) {
+	$page = apiDownloadPage("subject/" . $subject, "service=CourseSearch&q=" . $subject);
+	if($page) {
+		return $page["response"]["data"]["result"];
+	}
+	return array();
 }
 
 function apiDownloadCourse($subject, $number) {
 	$page = apiDownloadPage("course/" . $subject. "/" . $number, "service=CourseInfo&q=" . $subject . $number);
-	$data = $page["response"]["data"]["result"];
-	return $data[0];
+	if($page) {
+		$data = $page["response"]["data"]["result"];
+		return $data[0];
+	}
+	return array();
 }
 
-function apiDownloadCourseScheduleList($code) {
-	$page = apiDownloadPage("schedule/" . $code, "service=Schedule&q=" . $code);
-	return $page["response"]["data"]["result"];
+function apiDownloadCourseScheduleList($subject) {
+	$page = apiDownloadPage("schedule/" . $subject, "service=Schedule&q=" . $subject);
+	if($page) {
+		return $page["response"]["data"]["result"];
+	}
+	return array();
 }
 
 function apiGetSubjectIndex($subject) {
-	$courses = apiDownloadCourseList($subject);
+	$courses = apiDownloadSubject($subject);
 	$courseIndex = array();
 	if($courses) {
 		foreach ($courses as $course) {

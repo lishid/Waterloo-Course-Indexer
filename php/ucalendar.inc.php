@@ -23,18 +23,30 @@ function ucalendarDownloadSubjectPage($subject) {
 }
 
 function ucalendarGetSubjectIndex($subject) {
-	$courses = ucalendarGenerateSubjectData($subject);
+	$courses = ucalendarGetSubjectData($subject);
 	$subjectIndex = array();
 	foreach($courses as $number => $course) {
-		$course = ucalendarGenerateCourseIndex($course);
 		$subjectIndex[$number] = $course["title"];
 	}
 	return $subjectIndex;
 }
 
 function ucalendarGetCourseData($subject, $number) {
-	$courses = ucalendarGenerateSubjectData($subject);
+	$courses = ucalendarGetSubjectData($subject);
 	return $courses[$number];
+}
+
+function ucalendarGetSubjectData($subject) {
+	$filename = getcwd() . "/cache/ucalendar/subject/" . $subject;
+	$data = utilCacheGet($filename);
+	if(!$data) {
+		$data = ucalendarGenerateSubjectData($subject);
+		utilCacheWrite($filename, json_encode($data));
+	}
+	else {
+		$data = json_decode($data, true);
+	}
+	return $data;
 }
 
 function ucalendarGenerateSubjectData($subject) {
@@ -53,14 +65,6 @@ function ucalendarGenerateSubjectData($subject) {
 		$courses[$course["number"]] = $course;
 	}
 	return $courses;
-}
-
-function ucalendarGenerateCourseIndex($course) {
-	$courseIndex = array();
-	$courseIndex["subject"] = $course["subject"];
-	$courseIndex["number"] = $course["number"];
-	$courseIndex["title"] = $course["title"];
-	return $courseIndex;
 }
 
 function ucalendarGenerateCourseData($fields) {
