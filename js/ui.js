@@ -4,7 +4,7 @@ var COURSES_SHOWN = 5;
 
 var facultyToSubjectMap = {
 	'AHS': [ 'AHS', 'GERON', 'HLTH', 'KIN', 'REC' ],
-	'ART': [ 'AFM', 'ANTH', 'APPLS', 'ARTS', 'ARBUS', 'BUS', 'CHINA', 'CMW', 'CLAS', 'CROAT', 'DAC', 'DRAMA', 'DUTCH', 'EASIA', 'ECON', 'ENGL', 'ESL', 'EFAS', 'FINE', 'FR', 'GER', 'GBDA', 'GRK', 'HIST', 'HRM', 'HUMSC', 'IS', 'INTST', 'INTTS', 'ITAL', 'ITALST', 'JAPAN', 'JS', 'KOREA', 'LAT', 'MEDVL', 'MUSIC', 'NATST', 'PACS', 'PHIL', 'POLSH', 'PSCI', 'PORT', 'PSYCH', 'RS', 'RUSS', 'REES', 'SMF', 'SOCWK', 'SOC', 'SPAN', 'SPCOM', 'SI', 'STV', 'VCULT', 'WS' ],
+	'ART': [ 'AFM', 'ANTH', 'APPLS', 'ARTS', 'ARBUS', 'BUS', 'CHINA', 'CMW', 'CLAS', 'CROAT', 'DAC', 'DRAMA', 'DUTCH', 'EASIA', 'ECON', 'ENGL', 'ESL', 'EFAS', 'FINE', 'FR', 'GER', 'GBDA', 'GRK', 'HIST', 'HRM', 'HUMSC', 'IS', 'INTST', 'INTTS', 'ITAL', 'ITALST', 'JAPAN', 'JS', 'KOREA', 'LAT', 'MEDVL', 'MUSIC', 'NATST', 'PACS', 'PHIL', 'POLSH', 'PSCI', 'PORT', 'PSYCH', 'RS', 'RUSS', 'REES', 'SDS', 'SMF', 'SOCWK', 'SOC', 'SPAN', 'SPCOM', 'SI', 'STV', 'SWREN', 'VCULT', 'WS' ],
 	'ENG': [ 'ARCH', 'BET', 'CHE', 'CIVE', 'ECE', 'ENVE', 'GENE', 'GEOE', 'MSCI', 'ME', 'MTE', 'NE', 'SE', 'SYDE' ],
 	'ENV': [ 'ENBUS', 'ERS', 'ENVS', 'GEOG', 'INDEV', 'INTEG', 'PLAN' ],
 	'MAT': [ 'ACTSC', 'AMATH', 'CO', 'COMM', 'CS', 'MATBUS', 'MATH', 'MTHEL', 'PMATH', 'STAT' ],
@@ -119,7 +119,7 @@ function enableSearch() {
 		} else if ($(this).val()) {
 			getCoursesByQuery($(this).val());
 		} else {
-			$('.course-results').empty();
+			$('.course-results, .results-count').empty();
 		}
 	});
 	$('.search input').on('focus', function() {
@@ -132,6 +132,8 @@ function getCoursesByQuery(query) {
 	query = query.toUpperCase().replaceAll(' ', '');
 	var re = /([A-Za-z]+)\s*([0-9]*)/;
 	var result = query.match(re);
+	var resultCount = 0;
+	var subjectCount = 0;
 	if (result && result[0]) {
 		if (!result[1]) return;
 		// subject only
@@ -156,7 +158,14 @@ function getCoursesByQuery(query) {
 				} 
 				subjectCache[queriedSubject] = results;
 			}
+			for (var subject in subjectCache[queriedSubject]) {
+				for (var number in subjectCache[queriedSubject][subject]) {
+					resultCount++;
+				}
+				subjectCount++;
+			}
 			$('.course').remove();
+			$('.results-count').text('Found ' + resultCount + ' results' + (subjectCount > 1 ? ' in ' + subjectCount + ' subjects:' : ':'));
 			loadCourses(subjectCache[queriedSubject], 5);
 		} else {
 			var queriedSubject = result[1];
@@ -164,8 +173,6 @@ function getCoursesByQuery(query) {
 		}
 		var end = new Date();
 		console.log('Search completed in ' + (end.getTime() - start.getTime()) + ' ms for query ' + query);
-	} else if (query === '') {
-		$('.course').remove();
 	}
 };
 
