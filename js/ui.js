@@ -12,18 +12,16 @@ function attachCourseHandlers () {
 
 // get a results list from backend and load it
 function loadCourses (results, limit) {
-    $('.course').remove();
-	var count = 0;
+    $('.course-results, .results-count').empty();
+	var courseCount = 0, subjectCount = 0;
 	for (var subject in results) {
 		for (var number in results[subject]) {
-			loadCourse (subject, number);
-			count++;
-			if (count >= limit) {
-				attachCourseHandlers();
-				return;
-			}
+			courseCount++;
+			if (courseCount <= limit) { loadCourse(subject, number); }
 		}
+		subjectCount++;
 	}
+    showSearchResult(courseCount, subjectCount);
 	attachCourseHandlers();
 }
 
@@ -86,11 +84,14 @@ function showCourse (subject, number) {
 }; 
 
 function showSearchResult (courseCount, subjectCount) {
-    if (courseCount > 1) {
+    if (courseCount > 0) {
+    	var text = '';
     	if (subjectCount > 1) {
-    		var text = 'Found ' + courseCount + ' results in ' + subjectCount + ' subjects:';
+    		text = 'Found ' + courseCount + ' results in ' + subjectCount + ' subjects:';
+    	} else if (courseCount > 1) {
+    		text = 'Found ' + courseCount + ' results:';
     	} else {
-    		var text = 'Found ' + courseCount + ' results:';
+    		text = 'Found 1 result:';
     	}
         $('.results-count').text(text);
     } else {

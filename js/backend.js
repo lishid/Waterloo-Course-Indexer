@@ -28,50 +28,59 @@ function getCoursesByQuery(query) {
     var start = new Date();
     query = query.toUpperCase().replaceAll(' ', '');
     var re = /([A-Za-z]+)\s*(.*)/;
-    var result = query.match(re);
+    var queries = query.match(re);
     var courseCount = 0, subjectCount = 0;
-    if (result && result[0]) {
-        if (!result[1]) return;
-        // subject only
-        else if (!result[2]) {
-            var queriedSubject = result[1];
+    var finalResults = {};
+    if (queries && queries[0]) {
+        if (!queries[1]) return;
+        // subject is specified
+        else {
+            var queriedSubject = queries[1];
             var len = queriedSubject.length;
-            if (subjectCache[queriedSubject]){
-            } else if (len > 1 && subjectCache[queriedSubject.substring(0, len-1)]) {
-                var results = {};
-                for (var subject in subjectCache[queriedSubject.substring(0, len-1)]) {
-                    if (subject.startWith(queriedSubject)) {
-                        results[subject] = courses[subject];
-                    }
-                }
-                subjectCache[queriedSubject] = results;
+            if (!subjectCache[queriedSubject] && len > 1 && subjectCache[queriedSubject.substring(0, len-1)]) {
+                var cachedDic = subjectCache[queriedSubject.substring(0, len-1)];
+                subjectCache[queriedSubject] = queryInDic(queriedSubject, cachedDic);
             } else {
+                subjectCache[queriedSubject] = queryInDic(queriedSubject, courses);
+            }
+            // if number is specified
+            if (queries[2]) {
+                var queriedNumber = queries[2];
+                var query = queriedSubject + queriedNumber.toString();
+                var len = query.length;
                 var results = {};
-                for (var subject in courses) {
-                    if (subject.startWith(queriedSubject)) {
-                        results[subject] = courses[subject];
-                    }
-                } 
-                subjectCache[queriedSubject] = results;
-            }
-            for (var subject in subjectCache[queriedSubject]) {
-                for (var number in subjectCache[queriedSubject][subject]) {
-                    courseCount++;
+                // if prefix is in cache
+                if (!courseCache[query] && len > 1 && courseCache[query.substring(0, len-1)]) {
+                    var cachedDic = courseCache[query.substring(0, len-1)];
+                    results = queryInDic(queriedNumber, cachedDic);
+                } else {
+                    var coursesUnderSubject = subjectCache[queriedSubject][queriedSubject];
+                    results = queryInDic(queriedNumber, coursesUnderSubject);
                 }
-                subjectCount++;
+                courseCache[query] = results;
+                finalResults[queriedSubject] = results;
+            } else {
+                finalResults = subjectCache[queriedSubject];
             }
-            showSearchResult(courseCount, subjectCount);
-            loadCourses(subjectCache[queriedSubject], 5);
-        } else {
-            var queriedSubject = result[1];
-            var queriedNumber = result[2];
+            loadCourses(finalResults, 5);
         }
         var end = new Date();
         console.log('Search completed in ' + (end.getTime() - start.getTime()) + ' ms for query ' + query);
     }
 };
 
+
 // utils
+function queryInDic (query, dic) {
+    var results = {};
+    for (var key in dic) {
+        if (key.startWith(query)) {
+            results[key] = dic[key];
+        }
+    }
+    return results;
+}
+
 String.prototype.startWith = function (str) {
     var re = new RegExp('^' + str);
     return re.test(this);
