@@ -10,7 +10,9 @@ function attachCourseHandlers () {
 	});
 }
 
+// get a results list from backend and load it
 function loadCourses (results, limit) {
+    $('.course').remove();
 	var count = 0;
 	for (var subject in results) {
 		for (var number in results[subject]) {
@@ -25,6 +27,7 @@ function loadCourses (results, limit) {
 	attachCourseHandlers();
 }
 
+// add a course result to the DOM
 function loadCourse (subject, number) {
 	var title = courses[subject][number] || '';
 	HTML = '<div class="course ' + subjectToFacultyMap[subject] + '" id="' + subject + number + '" data-subject="'+ subject +'" data-number="' + number + '">';
@@ -82,7 +85,20 @@ function showCourse (subject, number) {
 	}
 }; 
 
-function enableSearch() {
+function showSearchResult (courseCount, subjectCount) {
+    if (courseCount > 1) {
+    	if (subjectCount > 1) {
+    		var text = 'Found ' + courseCount + ' results in ' + subjectCount + ' subjects:';
+    	} else {
+    		var text = 'Found ' + courseCount + ' results:';
+    	}
+        $('.results-count').text(text);
+    } else {
+        $('.results-count').empty();
+    }
+}
+
+function enableSearch () {
 	$('.search input').on('input', function (e) {
 		var href = window.location.href;
 		if (href.indexOf('#') !== -1) {
@@ -99,7 +115,7 @@ function enableSearch() {
 }
 
 // listen for keyboard commands: up, down, and enter (return)
-function addArrowKeyListener() {
+function addArrowKeyListener () {
 	$(document).keydown(function(e) {
 		if (e.keyCode === 38) {     // up key
 			if ($('.selected').length > 0) {
@@ -139,7 +155,7 @@ $(document).ready(function() {
 	window.addEventListener('popstate', function(event) {
 		if($('body').hasClass('historyPushed')) {
 			var href = window.location.href;
-			$('.course-results').empty(); 
+			$('.course-results, .results-count').empty(); 
 			if (href.indexOf('#') !== -1) {
 				var subject = href.split('#')[1].split('-')[0];
 				var number = href.split('#')[1].split('-')[1];

@@ -29,8 +29,7 @@ function getCoursesByQuery(query) {
     query = query.toUpperCase().replaceAll(' ', '');
     var re = /([A-Za-z]+)\s*([0-9]*)/;
     var result = query.match(re);
-    var resultCount = 0;
-    var subjectCount = 0;
+    var courseCount = 0, subjectCount = 0;
     if (result && result[0]) {
         if (!result[1]) return;
         // subject only
@@ -57,16 +56,11 @@ function getCoursesByQuery(query) {
             }
             for (var subject in subjectCache[queriedSubject]) {
                 for (var number in subjectCache[queriedSubject][subject]) {
-                    resultCount++;
+                    courseCount++;
                 }
                 subjectCount++;
             }
-            $('.course').remove();
-            if (resultCount > 1) {
-                $('.results-count').text('Found ' + resultCount + ' results' + (subjectCount > 1 ? ' in ' + subjectCount + ' subjects:' : ':'));
-            } else {
-                $('.results-count').empty();
-            }
+            showSearchResult(courseCount, subjectCount);
             loadCourses(subjectCache[queriedSubject], 5);
         } else {
             var queriedSubject = result[1];
