@@ -27,7 +27,7 @@ var subjectCache = {}, courseCache = {};
 function getCoursesByQuery(query) {
     var start = new Date();
     query = query.toUpperCase().replaceAll(' ', '');
-    var re = /([A-Za-z]+)\s*([0-9]*)/;
+    var re = /([A-Za-z]+)\s*(.*)/;
     var result = query.match(re);
     var courseCount = 0, subjectCount = 0;
     if (result && result[0]) {

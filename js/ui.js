@@ -5,7 +5,7 @@ function attachCourseHandlers () {
 		var number = $(this).data('number');
 		$('#' + id + ' .icon').css('background-image', getIconUrl(subject));
 		$(this).click(function () {
-			window.location.href = window.location.href.split('#')[0] + '#' + subject + '-' + number;
+			window.location.href = window.location.href.split('#')[0] + '#' + subject + number;
 		});
 	});
 }
@@ -157,10 +157,14 @@ $(document).ready(function() {
 			var href = window.location.href;
 			$('.course-results, .results-count').empty(); 
 			if (href.indexOf('#') !== -1) {
-				var subject = href.split('#')[1].split('-')[0];
-				var number = href.split('#')[1].split('-')[1];
-				showCourse(subject, number);
-				$('#' + subject + number + ' .icon').css('background-image', getIconUrl(subject));
+				var re = /#([A-Za-z]+)\s*(.*)/;
+				var result = href.match(re);
+				if (result && result[1] && result[2]) {
+					var subject = result[1];
+					var number = result[2];
+					showCourse(subject, number);
+					$('#' + subject + number + ' .icon').css('background-image', getIconUrl(subject));
+				}
 			} else if ($('.search input')) {
 				getCoursesByQuery($('.search input').val());
 			} else {
