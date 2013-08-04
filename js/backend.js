@@ -132,10 +132,6 @@ for (var faculty in facultyToSubjectMap) {
 		subjectToFacultyMap[facultyToSubjectMap[faculty][i]] = faculty;
 }
 
-// {subjectprefix:{subject:{courses}}}
-var subjectCache = {};
-// {subject:{numberprefix:{courses}}}
-var courseCaches = {};
 
 function getCoursesByQuery(query, callback) {
 	var start = new Date();
@@ -155,6 +151,8 @@ function getCoursesByQuery(query, callback) {
 	console.log('Search completed in ' + ((new Date()).getTime() - start.getTime()) + ' ms for query ' + query);
 }
 
+//{subjectprefix:{subject:{courses}}}
+var subjectCache = {};
 function findOrCacheSubject(subject, exactMatch) {
 	if(exactMatch) {
 		var result = {};
@@ -175,7 +173,7 @@ function findOrCacheSubject(subject, exactMatch) {
 				subjectCache[subject] = subset(cached, subject);
 			}
 		}
-		//Create new
+		//Create new otherwise
 		if(!subjectCache[subject]) {
 			subjectCache[subject] = subset(courses, subject);
 		}
@@ -184,34 +182,43 @@ function findOrCacheSubject(subject, exactMatch) {
 	return subjectCache[subject];
 }
 
+//{subject:{numberprefix:{courses}}}
+var courseCaches = {};
 function findOrCacheCourses(subjectMap, number) {
 	var results = {};
 
 	for (var key in subjectMap) {
+		//{numberprefix:{courses}}
 		var courseList = courseCaches[key];
+		var cachedCourseList;
+		//Cache found for subject
 		if(courseList) {
 			var length = number.length;
-			if(!courseList[number]){
-				//From prev cached
+			cachedCourseList = courseList[number];
+			//Cached search
+			if(!cachedCourseList){
 				if(length > 1) {
 					var cached = courseList[number.substring(0, length - 1)];
 					if(cached) {
-						courseList[number] = subset(cached, number);
+						cachedCourseList = subset(cached, number);
+						courseList[number] = cachedCourseList;
 					}
 				}
 			}
 		}
+		//Create cache for subject
 		else {
 			courseList = {};
 			courseCaches[key] = courseList;
 		}
 
-		//Create new
-		if(!courseList[number]) {
-			courseList[number] = subset(subjectMap[key], number);
+		//Do a full search if not cached or from a cached search
+		if(!cachedCourseList) {
+			cachedCourseList = subset(subjectMap[key], number);
+			courseList[number] = cachedCourseList;
 		}
 
-		results[key] = courseList[number];
+		results[key] = cachedCourseList;
 	}
 
 	return results;
