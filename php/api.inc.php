@@ -82,6 +82,12 @@ function apiGetCourseData($subject, $number) {
 	$offered = commonParseOfferedFromNote($notes, $offered);
 	$offered = commonFinalizeOffered($offered);
 
+	$prereqDesc = substr($prereqDesc, 8);
+	$antireqDesc = substr($antireqDesc, 9);
+	$crosslistDesc = substr($crosslistDesc, 1, strlen($crosslistDesc) - 2);
+	$coreqDesc = substr($coreqDesc, 7);
+	$notes = substr($notes, 7, strlen($notes) - 8);
+
 	// [hasDistEd] => 0
 	// [onlyDistEd] => 0
 	// [hasStj] => 0

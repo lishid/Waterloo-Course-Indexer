@@ -90,8 +90,8 @@ function ucalendarGenerateCourseData($fields) {
 	$components = $courseCodeTokens[2];
 	$credits = $courseCodeTokens[3];
 	$type = "UGRAD";
-	$consentDepartment = findInArray($fields, 3, count($fields) - 1, "Department Consent");
-	$consentInstructor = findInArray($fields, 3, count($fields) - 1, "Instructor Consent");
+	$consentDepartment = (findInArray($fields, 3, count($fields) - 1, "Department Consent") != "");
+	$consentInstructor = (findInArray($fields, 3, count($fields) - 1, "Instructor Consent") != "");
 	$prereqDesc = findInArray($fields, 3, count($fields) - 1, "Prereq:");
 	$antireqDesc = findInArray($fields, 3, count($fields) - 1, "Antireq:");
 	$crosslistDesc = findInArray($fields, 3, count($fields) - 1, "(Cross-listed");
@@ -106,6 +106,11 @@ function ucalendarGenerateCourseData($fields) {
 	$offered = commonParseOfferedFromNote($notes, $offered);
 	$offered = commonFinalizeOffered($offered);
 
+	$prereqDesc = substr($prereqDesc, 8);
+	$antireqDesc = substr($antireqDesc, 9);
+	$crosslistDesc = substr($crosslistDesc, 1, strlen($crosslistDesc) - 2);
+	$coreqDesc = substr($coreqDesc, 7);
+	$notes = substr($notes, 7, strlen($notes) - 8);
 
 	$course["subject"] = $subject;
 	$course["number"] = $number;

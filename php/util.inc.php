@@ -39,4 +39,5 @@ function array_merge_assoc() {
 	}
 	return $array;
 }
+
 ?>
