@@ -136,8 +136,9 @@ function enableSearch () {
 	$('.search input').on('input', function (e) {
 		var href = window.location.href;
 		if (href.indexOf('#') !== -1) {
-			window.location.href = href.split('#')[0];
-		} else if ($(this).val()) {
+			window.location.hash = '';
+		}
+		if ($(this).val()) {
 			getCoursesByQuery($(this).val());
 		} else {
 			$('.subject-results, .course-results, .results-count').empty();
@@ -190,7 +191,7 @@ $(document).ready(function() {
 		if($('body').hasClass('historyPushed')) {
 			var href = window.location.href;
 			$('.subject-results, .course-results, .results-count').empty(); 
-			if (href.indexOf('#') !== -1) {
+			if (window.location.hash) {
 				var re = /#([A-Za-z]+)\s*(.*)/;
 				var result = href.match(re);
 				if (result && result[1] && result[2]) {
@@ -201,11 +202,13 @@ $(document).ready(function() {
 				}
 			} else if ($('.search input')) {
 				getCoursesByQuery($('.search input').val());
-			} else {
-				if($('.course:visible').length > COURSES_SHOWN) {
-					$('.course:visible:gt(' + (COURSES_SHOWN - 1) + ')').hide();
-				}
-
+				$.ajax({
+					url: 'get?course&subject=CS&number=137',
+					dataType: 'json',
+					success: function (data) {
+						console.log(data);//t
+					}
+				})
 			}
 			enableSearch();
 			addArrowKeyListener();
