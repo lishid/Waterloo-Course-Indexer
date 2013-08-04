@@ -10,31 +10,64 @@ function attachCourseHandlers () {
 	});
 }
 
+function attachSubjectHandlers () {
+	$('.subject').each(function () {
+		var subject = $(this).attr('id');
+		$('#' + subject + ' .icon').css('background-image', getIconUrl(subject));
+		$(this).click(function () {
+			$('.search input').val(subject + ' ').focus();
+			getCoursesByQuery($('.search input').val());
+		});
+	});
+}
+
 // get a results list from backend and load it
-function loadCourses (results, limit) {
-    $('.course-results, .results-count').empty();
-	var courseCount = 0, subjectCount = 0;
+function loadSearchResult (results, courseLimit, subjectLimit) {
+	$('.subject-results, .course-results, .results-count').empty();
+	var subjectCount = 0;
+	var courseCount = 0;
+	for (var subject in results) subjectCount++;
+	if (subjectCount > 1) {
+		var count = 0;
+		for (var subject in results) {
+			count++;
+			if (count <= subjectLimit) loadSubject(subject);
+		}
+	}
 	for (var subject in results) {
 		for (var number in results[subject]) {
 			courseCount++;
-			if (courseCount <= limit) { loadCourse(subject, number); }
+			if (courseCount <= courseLimit) { loadCourse(subject, number); }
 		}
-		subjectCount++;
 	}
-    showSearchResult(courseCount, subjectCount);
+	showSearchResult(courseCount, subjectCount);
+	attachSubjectHandlers();
 	attachCourseHandlers();
+}
+
+
+// add a subject result to the DOM
+function loadSubject (subject) {
+	var title = subjectTitles[subject];
+	var html = '<div class="subject ' + subjectToFacultyMap[subject] + '" id="' + subject + '">';
+	html += '<div class="header"><div class="title">';
+	html += '<h2><span class="code">' + subject + '</span></h2>';
+	html += '<h3><span class="name">' + title + '</span></h3></div>';
+    html += '<div class="icon-wrapper"><div class="icon"></div></div></div></div>';
+    $('.subject-results').append(html);
 }
 
 // add a course result to the DOM
 function loadCourse (subject, number) {
 	var title = courses[subject][number] || '';
-	HTML = '<div class="course ' + subjectToFacultyMap[subject] + '" id="' + subject + number + '" data-subject="'+ subject +'" data-number="' + number + '">';
-	HTML += '<div class="header"><div class="icon-wrapper"><div class="icon"></div></div>';
-	HTML += '<div class="title"><h2><span class="code">' + subject + " " + number + '</span></h2>';
-	HTML += '<h3><span class="name">' + title.trunc(50) + '</span></h3></div></div>';
-	HTML += '<div class="details" style="display: none"></div></div>';
-	$('.course-results').append(HTML);
+	html = '<div class="course ' + subjectToFacultyMap[subject] + '" id="' + subject + number + '" data-subject="'+ subject +'" data-number="' + number + '">';
+	html += '<div class="header"><div class="icon-wrapper"><div class="icon"></div></div>';
+	html += '<div class="title"><h2><span class="code">' + subject + " " + number + '</span></h2>';
+	html += '<h3><span class="name">' + title.trunc(50) + '</span></h3></div></div>';
+	html += '<div class="details" style="display: none"></div></div>';
+	$('.course-results').append(html);
 }
+
 
 // get the path to an icon; it DOES NOT check for whether file exists
 function getIconUrl (filename) {
@@ -107,7 +140,7 @@ function enableSearch () {
 		} else if ($(this).val()) {
 			getCoursesByQuery($(this).val());
 		} else {
-			$('.course-results, .results-count').empty();
+			$('.subject-results, .course-results, .results-count').empty();
 		}
 	});
 	$('.search input').on('focus', function() {
@@ -156,7 +189,7 @@ $(document).ready(function() {
 	window.addEventListener('popstate', function(event) {
 		if($('body').hasClass('historyPushed')) {
 			var href = window.location.href;
-			$('.course-results, .results-count').empty(); 
+			$('.subject-results, .course-results, .results-count').empty(); 
 			if (href.indexOf('#') !== -1) {
 				var re = /#([A-Za-z]+)\s*(.*)/;
 				var result = href.match(re);
@@ -172,13 +205,7 @@ $(document).ready(function() {
 				if($('.course:visible').length > COURSES_SHOWN) {
 					$('.course:visible:gt(' + (COURSES_SHOWN - 1) + ')').hide();
 				}
-				$('.subject').each(function () {
-					$(this).click(function () {
-						var id = $(this).attr('id');
-						$('.search input').val(id + ' ').focus();
-						$('.subject').hide();
-					});
-				});
+
 			}
 			enableSearch();
 			addArrowKeyListener();
