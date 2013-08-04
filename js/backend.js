@@ -143,9 +143,10 @@ function getCoursesByQuery(query, callback) {
 	var queries = query.match(/([A-Z]+)(\s*)(.*)/);
 	if(!queries || !queries[0]) return null;
 	var subject = queries[1];
+	var foundWhitespace = queries[2];
 	var number = queries[3];
-	var resultMap = findOrCacheSubject(subject);
-	if(number && objectKeyLength(resultMap) == 1) {
+	var resultMap = findOrCacheSubject(subject, foundWhitespace || number);
+	if(number || objectKeyLength(resultMap) == 1) {
 		resultMap = findOrCacheCourses(resultMap, number);
 	}
 
@@ -154,7 +155,13 @@ function getCoursesByQuery(query, callback) {
 	console.log('Search completed in ' + ((new Date()).getTime() - start.getTime()) + ' ms for query ' + query);
 }
 
-function findOrCacheSubject(subject) {
+function findOrCacheSubject(subject, exactMatch) {
+	if(exactMatch) {
+		var result = {};
+		result[subject] = courses[subject];
+		return result;
+	}
+
 	if(!subject || subject.length == 0) {
 		return courses;
 	}
@@ -210,12 +217,25 @@ function findOrCacheCourses(subjectMap, number) {
 	return results;
 }
 
-function fetchCourse (subject, number, callback) {
+function fetchCourse(subject, number, callback) {
 	$.ajax({
 		url: 'get?course&subject=' + subject + '&number=' + number,
 		dataType: 'json',
 		success: function (data) {
 			callback(data);
+		}
+	})
+};
+
+var courses;
+//loadCourses();
+
+function loadCourses() {
+	$.ajax({
+		url: 'get?index',
+		dataType: 'json',
+		success: function (data) {
+			courses = data;
 		}
 	})
 };
