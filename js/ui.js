@@ -75,45 +75,36 @@ function getIconUrl (filename) {
 }
 
 // load course details; hide search list
-function showCourse (subject, number) {
-	var code = subject + number;
+function showCourse (course) {
+	var code = course.subject + course.number;
+	loadCourse(course.subject, course.number);
 	var container = $('#' + code);
-	var href = window.location.href;
-	if (!container.hasClass('opened')) {
-		var subject, number;
-		$('.course').remove();
-		if (!container.length > 0) {
-			loadCourse(subject, number);
-			container = $('#' + subject + number);
-		}
+	container.addClass('opened');
 
-		var course = courses[subject][number];
-		container.off('click');
+	var HTML = '<h2>Description</h2>';
+	HTML += '<p>' + course.description + '</p>';
 
-		var HTML = '<h2>Description</h2>';
-		// HTML += '<p>' + course.description + '</p>';
-		HTML += '<p>SampleDescription</p>';
-
-		var note = '';
-		for (var i in course.offered) {
-			var term = course.offered[i];
-			if (term !== 'F' && term !== 'W' && term !== 'S') note = term; 
-		}
-
-		var terms = ['Fall', 'Winter', 'Spring'];
-		var abbrs = ['F', 'W', 'S'];
-		HTML += '<h2>Availability</h2><p class="offered">';
-		for (var i in abbrs) {
-			HTML += (jQuery.inArray(abbrs[i], course.offered) !== -1) ? '<span class="offered">' + terms[i] + '</span>' : '';
-		}
-		HTML += '</p>';
-		container.find('.details').empty().append(HTML).show();
-		container.addClass('opened');
-
-		// transformation
-		var width = container.find('.header').width();
-		container.find('.header').width(width + 22);
+	var note = '';
+	var offered = ['F', 'W', 'S'];
+	if (course.offered.length > 0) offered = course.offered;
+	for (var i in offered) {
+		var term = offered[i];
+		if (term !== 'F' && term !== 'W' && term !== 'S') note = term; 
 	}
+
+	var terms = ['Fall', 'Winter', 'Spring'];
+	var abbrs = ['F', 'W', 'S'];
+	HTML += '<h2>Availability</h2><p class="offered">';
+	for (var i in abbrs) {
+		HTML += (jQuery.inArray(abbrs[i], offered) !== -1) ? '<span class="offered">' + terms[i] + '</span>' : '';
+	}
+	HTML += '</p>';
+	container.find('.details').empty().append(HTML).show();
+	container.find('.icon').css('background-image', getIconUrl(course.subject));
+
+	// transformation
+	var width = container.find('.header').width();
+	container.find('.header').width(width + 22);
 }; 
 
 function showSearchResult (courseCount, subjectCount) {
@@ -197,18 +188,11 @@ $(document).ready(function() {
 				if (result && result[1] && result[2]) {
 					var subject = result[1];
 					var number = result[2];
-					showCourse(subject, number);
+					fetchCourse(subject, number);
 					$('#' + subject + number + ' .icon').css('background-image', getIconUrl(subject));
 				}
 			} else if ($('.search input')) {
 				getCoursesByQuery($('.search input').val());
-				$.ajax({
-					url: 'get?course&subject=CS&number=137',
-					dataType: 'json',
-					success: function (data) {
-						console.log(data);//t
-					}
-				})
 			}
 			enableSearch();
 			addArrowKeyListener();

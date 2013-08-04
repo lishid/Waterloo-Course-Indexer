@@ -180,6 +180,15 @@ function getCoursesByQuery(query) {
     }
 };
 
+function fetchCourse (subject, number) {
+    $.ajax({
+        url: 'get?course&subject=' + subject + '&number=' + number,
+        dataType: 'json',
+        success: function (data) {
+            showCourse(data);
+        }
+    })
+};
 
 // utils
 function queryInDic (query, dic) {
