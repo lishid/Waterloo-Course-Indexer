@@ -122,7 +122,7 @@ $(document).ready(function() {
 					var subject = result[1];
 					var number = result[2];
 					if (result && subject && number) {
-						fetchCourse(subject, number, showCourse);
+						BACKEND.getCourse(subject, number, showCourse);
 					} else if (result && subject) {
 						searchBar.val(subject + " ").focus();
 						BACKEND.getCoursesByQuery(searchBar.val(), loadSearchResult);
