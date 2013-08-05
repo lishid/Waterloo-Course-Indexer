@@ -1,5 +1,16 @@
 <?php
 
+
+function utilDownloadPage($filename, $url) {
+	$filename = getcwd() . $filename;
+	$data = utilCacheGet($filename);
+	if(!$data) {
+		$data = file_get_contents($url);
+		utilCacheWrite($filename, $data);
+	}
+	return $data;
+}
+
 function utilCreateDir($filename) {
 	$dir = dirname($filename);
 	if (!file_exists($dir)) {

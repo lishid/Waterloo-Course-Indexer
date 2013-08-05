@@ -9,12 +9,7 @@ function apiBaseUrl() {
 }
 
 function apiDownloadPage($filename, $urlSuffix) {
-	$filename = getcwd() . "/cache/api/raw/" . $filename;
-	$data = utilCacheGet($filename);
-	if(!$data) {
-		$data = file_get_contents(apiBaseUrl() . $urlSuffix);
-		utilCacheWrite($filename, $data);
-	}
+	$data = utilDownloadPage("/cache/api/raw/" . $filename, apiBaseUrl() . $urlSuffix);
 	return json_decode($data, true);
 }
 

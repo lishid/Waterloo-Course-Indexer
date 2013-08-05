@@ -4,7 +4,10 @@ require_once("php/indexing.inc.php");
 
 set_time_limit(0);
 
-if(isset($_GET["index"])) {
+if(isset($_GET["subjects"])) {
+	echo json_encode(getSubjectsIndex());
+}
+else if(isset($_GET["index"])) {
 	echo json_encode(getAllSubjectIndex());
 }
 else if(isset($_GET["course"])) {
@@ -15,7 +18,7 @@ else if(isset($_GET["course"])) {
 	}
 }
 else {
-	print_r(getSubjectIndex("CS"));
+	
 }
 
 ?>

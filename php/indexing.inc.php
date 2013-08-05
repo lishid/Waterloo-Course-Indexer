@@ -53,4 +53,17 @@ function generateCourseData($subject, $number) {
 	return $data;
 }
 
+function getSubjectsIndex() {
+	$filename = getcwd() . "/cache/index/subjects";
+	$data = utilCacheGet($filename);
+	if(!$data) {
+		$data = ucalendarGetSubjectsIndex();
+		utilCacheWrite($filename, json_encode($data));
+	}
+	else {
+		$data = json_decode($data, true);
+	}
+	return $data;
+}
+
 ?>
