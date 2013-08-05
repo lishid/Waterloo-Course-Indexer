@@ -83,7 +83,7 @@ $(document).ready(function() {
 				window.location.hash = "";
 			}
 			if ($(this).val()) {
-				getCoursesByQuery($(this).val(), loadSearchResult);
+				BACKEND.getCoursesByQuery($(this).val(), loadSearchResult);
 			} else {
 				searchResults.empty();
 			}
@@ -95,10 +95,10 @@ $(document).ready(function() {
 		var icon = "<div class='icon-wrapper'><div class='icon' style='background-image: url(\"img/course-icons/" + subject + ".svg\");'></div></div>";
 
 		if (component === "subject") {
-			return "<a href='#" + subject + "'><div class='subject " + subjectToFacultyMap[subject] + "' id='" + subject + "'><div class='header'><div class='title'><h2><span class='code'>" + subject + "</span></h2><h3><span class='name'>" + subjectTitles[subject] + "</span></h3></div>" + icon + "</div></div></a>";
+			return "<a href='#" + subject + "'><div class='subject " + BACKEND.subjects[subject].department + "' id='" + subject + "'><div class='header'><div class='title'><h2><span class='code'>" + subject + "</span></h2><h3><span class='name'>" + BACKEND.subjects[subject].title + "</span></h3></div>" + icon + "</div></div></a>";
 		}
 
-		var courseHTML = "<div class='course " + subjectToFacultyMap[subject] + "' id='" + id + "'><div class='header'>" + icon + "<div class='title'><h2><span class='code'>" + subject + " " + number + "</span></h2><h3><span class='name'>" + courses[subject][number].trunc(50) + "</span></h3></div></div><div class='details' style='display: none'></div></div>";
+		var courseHTML = "<div class='course " + BACKEND.subjects[subject].department + "' id='" + id + "'><div class='header'>" + icon + "<div class='title'><h2><span class='code'>" + subject + " " + number + "</span></h2><h3><span class='name'>" + BACKEND.courseIndex[subject][number].trunc(50) + "</span></h3></div></div><div class='details' style='display: none'></div></div>";
 
 		if (component === "course") {
 			return "<a href='#" + id + "'>" + courseHTML + "</a>";
@@ -124,12 +124,11 @@ $(document).ready(function() {
 					if (result && subject && number) {
 						fetchCourse(subject, number, showCourse);
 					} else if (result && subject) {
-						searchBar.val(subject + " ");
-						window.location.hash = "";
-						getCoursesByQuery(searchBar.val());
+						searchBar.val(subject + " ").focus();
+						BACKEND.getCoursesByQuery(searchBar.val(), loadSearchResult);
 					}
 				} else if (searchBar.val()) {
-					getCoursesByQuery(searchBar.val(), loadSearchResult);
+					BACKEND.getCoursesByQuery(searchBar.val(), loadSearchResult);
 				}
 				enableSearch();
 			}

@@ -249,7 +249,7 @@ a {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5f3ff', endColorstr='#cce8ff',GradientType=0 ); /* IE6-9 */
 }
 
-.OTHER.opened .header, .OTHER.selected .header, .OTHER.subject .header {
+.VPA.opened .header, .VPA.selected .header, .VPA.subject .header {
 	background: #efefef; /* Old browsers */
 	background: -moz-linear-gradient(top,  #efefef 0%, #d8d8d8 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#efefef), color-stop(100%,#d8d8d8)); /* Chrome,Safari4+ */
@@ -380,7 +380,7 @@ p.offered {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7fc7ff', endColorstr='#66bcff',GradientType=0 ); /* IE6-9 */
 }
 
-.OTHER .icon-wrapper, .OTHER span.offered {
+.VPA .icon-wrapper, .VPA span.offered {
 	background: #dbdbdb; /* Old browsers */
 	background: -moz-linear-gradient(top,  #dbdbdb 0%, #aaaaaa 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dbdbdb), color-stop(100%,#aaaaaa)); /* Chrome,Safari4+ */
