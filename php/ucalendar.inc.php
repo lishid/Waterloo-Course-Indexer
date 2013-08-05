@@ -165,7 +165,7 @@ function ucalendarGetSubjectsIndex() {
 		}
 		$subjectCode = trim($value);
 		$subject = array();
-		$subject["description"] = trim($subjectList[1][$key]);
+		$subject["title"] = trim($subjectList[1][$key]);
 		$subject["department"] = trim($subjectList[3][$key]);
 		$subjects[$subjectCode] = $subject;
 	}

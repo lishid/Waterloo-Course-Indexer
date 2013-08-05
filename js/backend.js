@@ -110,6 +110,7 @@ var BACKEND = (function (object) {
 		$.ajax({
 			url: "get?subjects",
 			dataType: "json",
+			async: false,
 			success: function (data) {
 				subjectIndex = data;
 				object.departments = subjectIndex["departments"];
@@ -122,6 +123,7 @@ var BACKEND = (function (object) {
 		$.ajax({
 			url: "get?index",
 			dataType: "json",
+			async: false,
 			success: function (data) {
 				courseIndex = data;
 				object.courseIndex = courseIndex;
