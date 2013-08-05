@@ -24,7 +24,7 @@ body {
 	overflow-y: scroll;
 }
 
-header, .search, .course-results, .subject-results {
+header, #search, #course-results, #subject-results {
 	margin: 0 auto;
 	width: 600px;
 }
@@ -57,7 +57,7 @@ a {
 	text-decoration: none;
 }
 
-.search input {
+#search input {
 	margin-top: 1em;
 	width: 100%;
 	height: 2.4em;
@@ -74,17 +74,17 @@ a {
     background-position: 0.6em 0.4em;
 }
 
-.results-count {
+#results-count {
 	width: 600px;
 	margin: 1em auto 0.5em auto;
 	font-size: 2em;
 }
 
-.subject-results {
+#subject-results {
 	margin-bottom: 1.5em;
 }
 
-.course-results {
+#course-results {
 	margin-bottom: 10em;
 }
 
@@ -94,7 +94,7 @@ a {
     border-radius: 4px;
 }
 
-.search input, .course {
+#search input, .course {
 	border: 1px solid #adadad;
 	-webkit-box-shadow:  0 1px 1px rgba(0,0,0,0.2),inset -1px -1px 0 #fff;
     box-shadow: 0 1px 1px rgba(0,0,0,0.2),inset -1px -1px 0 #fff;
@@ -128,8 +128,8 @@ a {
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
-	-webkit-border-radius: 0 0 0 4px;
-    border-radius: 0 0 0 4px;
+	-webkit-border-radius: 4px;
+    border-radius: 4px;
     cursor: pointer;
 }
 
@@ -431,11 +431,11 @@ p.offered {
 
 /*adjustments for smaller screen size*/
 @media only screen and (max-width : 475px) {
-	header, .search, .course-results { width: 400px; }
+	header, #search, #course-results, #subject-results { width: 400px; }
 	h2 { font-size: 2.5em; }
 	h3 { font-size: 1.5em; }
 }
 
 @media only screen and (max-width : 425px) {
-	header, .search, .course-results { width: 350px; }
+	header, #search, #course-results, #subject-results { width: 350px; }
 }
