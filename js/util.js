@@ -20,7 +20,7 @@ String.prototype.replaceAll = function (find, replace) {
 	return this.replace(new RegExp(find, 'g'), replace);
 }
 
-function objectKeyLength(object) {
+Object.size = function(object) {
 	var count = 0;
 	for (var key in object){
 		if (object.hasOwnProperty(key)){

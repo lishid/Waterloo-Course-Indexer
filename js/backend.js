@@ -17,7 +17,7 @@ var BACKEND = (function (object) {
 		var foundWhitespace = queries[2];
 		var number = queries[3];
 		var resultMap = findOrCacheSubjects(subject, foundWhitespace || number);
-		if(number || objectKeyLength(resultMap) == 1) {
+		if(number || Object.size(resultMap) == 1) {
 			resultMap = findOrCacheCourses(resultMap, number);
 		}
 
