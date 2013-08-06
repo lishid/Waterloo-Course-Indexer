@@ -10,7 +10,6 @@ var BACKEND = (function (object) {
 	var courseCaches = {};
 
 	function getCoursesByQuery (query, callback) {
-		var start = new Date();
 		query = query.toUpperCase();
 		var queries = query.match(/([A-Z]+)(\s*)(.*)/);
 		if(!queries || !queries[0]) return null;
@@ -23,8 +22,6 @@ var BACKEND = (function (object) {
 		}
 
 		callback(resultMap);
-
-		console.log("Search completed in " + ((new Date()).getTime() - start.getTime()) + " ms for query " + query);
 	}
 
 	function findOrCacheSubjects (subject, exactMatch) {

@@ -82,8 +82,9 @@ $(document).ready(function() {
 			if (window.location.hash) {
 				window.location.hash = "";
 			}
-			if ($(this).val()) {
-				BACKEND.getCoursesByQuery($(this).val(), loadSearchResult);
+			var query = $(this).val();
+			if (query) {
+				BACKEND.getCoursesByQuery(query, loadSearchResult);
 			} else {
 				searchResults.empty();
 			}
