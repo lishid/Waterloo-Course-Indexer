@@ -3,6 +3,7 @@
 require_once("api.inc.php");
 require_once("ucalendar.inc.php");
 require_once("util.inc.php");
+require_once("requisites.inc.php");
 
 function getAllSubjectIndex() {
 	$subjects = getSubjectList();
@@ -50,6 +51,28 @@ function generateCourseData($subject, $number) {
 	$apiData = apiGetCourseData($subject, $number);
 	$ucalendarData = ucalendarGetCourseData($subject, $number);
 	$data = array_merge_assoc($apiData, $ucalendarData);
+
+	$data["offered"] = commonParseOfferedFromDescription($data["description"], $data["offered"]);
+	$data["offered"] = commonParseOfferedFromNote($data["notes"], $data["offered"]);
+	$data["offered"] = commonFinalizeOffered($data["offered"]);
+
+	if(startsWith($data["prereqDesc"], "Prerequisite")) {
+		$data["prereqDesc"] = substr($data["prereqDesc"], 14);
+	}
+	else {
+		$data["prereqDesc"] = substr($data["prereqDesc"], 8);
+	}
+	$data["antireqDesc"] = substr($data["antireqDesc"], 9);
+	$data["crosslistDesc"] = substr($data["crosslistDesc"], 1, strlen($data["crosslistDesc"]) - 2);
+	$data["coreqDesc"] = substr($data["coreqDesc"], 7);
+	$data["notes"] = substr($data["notes"], 7, strlen($data["notes"]) - 8);
+
+	$prereq = parseRequisiteList(trim($data["prereqDesc"], "."));
+
+	if(count($prereq) > 0) {
+		utilAppendFile(getcwd() . "/cache/prereq", $data["prereqDesc"] . "\n" . print_r($prereq, true) . "\n\n");
+	}
+
 	return $data;
 }
 
@@ -67,7 +90,11 @@ function getSubjectsIndex() {
 }
 
 function generateSubjectCoursesData($subject) {
-
+	$index = getSubjectIndex($subject);
+	foreach($index as $key => $value) {
+		$index[$key] = generateCourseData($subject, $key); // TODO: getCourseData
+	}
+	return $index;
 }
 
 ?>

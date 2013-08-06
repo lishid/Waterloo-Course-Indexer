@@ -87,50 +87,23 @@ function ucalendarGenerateCourseData($fields) {
 	$courseCodeTokens = explode(" ", $fields[0]);
 	$course = array();
 
-	$subject = $courseCodeTokens[0];
-	$number = $courseCodeTokens[1];
-	$title = $fields[2];
-	$components = $courseCodeTokens[2];
-	$credits = $courseCodeTokens[3];
-	$type = "UGRAD";
-	$consentDepartment = (findInArray($fields, 3, count($fields) - 1, "Department Consent") != "");
-	$consentInstructor = (findInArray($fields, 3, count($fields) - 1, "Instructor Consent") != "");
-	$prereqDesc = findInArray($fields, 3, count($fields) - 1, "Prereq:");
-	$antireqDesc = findInArray($fields, 3, count($fields) - 1, "Antireq:");
-	$crosslistDesc = findInArray($fields, 3, count($fields) - 1, "(Cross-listed");
-	$coreqDesc = findInArray($fields, 3, count($fields) - 1, "Coreq:");
-	$notes = findInArray($fields, 3, count($fields) - 1, "[Note: ");
-	$offered = array();
-	$url = ucalendarSubjectUrl($course["subject"]) . "#" . $course["subject"] . $course["number"];
+	$course["subject"] = $courseCodeTokens[0];
+	$course["number"] = $courseCodeTokens[1];
+	$course["title"] = $fields[2];
+	$course["components"] = $courseCodeTokens[2];
+	$course["credits"] = $courseCodeTokens[3];
+	$course["type"] = "UGRAD";
+	$course["consentDepartment"] = (findInArray($fields, 3, count($fields) - 1, "Department Consent") != "");
+	$course["consentInstructor"] = (findInArray($fields, 3, count($fields) - 1, "Instructor Consent") != "");
+	$course["prereqDesc"] = findInArray($fields, 3, count($fields) - 1, "Prereq:");
+	$course["antireqDesc"] = findInArray($fields, 3, count($fields) - 1, "Antireq:");
+	$course["crosslistDesc"] = findInArray($fields, 3, count($fields) - 1, "(Cross-listed");
+	$course["coreqDesc"] = findInArray($fields, 3, count($fields) - 1, "Coreq:");
+	$course["notes"] = findInArray($fields, 3, count($fields) - 1, "[Note: ");
+	$course["offered"] = array();
+	$course["url"] = ucalendarSubjectUrl($course["subject"]) . "#" . $course["subject"] . $course["number"];
 
-	$description = $fields[3];
-
-	$offered = commonParseOfferedFromDescription($description, $offered);
-	$offered = commonParseOfferedFromNote($notes, $offered);
-	$offered = commonFinalizeOffered($offered);
-
-	$prereqDesc = substr($prereqDesc, 8);
-	$antireqDesc = substr($antireqDesc, 9);
-	$crosslistDesc = substr($crosslistDesc, 1, strlen($crosslistDesc) - 2);
-	$coreqDesc = substr($coreqDesc, 7);
-	$notes = substr($notes, 7, strlen($notes) - 8);
-
-	$course["subject"] = $subject;
-	$course["number"] = $number;
-	$course["title"] = $title;
-	$course["description"] = $description;
-	$course["components"] = $components;
-	$course["credits"] = $credits;
-	$course["type"] = $type;
-	$course["consentDepartment"] = $consentDepartment;
-	$course["consentInstructor"] = $consentInstructor;
-	$course["prereqDesc"] = $prereqDesc;
-	$course["antireqDesc"] = $antireqDesc;
-	$course["crosslistDesc"] = $crosslistDesc;
-	$course["coreqDesc"] = $coreqDesc;
-	$course["notes"] = $notes;
-	$course["offered"] = $offered;
-	$course["url"] = $url;
+	$course["description"] = $fields[3];
 
 	return $course;
 }

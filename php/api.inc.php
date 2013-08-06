@@ -56,33 +56,6 @@ function apiGetCourseData($subject, $number) {
 	$data = apiDownloadCourse($subject, $number);
 	$course = array();
 
-	$subject = $data["DeptAcronym"];
-	$number = $data["Number"];
-	$title = $data["Title"];
-	$description = $data["Description"];
-	$components = apiParseComponents($data);
-	$credits = $data["Credits"];
-	$type = $data["Type"];
-	$consentDepartment = ($data["needsDeptConsent"] == "1");
-	$consentInstructor = ($data["needsInstrConsent"] == "1");
-	$prereqDesc = $data["prereqDesc"];
-	$antireqDesc = $data["antireqDesc"];
-	$crosslistDesc = $data["crosslistDesc"];
-	$coreqDesc = $data["coreqDesc"];
-	$notes = $data["noteDesc"];
-	$offered = array();
-	$url = $data["URL"];
-
-	$offered = commonParseOfferedFromDescription($description, $offered);
-	$offered = commonParseOfferedFromNote($notes, $offered);
-	$offered = commonFinalizeOffered($offered);
-
-	$prereqDesc = substr($prereqDesc, 8);
-	$antireqDesc = substr($antireqDesc, 9);
-	$crosslistDesc = substr($crosslistDesc, 1, strlen($crosslistDesc) - 2);
-	$coreqDesc = substr($coreqDesc, 7);
-	$notes = substr($notes, 7, strlen($notes) - 8);
-
 	// [hasDistEd] => 0
 	// [onlyDistEd] => 0
 	// [hasStj] => 0
@@ -92,22 +65,22 @@ function apiGetCourseData($subject, $number) {
 	// [hasCgr] => 0
 	// [onlyCgr] => 0
 
-	$course["subject"] = $subject;
-	$course["number"] = $number;
-	$course["title"] = $title;
-	$course["description"] = $description;
-	$course["components"] = $components;
-	$course["credits"] = $credits;
-	$course["type"] = $type;
-	$course["consentDepartment"] = $consentDepartment;
-	$course["consentInstructor"] = $consentInstructor;
-	$course["prereqDesc"] = $prereqDesc;
-	$course["antireqDesc"] = $antireqDesc;
-	$course["crosslistDesc"] = $crosslistDesc;
-	$course["coreqDesc"] = $coreqDesc;
-	$course["notes"] = $notes;
-	$course["offered"] = $offered;
-	$course["url"] = $url;
+	$course["subject"] = $data["DeptAcronym"];
+	$course["number"] = $data["Number"];
+	$course["title"] = $data["Title"];
+	$course["description"] = $data["Description"];
+	$course["components"] = apiParseComponents($data);
+	$course["credits"] = $data["Credits"];
+	$course["type"] = $data["Type"];
+	$course["consentDepartment"] = ($data["needsDeptConsent"] == "1");
+	$course["consentInstructor"] = ($data["needsInstrConsent"] == "1");
+	$course["prereqDesc"] = $data["prereqDesc"];
+	$course["antireqDesc"] = $data["antireqDesc"];
+	$course["crosslistDesc"] = $data["crosslistDesc"];
+	$course["coreqDesc"] = $data["coreqDesc"];
+	$course["notes"] = $data["noteDesc"];
+	$course["offered"] = array();
+	$course["url"] = $data["URL"];
 
 	return $course;
 }

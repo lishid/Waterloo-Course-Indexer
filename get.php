@@ -18,7 +18,9 @@ else if(isset($_GET["course"])) {
 	}
 }
 else {
-	
+	generateSubjectCoursesData("CS");
+	generateSubjectCoursesData("ECE");
+	print_r("");
 }
 
 ?>
