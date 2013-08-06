@@ -44,6 +44,9 @@ function findInArray($array, $start, $end, $prefix) {
 function array_merge_assoc() {
 	$array = array();
 	foreach (func_get_args() as $param) {
+		if(!is_array($param)) {
+			continue;
+		}
 		foreach($param as $key => $value) {
 			$array[$key] = $value;
 		}

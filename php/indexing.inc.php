@@ -66,4 +66,8 @@ function getSubjectsIndex() {
 	return $data;
 }
 
+function generateSubjectCoursesData($subject) {
+
+}
+
 ?>
