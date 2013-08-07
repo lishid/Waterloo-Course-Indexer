@@ -95,7 +95,7 @@ var BACKEND = (function (object) {
 
 	function getCourse (subject, number, callback) {
 		$.ajax({
-			url: "get?course&subject=" + subject + "&number=" + number,
+			url: "get.php?course&subject=" + subject + "&number=" + number,
 			dataType: "json",
 			success: function (data) {
 				callback(data);
@@ -105,7 +105,7 @@ var BACKEND = (function (object) {
 
 	function loadSubjectIndex () {
 		$.ajax({
-			url: "get?subjects",
+			url: "get.php?subjects",
 			dataType: "json",
 			async: false,
 			success: function (data) {
@@ -118,7 +118,7 @@ var BACKEND = (function (object) {
 
 	function loadCourses () {
 		$.ajax({
-			url: "get?index",
+			url: "get.php?index",
 			dataType: "json",
 			async: false,
 			success: function (data) {
