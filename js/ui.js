@@ -11,7 +11,7 @@ $(document).ready(function() {
 	var courseResults = $("#course-results");
 
 	function loadSearchResult (results) {
-		var numSubjects = objectKeyLength(results);
+		var numSubjects = Object.size(results);
 		var numCourses = 0;
 
 		searchResults.empty();
@@ -35,7 +35,7 @@ $(document).ready(function() {
 		showSearchResult(numCourses, numSubjects);
 	}
 
-	// load course details; hide search list
+	//Load course details; hide search list
 	function showCourse (course) {
 		courseResults.append(generateHTML("opened-course", course.subject, course.number));
 		
@@ -105,6 +105,8 @@ $(document).ready(function() {
 			return "<a href='#" + id + "'>" + courseHTML + "</a>";
 		} else if (component === "opened-course") {
 			return courseHTML;
+		} else if (component === "small-course") {
+			return "<a href='" + id + "'><div class='course small " + BACKEND.subjects[subject].department + "' id='" + id + "'><div class='header'>" + icon + "<div class='title'><h2><span class='code'>" + subject + " " + number + "</span></h2></div></div></div></a>";
 		}
 	}
 
