@@ -35,12 +35,19 @@ $(document).ready(function() {
 		showSearchResult(numCourses, numSubjects);
 	}
 
+	function setupCourse (subject, number) {
+		courseResults.append(generateHTML("opened-course", subject, number));
+
+		var container = $("#" + subject + number);
+		container.addClass("opened");
+
+		var width = container.find(".header").width();
+		container.find(".header").width(width + 22);
+	}
+
 	//Load course details; hide search list
 	function showCourse (course) {
-		courseResults.append(generateHTML("opened-course", course.subject, course.number));
-		
 		var container = $("#" + course.subject + course.number);
-		container.addClass("opened");
 
 		var description = "<h2>Description</h2><p>" + course.description + "</p>";
 
@@ -55,10 +62,6 @@ $(document).ready(function() {
 		}
 		availability += "</p>";
 		container.find(".details").empty().append(description + availability).show();
-
-		// transformation
-		var width = container.find(".header").width();
-		container.find(".header").width(width + 22);
 	}; 
 
 	function showSearchResult (courseCount, subjectCount) {
@@ -126,6 +129,7 @@ $(document).ready(function() {
 					var number = result[2];
 					if (result && subject && number) {
 						if (BACKEND.courseIndex[subject] && BACKEND.courseIndex[subject][number]) {
+							setupCourse(subject, number);
 							BACKEND.getCourse(subject, number, showCourse);	
 						} else {
 							searchBar.val("");
@@ -144,5 +148,4 @@ $(document).ready(function() {
 	}
 
 	init();
-
 });
