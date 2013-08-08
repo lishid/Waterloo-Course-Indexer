@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="100px" height="100px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='100px' height='100px' viewBox='0 0 100 100' enable-background='new 0 0 100 100' xml:space='preserve'>
 <g>
-	<path fill="#000000" d="M78.676,46.713V18.354L64.94,4.283H36.877v42.43H16.896l-5.043,50.996h73.391l11.817-50.996H78.676z    M42.909,10.313H61.84v10.052h10.807v26.348H42.909V10.313z"/>
-	<rect x="47.013" y="40.551" fill="#000000" width="21.276" height="2.345"/>
-	<rect x="47.013" y="27.149" fill="#000000" width="21.276" height="2.345"/>
-	<rect x="47.013" y="33.852" fill="#000000" width="21.276" height="2.345"/>
-	<polygon fill="#000000" points="35.073,36.55 30.305,36.55 30.305,31.367 2.939,31.367 5.633,97.709 9.883,97.709 9.883,41.733    35.073,41.733  "/>
-	<rect x="79.854" y="36.55" fill="#000000" width="5.183" height="5.183"/>
+<path fill='#000000' d='M78.676,46.713V18.354L64.94,4.283H36.877v42.43H16.896l-5.043,50.996h73.391l11.817-50.996H78.676z M42.909,10.313H61.84v10.052h10.807v26.348H42.909V10.313z'/>
+<rect x='47.013' y='40.551' fill='#000000' width='21.276' height='2.345'/>
+<rect x='47.013' y='27.149' fill='#000000' width='21.276' height='2.345'/>
+<rect x='47.013' y='33.852' fill='#000000' width='21.276' height='2.345'/>
+<polygon fill='#000000' points='35.073,36.55 30.305,36.55 30.305,31.367 2.939,31.367 5.633,97.709 9.883,97.709 9.883,41.733 35.073,41.733 '/>
+<rect x='79.854' y='36.55' fill='#000000' width='5.183' height='5.183'/>
 </g>
 </svg>
