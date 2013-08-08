@@ -347,7 +347,7 @@ p.offered {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cb7fff', endColorstr='#c166ff',GradientType=0 ); /* IE6-9 */
 }
 
-.ENV .icon-wrapper, .ENG span.offered {
+.ENV .icon-wrapper, .ENV span.offered {
 	background: #d5d86c; /* Old browsers */
 	background: -moz-linear-gradient(top,  #d5d86c 0%, #d4d655 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d5d86c), color-stop(100%,#d4d655)); /* Chrome,Safari4+ */
