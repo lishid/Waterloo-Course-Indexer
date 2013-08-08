@@ -94,37 +94,32 @@ var BACKEND = (function (object) {
 	}
 
 	function getCourse (subject, number, callback) {
-		$.ajax({
+		safeAjax({
 			url: "get.php?course&subject=" + subject + "&number=" + number,
-			dataType: "json",
-			success: function (data) {
-				callback(data);
-			}
-		})
+			dataType: "json"
+		}, callback);
 	};
 
 	function loadSubjectIndex () {
-		$.ajax({
+		safeAjax({
 			url: "get.php?subjects",
 			dataType: "json",
-			async: false,
-			success: function (data) {
-				subjectIndex = data;
-				object.departments = subjectIndex["departments"];
-				object.subjects = subjectIndex["subjects"];
-			}
+			async: false
+		}, function (data) {
+			subjectIndex = data;
+			object.departments = subjectIndex["departments"];
+			object.subjects = subjectIndex["subjects"];
 		});
 	}
 
 	function loadCourses () {
-		$.ajax({
+		safeAjax({
 			url: "get.php?index",
 			dataType: "json",
-			async: false,
-			success: function (data) {
-				courseIndex = data;
-				object.courseIndex = courseIndex;
-			}
+			async: false
+		}, function (data) {
+			courseIndex = data;
+			object.courseIndex = courseIndex;
 		});
 	};
 

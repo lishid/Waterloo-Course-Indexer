@@ -29,3 +29,51 @@ Object.size = function(object) {
 	}
 	return count;
 }
+
+var AssocArray = function (object) {
+	this.keys = [];
+	for(var key in object) {
+		this[key] = object[key];
+		this.keys.push(key);
+	}
+	this.keys.sort(this.keys);
+};
+
+AssocArray.prototype.getKeys = function () {
+	return this.keys;
+};
+
+AssocArray.prototype.each = function (func) {
+	for (var i = 0; i < this.keys.length; i++) {
+		func(this.keys[i]);
+	};
+};
+
+function safeAjax(params, callback, retryTimeout, retryTimes) {
+	//Verify our numbers
+	if(!retryTimeout || isNaN(retryTimeout)) {
+		retryTimeout = 50;
+	}
+	if(!retryTimes || isNaN(retryTimes)) {
+		retryTimes = 10;
+	}
+
+	//The recursive call
+	function ajaxCall() {
+		$.ajax(params);
+	}
+
+	//Set the callbacks
+	params.success = function (data) {
+		callback(data);
+	}
+	params.error = function (data) {
+		if(retryTimes > 0) {
+			retryTimes--;
+			setTimeout(ajaxCall, retryTimeout);
+		}
+	}
+
+	//Start the call
+	ajaxCall();
+}
