@@ -9,7 +9,7 @@ require_once("util.inc.php");
 
 // Type B:
 // Example: C, C, (A), C or C
-// 1. Split by ",", "and" and "or" outside brackets. "and" and "or" all pass their properties leftwards
+// 1. Split by ",", "and" and "or" outside brackets. "One of", "and" and "or" all pass their properties leftwards
 // 2. Open brackets, each yielding type A
 // 3. The rest yields type C. Iterate on C passing all previous types
 
@@ -22,7 +22,7 @@ require_once("util.inc.php");
 // 5. Check if starts with course number. If so, look for previous course number and add it in front
 // 6. Take it as a course.
 
-//TOOD: comma, "and", "or" separation method
+//TOOD: comma, "One of", "and", "or" separation method
 
 function parseRequisiteList($reqList) {
 	$requisites = array();
@@ -31,21 +31,30 @@ function parseRequisiteList($reqList) {
 		$result = array();
 		$prev = 0;
 		$length = strlen($part);
-		$inBrackets = false;
+		$inBrackets = 0;
 		for ($i = 0; $i < $length; $i++) { 
 			$char = $part{$i};
-			if($inBrackets) {
-				if($char == ")") {
-					$inBrackets = false;
-			 		parseRequisiteList(substr($part, $prev, $i - $prev));
-			 		$prev = $i + 1;
+			if($char == ")") {
+				$inBrackets--;
+				if($inBrackets == 0) {
+					$result[] = parseRequisiteList(substr($part, $prev, $i - $prev));
+					$prev = $i + 1;
 				}
 			}
-			if($char == ",") {
-		 		parseRequisite(substr($part, $prev, $i - $prev));
-		 		$prev = $i + 1;
+			else if($char == "," && $inBrackets == 0) {
+				$result[] = parseRequisite(substr($part, $prev, $i - $prev));
+				$prev = $i + 1;
+			}
+			else if($char == "(") {
+				if($inBrackets == 0) {
+					$result[] = parseRequisite(substr($part, $prev, $i - $prev));
+					$prev = $i + 1;
+				}
+				$inBrackets++;
 			}
 		}
+		$result[] = parseRequisite(substr($part, $prev, $length - $prev));
+		$prev = $i + 1;
 
 		$parts[$key] = array_merge_assoc_recursive_array($result);
 	}
@@ -55,6 +64,7 @@ function parseRequisiteList($reqList) {
 function parseRequisite($req) {
 	$req = trim($req);
 	$requisite = array();
+	$requisite["query"] = array($req => $req);
 	//students only
 	if(endsWith($req, "students only")) {
 		$program = substr($req, 0, -14);
