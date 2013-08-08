@@ -5,12 +5,17 @@ require_once("ucalendar.inc.php");
 require_once("util.inc.php");
 require_once("requisites.inc.php");
 
+function clearCache() {
+	rrmdir(getcwd() . "/cache/index/");
+}
+
 function getAllSubjectIndex() {
 	$subjects = getSubjectList();
 	$courseIndex = array();
 	foreach($subjects as $subject) {
 		$courseIndex[$subject] = getSubjectIndex($subject);
 	}
+	knatsort($courseIndex);
 	return $courseIndex;
 }
 
@@ -19,6 +24,7 @@ function getSubjectIndex($subject) {
 	$data = utilCacheGet($filename);
 	if(!$data) {
 		$data = generateSubjectIndex($subject);
+		knatsort($data);
 		utilCacheWrite($filename, json_encode($data));
 	}
 	else {
@@ -81,6 +87,7 @@ function getSubjectsIndex() {
 	$data = utilCacheGet($filename);
 	if(!$data) {
 		$data = ucalendarGetSubjectsIndex();
+		knatsort($data);
 		utilCacheWrite($filename, json_encode($data));
 	}
 	else {

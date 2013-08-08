@@ -77,6 +77,9 @@ function array_merge_assoc_recursive() {
 		}
 		foreach($param as $key => $value) {
 			if($array[$key] && $value) {
+				if(is_array($value) && is_array($array[$key]) && !is_assoc($value) && !is_assoc($array[$key])) {
+				$array[$key] = array_merge($array[$key], $value);
+				}
 				$array[$key] = array_merge_assoc_recursive($array[$key], $value);
 			}
 			else{
@@ -85,6 +88,16 @@ function array_merge_assoc_recursive() {
 		}
 	}
 	return $array;
+}
+
+function rrmdir($dir) {
+    foreach(glob($dir . '/*') as $file) {
+        if(is_dir($file))
+            rrmdir($file);
+        else
+            unlink($file);
+    }
+    rmdir($dir);
 }
 
 function startsWith($haystack, $needle)
@@ -100,6 +113,14 @@ function endsWith($haystack, $needle)
     }
 
     return (substr($haystack, -$length) === $needle);
+}
+
+function is_assoc($array) {
+  return (bool)count(array_filter(array_keys($array), 'is_string'));
+}
+
+function knatsort($array) {
+	uksort($array, "strnatcmp");
 }
 
 ?>

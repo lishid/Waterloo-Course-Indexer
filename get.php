@@ -10,6 +10,9 @@ if(isset($_GET["subjects"])) {
 else if(isset($_GET["index"])) {
 	echo json_encode(getAllSubjectIndex());
 }
+else if(isset($_GET["clearcache"])) {
+	clearCache();
+}
 else if(isset($_GET["course"])) {
 	if(isset($_GET["subject"]) && isset($_GET["number"])) {
 		$subject = strtoupper($_GET["subject"]);
@@ -18,9 +21,9 @@ else if(isset($_GET["course"])) {
 	}
 }
 else {
-	generateSubjectCoursesData("CS");
-	generateSubjectCoursesData("ECE");
-	print_r("");
+	// generateSubjectCoursesData("CS");
+	// generateSubjectCoursesData("ECE");
+	// print_r("");
 }
 
 ?>

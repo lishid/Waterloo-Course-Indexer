@@ -44,7 +44,7 @@ function apiGetSubjectIndex($subject) {
 	if($courses) {
 		foreach ($courses as $course) {
 			if($course["DeptAcronym"] == $subject) {
-				$number = preg_replace('/\D/', '', $course["Number"]);
+				$number = $course["Number"];
 				$courseIndex[$number] = $course["Title"];
 			}
 		}
