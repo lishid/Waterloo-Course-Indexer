@@ -125,7 +125,12 @@ $(document).ready(function() {
 					var subject = result[1];
 					var number = result[2];
 					if (result && subject && number) {
-						BACKEND.getCourse(subject, number, showCourse);
+						if (BACKEND.courseIndex[subject] && BACKEND.courseIndex[subject][number]) {
+							BACKEND.getCourse(subject, number, showCourse);	
+						} else {
+							searchBar.val("");
+							window.location.hash = "";
+						}
 					} else if (result && subject) {
 						searchBar.val(subject + " ").focus();
 						BACKEND.getCoursesByQuery(searchBar.val(), loadSearchResult);
