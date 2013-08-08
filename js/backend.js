@@ -10,6 +10,10 @@ var BACKEND = (function (object) {
 	var courseCaches = {};
 
 	function getCoursesByQuery (query, callback) {
+		if(query == "*") {
+			callback(courseIndex);
+			return;
+		}
 		query = query.toUpperCase();
 		var queries = query.match(/([A-Z]+)(\s*)(.*)/);
 		if(!queries || !queries[0]) return null;

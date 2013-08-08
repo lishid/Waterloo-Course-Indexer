@@ -30,24 +30,17 @@ Object.size = function(object) {
 	return count;
 }
 
-var AssocArray = function (object) {
-	this.keys = [];
+function sortedEach(object, func) {
+	var keys = [];
 	for(var key in object) {
-		this[key] = object[key];
-		this.keys.push(key);
+		keys.push(key);
 	}
-	this.keys.sort(this.keys);
-};
-
-AssocArray.prototype.getKeys = function () {
-	return this.keys;
-};
-
-AssocArray.prototype.each = function (func) {
-	for (var i = 0; i < this.keys.length; i++) {
-		func(this.keys[i]);
-	};
-};
+	for (var i = 0; i < keys.length; i++) {
+		if(func(keys[i], i)) {
+			return;
+		}
+	}
+}
 
 function safeAjax(params, callback, retryTimeout, retryTimes) {
 	//Verify our numbers
