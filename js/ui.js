@@ -96,7 +96,7 @@ $(document).ready(function() {
 
 	function generateHTML (component, subject, number) {
 		var id = subject + number || "";
-		var icon = "<div class='icon-wrapper'><div class='icon' style='background-image: url(\"img/course-icons/" + subject + ".svg\");'></div></div>";
+		var icon = "<div class='icon-wrapper'><div class='icon icon-" + subject + "'></div></div>";
 
 		if (component === "subject") {
 			return "<a href='#" + subject + "'><div class='subject " + BACKEND.subjects[subject].department + "' id='" + subject + "'><div class='header'><div class='title'><h2><span class='code'>" + subject + "</span></h2><h3><span class='name'>" + BACKEND.subjects[subject].title + "</span></h3></div>" + icon + "</div></div></a>";

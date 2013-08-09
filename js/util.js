@@ -70,3 +70,7 @@ function safeAjax(params, callback, retryTimeout, retryTimes) {
 	//Start the call
 	ajaxCall();
 }
+
+function getDataURI(mime, data) {
+	return "data:" + mime + ";charset=UTF-8," + encodeURIComponent(data);
+}

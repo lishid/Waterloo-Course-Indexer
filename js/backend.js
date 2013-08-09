@@ -1,8 +1,10 @@
 var BACKEND = (function (object) {
 	var courseIndex;
 	var subjectIndex;
+	var svg;
 	loadCourses();
 	loadSubjectIndex();
+	loadSVG();
 
 	//{subjectprefix:{subject:{courses}}}
 	var subjectCache = {};
@@ -102,7 +104,7 @@ var BACKEND = (function (object) {
 			url: "get.php?course&subject=" + subject + "&number=" + number,
 			dataType: "json"
 		}, callback);
-	};
+	}
 
 	function loadSubjectIndex () {
 		safeAjax({
@@ -123,9 +125,32 @@ var BACKEND = (function (object) {
 			async: false
 		}, function (data) {
 			courseIndex = data;
-			object.courseIndex = courseIndex;
+			object.courseIndex = data;
 		});
-	};
+	}
+
+	function loadSVG () {
+		safeAjax({
+			url: "svg.php",
+			dataType: "json"
+		}, function (data) {
+			loadSVGToCSS(data);
+		});
+	}
+
+	function loadSVGToCSS (svg) {
+		var finalCSS = "";
+		for(var key in svg) {
+			if(key === "generic") {
+				finalCSS += ".icon ";
+			}
+			else {
+				finalCSS += ".icon-wrapper .icon-" + key; 
+			}
+			finalCSS += "{ background-image: url(\"" + getDataURI("image/svg+xml", svg[key]) + "\") }\n";
+		}
+		$("head").append("<style type='text/css'>" + finalCSS + "</style>");
+	}
 
 	object.getCoursesByQuery = getCoursesByQuery;
 	object.getCourse = getCourse;

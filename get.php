@@ -2,6 +2,8 @@
 
 require_once("php/indexing.inc.php");
 
+require_once("php/gz.inc.php");
+
 set_time_limit(0);
 
 if(isset($_GET["subjects"])) {
