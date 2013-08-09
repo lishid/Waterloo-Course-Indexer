@@ -25,7 +25,10 @@ function generateSVGs($folder) {
 	$svg = array();
 	foreach($files as $file) {
 		$data = file_get_contents($folder . $file);
-		$svg[$file] = $data;
+		if(endsWith($file, ".svg")) {
+			$fileTitle = substr($file, 0, strlen($file) - 4);
+			$svg[$fileTitle] = $data;
+		}
 	}
 	return $svg;
 }
