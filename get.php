@@ -22,10 +22,14 @@ else if(isset($_GET["course"])) {
 		echo json_encode(getCourseData($subject, $number));
 	}
 }
+else if(isset($_GET["courses"])) {
+	if(isset($_GET["subject"])) {
+		$subject = strtoupper($_GET["subject"]);
+		echo json_encode(generateSubjectCoursesData($subject));
+	}
+}
 else {
-	// generateSubjectCoursesData("CS");
-	// generateSubjectCoursesData("ECE");
-	// print_r("");
+	
 }
 
 ?>
