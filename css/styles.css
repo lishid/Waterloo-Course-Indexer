@@ -231,7 +231,8 @@ a {
 }
 
 .ART.opened .header, .ART.selected .header, .ART.subject .header,
-.REN.opened .header, .REN.selected .header, .REN.subject .header {
+.REN.opened .header, .REN.selected .header, .REN.subject .header,
+.WLU.opened .header, .WLU.selected .header, .WLU.subject .header {
 	background: #fff3e5; /* Old browsers */
 	background: -moz-linear-gradient(top,  #fff3e5 0%, #ffe8cc 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff3e5), color-stop(100%,#ffe8cc)); /* Chrome,Safari4+ */
@@ -362,7 +363,7 @@ p.offered {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cd1d8', endColorstr='#56d0d8',GradientType=0 ); /* IE6-9 */
 }
 
-.ART .icon-wrapper, .ART span.offered, .REN .icon-wrapper, .REN span.offered {
+.ART .icon-wrapper, .ART span.offered, .REN .icon-wrapper, .REN span.offered, .WLU .icon-wrapper, .WLU span.offered {
 	background: #ffc57f; /* Old browsers */
 	background: -moz-linear-gradient(top,  #ffc57f 0%, #ffb566 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffc57f), color-stop(100%,#ffb566)); /* Chrome,Safari4+ */
@@ -384,7 +385,7 @@ p.offered {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cb7fff', endColorstr='#c166ff',GradientType=0 ); /* IE6-9 */
 }
 
-.ENV .icon-wrapper, .ENG span.offered {
+.ENV .icon-wrapper, .ENV span.offered {
 	background: #d5d86c; /* Old browsers */
 	background: -moz-linear-gradient(top,  #d5d86c 0%, #d4d655 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d5d86c), color-stop(100%,#d4d655)); /* Chrome,Safari4+ */
