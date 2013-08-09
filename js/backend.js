@@ -6,9 +6,9 @@ var BACKEND = (function (object) {
 	loadSubjectIndex();
 	loadSVG();
 
-	//{subjectprefix:{subject:{courses}}}
+	// {subjectprefix:{subject:{courses}}}
 	var subjectCache = {};
-	//{subject:{numberprefix:{courses}}}
+	// {subject:{numberprefix:{courses}}}
 	var courseCaches = {};
 
 	function getCoursesByQuery (query, callback) {

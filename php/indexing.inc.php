@@ -99,7 +99,7 @@ function getSubjectsIndex() {
 function generateSubjectCoursesData($subject) {
 	$index = getSubjectIndex($subject);
 	foreach($index as $key => $value) {
-		$index[$key] = generateCourseData($subject, $key); // TODO: getCourseData
+		$index[$key] = generateCourseData($subject, $key);
 	}
 	return $index;
 }

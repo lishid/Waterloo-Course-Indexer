@@ -43,7 +43,7 @@ function sortedEach(object, func) {
 }
 
 function safeAjax(params, callback, retryTimeout, retryTimes) {
-	//Verify our numbers
+	// Verify our numbers
 	if(!retryTimeout || isNaN(retryTimeout)) {
 		retryTimeout = 50;
 	}
@@ -51,12 +51,12 @@ function safeAjax(params, callback, retryTimeout, retryTimes) {
 		retryTimes = 10;
 	}
 
-	//The recursive call
+	// The recursive call
 	function ajaxCall() {
 		$.ajax(params);
 	}
 
-	//Set the callbacks
+	// Set the callbacks
 	params.success = function (data) {
 		callback(data);
 	}
@@ -67,7 +67,7 @@ function safeAjax(params, callback, retryTimeout, retryTimes) {
 		}
 	}
 
-	//Start the call
+	// Start the call
 	ajaxCall();
 }
 

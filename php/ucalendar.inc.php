@@ -116,7 +116,7 @@ function ucalendarGetSubjectsIndex() {
 	$departments = array();
 	$subjects = array();
 
-	//Get departments
+	// Get departments
 	preg_match("/<h4>Owner&nbsp;Key <\\/h4><table[^\\>]*>(.*?)<\\/table>/", $page, $departmentData);
 	$departmentData = str_replace("&nbsp;", "", $departmentData);
 	preg_match_all("/<tr> *<td>(.*?)<\\/td> *<td>(.*?)<\\/td> *<\\/tr>/", $departmentData[1], $departmentList);
@@ -127,7 +127,7 @@ function ucalendarGetSubjectsIndex() {
 		$departments[$departmentCode] = $departmentDescription;
 	}
 
-	//Get subjects
+	// Get subjects
 	preg_match("/<h3>Course Table<\\/h3><table[^\\>]*>(.*?)<\\/table>/", $page, $subjectData);
 	$subjectData = str_replace("&nbsp;", "", $subjectData);
 	preg_match_all("/<tr> *<td>(.*?)<\\/td> *<td>(.*?)<\\/td> *<td>(.*?)<\\/td> *(<td.*?td> *)*<\\/tr>/", $subjectData[1], $subjectList);
@@ -143,7 +143,7 @@ function ucalendarGetSubjectsIndex() {
 		$subjects[$subjectCode] = $subject;
 	}
 
-	//Adjustments
+	// Adjustments
 	$subjects["SE"]["department"] = "ENG";
 
 	$result["departments"] = $departments;

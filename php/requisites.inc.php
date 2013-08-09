@@ -65,7 +65,7 @@ function parseRequisite($req) {
 	$req = trim($req);
 	$requisite = array();
 	$requisite["query"] = array($req => $req);
-	//students only
+	// Students only
 	if(endsWith($req, "students only")) {
 		$program = substr($req, 0, -14);
 		$requisite["program"] = parseRequisiteOr($program);
