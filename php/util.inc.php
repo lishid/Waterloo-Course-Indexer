@@ -20,7 +20,7 @@ function utilCreateDir($filename) {
 
 function utilCacheGet($filename) {
 	if(file_exists($filename)) {
-		return gzdecode(file_get_contents($filename));
+		return gzuncompress(file_get_contents($filename));
 	}
 	return false;
 }
@@ -34,7 +34,7 @@ function utilAppendFile($filename, $data) {
 function utilCacheWrite($filename, $data) {
 	if(!$data) return;
 	utilCreateDir($filename);
-	file_put_contents($filename, gzencode($data));
+	file_put_contents($filename, gzcompress($data));
 }
 
 function findInArray($array, $start, $end, $prefix) {
