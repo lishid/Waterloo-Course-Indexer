@@ -10,9 +10,24 @@ function clearCache() {
 }
 
 function getAllSubjectIndex() {
-	$subjects = getSubjectList();
+	$filename = getcwd() . "/cache/index/subjects-index";
+	$data = utilCacheGet($filename);
+	if(!$data) {
+		$data = generateAllSubjectIndex($subject);
+		knatsort($data);
+		utilCacheWrite($filename, json_encode($data));
+	}
+	else {
+		$data = json_decode($data, true);
+	}
+	return $data;
+}
+
+function generateAllSubjectIndex() {
+	$subjects = getSubjectsIndex();
+	$subjects = $subjects["subjects"];
 	$courseIndex = array();
-	foreach($subjects as $subject) {
+	foreach($subjects as $subject => $courses) {
 		$courseIndex[$subject] = getSubjectIndex($subject);
 	}
 	knatsort($courseIndex);
