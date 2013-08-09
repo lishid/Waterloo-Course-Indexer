@@ -148,8 +148,11 @@ $(document).ready(function() {
 						searchBar.val(subject + " ").focus();
 						BACKEND.getCoursesByQuery(searchBar.val(), loadSearchResult);
 					}
-				} else if (searchBar.val()) {
-					BACKEND.getCoursesByQuery(searchBar.val(), loadSearchResult);
+				} else {
+					searchBar.focus();
+					if (searchBar.val()) {
+						BACKEND.getCoursesByQuery(searchBar.val(), loadSearchResult);		
+					}
 				}
 				enableSearch();
 			}
