@@ -33,6 +33,6 @@ function generateSVGs($folder) {
 	return $svg;
 }
 
-print_r(getSVGs("course-icons", getcwd() . "/img/course-icons/"));
+print_r(getSVGs("svg", getcwd() . "/img/svg/"));
 
 ?>
