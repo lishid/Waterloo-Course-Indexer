@@ -4,11 +4,20 @@ $(document).ready(function() {
 	var COURSE_LIMIT = 5;
 
 	//Cached selectors
-	var searchBar = $('#search input');
+	var body = $("body");
+	var searchBar = $("#search input");
 	var searchResults = $("#subject-results, #course-results, #results-count");
 	var resultCount = $("#results-count");
 	var subjectResults = $("#subject-results");
 	var courseResults = $("#course-results");
+
+	var subjectToIconMap = {
+	    "AFM": "money", "ACTSC": "bar-chart", "ANTH": "man-woman", "AHS": "dropper", "APPLS": "japanese", "AMATH": "calculator", "ARCH": "tower", "ARTS": "pen", "ARBUS": "business-person", "AVIA": "airplane", "BIOL": "microscope", "BUS": "business-person", "BET": "idea", "CHE": "fire", "CHEM": "beaker", "CHINA": "chinese", "CMW": "church", "CIVE": "road", "CLAS": "ankh", "CO": "puzzle", "COMM": "money", "CS": "console", "COOP": "work", "CROAT": "translation", "DAC": "film", "DRAMA": "mask", "DUTCH": "translation", "EARTH": "earth", "EASIA": "china-map", "ECON": "line-chart", "ECE": "chip", "ENGL": "pen", "ESL": "translation", "ENBUS": "recycle", "ERS": "recycle", "ENVE": "recycle", "ENVS": "recycle", "FINE": "palette", "FR": "translation", "GENE": "hard-hat", "GEOG": "globe", "GEOE": "mountain", "GER": "translation", "GERON": "aging", "GBDA": "film", "GRK": "translation", "HLTH": "first-aid", "HRM": "people", "HUMSC": "man-woman", "INDEV": "earth", "INTST": "earth", "INTTS": "earth", "ITAL": "translation", "JAPAN": "japanese", "JS": "jewish", "KIN": "run", "KOREA": "translation", "LAT": "translation", "LS": "gavel", "MATBUS": "business-person", "MSCI": "organize", "MNS": "atom", "MATH": "calculator", "MTHEL": "calculator", "ME": "gear", "MTE": "gear", "MEDVL": "ankh", "MUSIC": "music", "NE": "atom", "NATST": "native", "OPTOM": "eye", "PACS": "peace", "PHARM": "pill", "PHIL": "thinking", "PHYS": "atom", "PLAN": "plan", "POLSH": "translation", "PSCI": "congress", "PORT": "translation", "PD": "wtf", "PDPHRM": "wtf", "PSYCH": "brain", "PMATH": "infinity", "REC": "island", "RS": "church", "RUSS": "translation", "SCI": "magnet", "SCBUS": "magnet", "SMF": "man-woman", "SDS": "network", "SOCWK": "network", "SWREN": "network", "STV": "network",  "SOC": "network", "SE": "console", "SPAN": "translation", "SPCOM": "speech", "STAT": "bar-chart", "SI": "islam", "SYDE": "rocket", "UNIV": "goose", "VCULT": "film", "WS": "female", "WKRPT": "wtf"
+	};
+
+	function getIcon (subject) {
+		return subjectToIconMap[subject] || "generic";
+	}
 
 	function loadSearchResult (results) {
 		var numSubjects = Object.size(results);
@@ -96,7 +105,7 @@ $(document).ready(function() {
 
 	function generateHTML (component, subject, number) {
 		var id = subject + number || "";
-		var icon = "<div class='icon-wrapper'><div class='icon icon-" + subject + "'></div></div>";
+		var icon = "<div class='icon-wrapper'><div class='icon icon-" + getIcon(subject) + "'></div></div>";
 
 		if (component === "subject") {
 			return "<a href='#" + subject + "'><div class='subject " + BACKEND.subjects[subject].department + "' id='" + subject + "'><div class='header'><div class='title'><h2><span class='code'>" + subject + "</span></h2><h3><span class='name'>" + BACKEND.subjects[subject].title + "</span></h3></div>" + icon + "</div></div></a>";
@@ -117,9 +126,9 @@ $(document).ready(function() {
 		if (history && history.pushState) {
 			history.pushState(null, document.title, this.href);
 		}
-		$("body").addClass("historyPushed");
+		body.addClass("historyPushed");
 		window.addEventListener("popstate", function(event) {
-			if($("body").hasClass("historyPushed")) {
+			if(body.hasClass("historyPushed")) {
 				var href = window.location.href;
 				searchResults.empty(); 
 				if (window.location.hash) {
