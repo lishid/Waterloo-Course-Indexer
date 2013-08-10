@@ -7,6 +7,7 @@ require_once("conf.inc.php");
 function ucalendarBaseUrl() {
 	return UGRAD_CALENDAR_URL . UGRAD_CALENDAR_TERM . "/COURSE/";
 }
+
 function ucalendarIndexUrl() {
 	return UGRAD_INDEX_URL;
 }

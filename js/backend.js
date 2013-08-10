@@ -103,7 +103,10 @@ var BACKEND = (function (object) {
 		safeAjax({
 			url: "get.php?course&subject=" + subject + "&number=" + number,
 			dataType: "json"
-		}, callback);
+		}, function(data) {
+			console.log(data);
+			callback(data);
+		});
 	}
 
 	function loadSubjectIndex () {
@@ -115,6 +118,7 @@ var BACKEND = (function (object) {
 			subjectIndex = data;
 			object.departments = subjectIndex["departments"];
 			object.subjects = subjectIndex["subjects"];
+			console.log("Subjects loaded");
 		});
 	}
 
@@ -126,6 +130,7 @@ var BACKEND = (function (object) {
 		}, function (data) {
 			courseIndex = data;
 			object.courseIndex = data;
+			console.log("Courses loaded");
 		});
 	}
 
@@ -135,6 +140,7 @@ var BACKEND = (function (object) {
 			dataType: "json"
 		}, function (data) {
 			loadSVGToCSS(data);
+			console.log("SVG loaded");
 		});
 	}
 

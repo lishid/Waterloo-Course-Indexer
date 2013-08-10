@@ -94,6 +94,12 @@ function generateCourseData($subject, $number) {
 		utilAppendFile(getcwd() . "/cache/prereq", $data["prereqDesc"] . "\n" . print_r($prereq, true) . "\n\n");
 	}
 
+	foreach($data as $key => $value) {
+		if(!$value) {
+			$data[$key] = "";
+		}
+	}
+
 	return $data;
 }
 
@@ -114,7 +120,7 @@ function getSubjectsIndex() {
 function generateSubjectCoursesData($subject) {
 	$index = getSubjectIndex($subject);
 	foreach($index as $key => $value) {
-		$index[$key] = generateCourseData($subject, $key);
+		$index[$key] = getCourseData($subject, $key);
 	}
 	return $index;
 }
