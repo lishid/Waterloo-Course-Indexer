@@ -25,15 +25,18 @@ function loadCSSToPage(css) {
 loadAllCssGradients();
 
 function loadAllCssGradients() {
-	loadCssGradientSat("ART", 33, 100, 100, 10, 20, 50, 60);
-	loadCssGradientSat("REN", 33, 100, 100, 10, 20, 50, 60);
-	loadCssGradientSat("WLU", 33, 100, 100, 10, 20, 50, 60);
-	loadCssGradientSat("MAT", 323, 100, 100, 10, 20, 50, 60);
-	loadCssGradientSat("AHS", 184, 90, 85, 10, 35, 50, 60);
-	loadCssGradientSat("ENG", 276, 100, 100, 10, 20, 50, 60);
-	loadCssGradientSat("SCI", 206, 100, 100, 10, 20, 50, 60);
-	loadCssGradientSat("ENV", 62, 90, 85, 15, 35, 50, 60);
-	loadCssGradientRaw("VPA", 0, [93, 0], [84, 0], [85, 0], [66, 0]);
+	loadCSSToPage(generateCssGradient(".course", 0, [100, 0], [90, 0]));
+	loadCSSToPage(generateCssGradient(".course .header:hover", 0, [94, 0], [90, 0]));
+	loadCSSToPage(generateCssGradient(".course .header:active", 0, [84, 0], [92, 0]));
+	loadCssGradientSat("ART", 33, 100, 100, 10, 20, 30, 60);
+	loadCssGradientSat("REN", 33, 100, 100, 10, 20, 30, 60);
+	loadCssGradientSat("WLU", 33, 100, 100, 10, 20, 30, 60);
+	loadCssGradientSat("MAT", 323, 100, 100, 10, 20, 30, 60);
+	loadCssGradientRaw("AHS", 184, [90, 10], [90, 35], [90, 30], [85, 60]);
+	loadCssGradientSat("ENG", 276, 100, 100, 10, 20, 30, 60);
+	loadCssGradientSat("SCI", 206, 100, 100, 10, 20, 30, 60);
+	loadCssGradientRaw("ENV", 62, [90, 15], [90, 35], [90, 30], [85, 60]);
+	loadCssGradientRaw("VPA", 0, [93, 0], [85, 0], [85, 0], [66, 0]);
 }
 
 function loadCssGradientSat(subject, h, v1, v2, s1, s2, s3, s4) {
@@ -58,14 +61,14 @@ function generateCssGradient(title, hue, c1, c2) {
 	var color1 = getGradientColorFrom(hue, c1[1], c1[0]);
 	var color2 = getGradientColorFrom(hue, c2[1], c2[0]);
 	var css = title + " {\n";
-	css += "\tbackground: " + color1 + ";\n"; /* Old browsers */
-	css += "\tbackground: -moz-linear-gradient(top,  " + color1 + " 0%, " + color2 + " 100%);\n"; /* FF3.6+ */
-	css += "\tbackground: -webkit-gradient(linear, left top, left bottom, color-stop(0%," + color1 + "), color-stop(100%," + color2 + "));\n"; /* Chrome,Safari4+ */
-	css += "\tbackground: -webkit-linear-gradient(top,  " + color1 + " 0%," + color2 + " 100%);\n"; /* Chrome10+,Safari5.1+ */
-	css += "\tbackground: -o-linear-gradient(top,  " + color1 + " 0%," + color2 + " 100%);\n"; /* Opera 11.10+ */
-	css += "\tbackground: -ms-linear-gradient(top,  " + color1 + " 0%," + color2 + " 100%);\n"; /* IE10+ */
-	css += "\tbackground: linear-gradient(to bottom,  " + color1 + " 0%," + color2 + " 100%);\n"; /* W3C */
-	css += "\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='" + color1 + "', endColorstr='" + color2 + "',GradientType=0 );\n"; /* IE6-9 */
+	css += "\tbackground: " + color1 + ";\n"; // Old browsers
+	css += "\tbackground: -moz-linear-gradient(top,  " + color1 + " 0%, " + color2 + " 100%);\n"; // FF3.6+
+	css += "\tbackground: -webkit-gradient(linear, left top, left bottom, color-stop(0%," + color1 + "), color-stop(100%," + color2 + "));\n"; // Chrome,Safari4+
+	css += "\tbackground: -webkit-linear-gradient(top,  " + color1 + " 0%," + color2 + " 100%);\n"; // Chrome10+,Safari5.1+
+	css += "\tbackground: -o-linear-gradient(top,  " + color1 + " 0%," + color2 + " 100%);\n"; // Opera 11.10+
+	css += "\tbackground: -ms-linear-gradient(top,  " + color1 + " 0%," + color2 + " 100%);\n"; // IE10+
+	css += "\tbackground: linear-gradient(to bottom,  " + color1 + " 0%," + color2 + " 100%);\n"; // W3C
+	css += "\tfilter: progid:DXImageTransform.Microsoft.gradient( startColorstr='" + color1 + "', endColorstr='" + color2 + "',GradientType=0 );\n"; // IE6-9
 	css += "}\n";
 	return css;
 }
