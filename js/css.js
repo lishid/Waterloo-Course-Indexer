@@ -76,29 +76,26 @@ function generateCssGradient(title, hue, c1, c2) {
 function getGradientColorFrom(h, s, v) {
 	var rgb = hsvToRgb(h / 360, s / 100, v / 100);
 	function componentToHex(c) {
-	    var hex = c.toString(16);
-	    return hex.length == 1 ? "0" + hex : hex;
+		var hex = c.toString(16);
+		return hex.length == 1 ? "0" + hex : hex;
 	}
-    return "#" + componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2]);
+	return "#" + componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2]);
 }
 
 function hsvToRgb(h, s, v) {
-    h = (h % 1 + 1) % 1;
-    var i = Math.floor(h * 6);
-    var f = h * 6 - i;
-    var p = v * (1 - s);
-    var q = v * (1 - s * f);
-    var t = v * (1 - s * (1 - f));
-    v = Math.round(v * 255);
-    t = Math.round(t * 255);
-    p = Math.round(p * 255);
-    q = Math.round(q * 255);
-    switch (i) {
-        case 0: return [v, t, p];
-        case 1: return [q, v, p];
-        case 2: return [p, v, t];
-        case 3: return [p, q, v];
-        case 4: return [t, p, v];
-        case 5: return [v, p, q];
-    }
+	var i = Math.floor(h * 6);
+	var f = h * 6 - i;
+	v *= 255;
+	var p = Math.round(v * (1 - s));
+	var q = Math.round(v * (1 - s * f));
+	var t = Math.round(v * (1 - s * (1 - f)));
+	v = Math.round(v);
+	switch (i) {
+		case 0: return [v, t, p];
+		case 1: return [q, v, p];
+		case 2: return [p, v, t];
+		case 3: return [p, q, v];
+		case 4: return [t, p, v];
+		case 5: return [v, p, q];
+	}
 }
