@@ -123,45 +123,41 @@ $(document).ready(function() {
 	}
 
 	function init () {
-		if (history && history.pushState) {
-			history.pushState(null, document.title, this.href);
-		}
-		body.addClass("historyPushed");
-		window.addEventListener("popstate", function(event) {
-			if(body.hasClass("historyPushed")) {
-				var href = window.location.href;
-				searchResults.empty(); 
-				if (window.location.hash) {
-					var re = /#([A-Za-z]+)\s*(.*)/;
-					var result = href.match(re);
-					var subject = result[1];
-					var number = result[2];
-					if (result && subject && number) {
-						if (BACKEND.courseIndex[subject] && BACKEND.courseIndex[subject][number]) {
-							document.title = subject + " " + number + " - UWaterloo Course Indexer";
-							setupCourse(subject, number);
-							BACKEND.getCourse(subject, number, showCourse);	
-						} else {
-							document.title = "Home - UWaterloo Course Indexer";
-							searchBar.val("");
-							window.location.hash = "";
-						}
-					} else if (result && subject) {
-						document.title = subject + " course - UWaterloo Course Indexer";
-						searchBar.val(subject + " ").focus();
-						BACKEND.getCoursesByQuery(searchBar.val(), loadSearchResult);
+		function work () {
+			searchResults.empty();
+			if (window.location.hash) {
+				var re = /#([A-Za-z]+)\s*(.*)/;
+				var result = window.location.hash.match(re);
+				var subject = result[1];
+				var number = result[2];
+				if (result && subject && number) {
+					if (BACKEND.courseIndex[subject] && BACKEND.courseIndex[subject][number]) {
+						document.title = subject + " " + number + " - UWaterloo Course Indexer";
+						setupCourse(subject, number);
+						BACKEND.getCourse(subject, number, showCourse);	
+					} else {
+						document.title = "Home - UWaterloo Course Indexer";
+						searchBar.val("");
+						window.location.hash = "";
 					}
-				} else {
-					document.title = "Home - UWaterloo Course Indexer";
-					searchBar.focus();
-					if (searchBar.val()) {
-						BACKEND.getCoursesByQuery(searchBar.val(), loadSearchResult);		
-					}
+				} else if (result && subject) {
+					document.title = subject + " course - UWaterloo Course Indexer";			
+					searchBar.val(subject + " ").focus();
+					BACKEND.getCoursesByQuery(searchBar.val(), loadSearchResult);
 				}
-				enableSearch();
+			} else {
+				document.title = "Home - UWaterloo Course Indexer";
+				searchBar.focus();
+				if (searchBar.val()) {
+					BACKEND.getCoursesByQuery(searchBar.val(), loadSearchResult);		
+				}
 			}
-		});	
-	}
+			enableSearch();
+		}
 
+		work();
+		window.addEventListener("popstate", work);
+	}
+	
 	init();
 });
