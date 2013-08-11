@@ -11,13 +11,16 @@ Order:
 body {
 	background-color: #fefefe;
 	color: #101010;
+	text-shadow: 0 1px 0 #fff;
 	font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 62.5%;
-	text-shadow: 0 1px 0 #fff;
 	overflow-y: scroll;
 }
 
-header, #search, #course-results, #subject-results {
+
+/* header styles */
+
+header, #search, #results-count, #course-results, #subject-results {
 	margin: 0 auto;
 	width: 600px;
 }
@@ -50,29 +53,40 @@ a {
 	text-decoration: none;
 }
 
+
+/* search bar styles */
+ 
 #search input {
 	margin-top: 1em;
+	padding: 0.5em 1em 0.5em 2.8em;
 	width: 100%;
 	height: 2.4em;
-	padding: 0.5em 0 0.5em 2.8em;
-	color: #00191C;
-	font-size: 1.8em;
-	font-family: inherit;
-	text-transform: uppercase;
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
-	outline: 0;
+	color: #00191C;
 	background-image: url('../img/svg/search.svg');
 	background-repeat: no-repeat;
 	background-size: 1.6em;
 	background-position: 0.6em 0.4em;
+	text-transform: uppercase;
+	font-size: 1.8em;
+	font-family: inherit;
+	outline: 0;
+}
+
+#search input, .course, .subject {
+	border: 1px solid #adadad;
+	-webkit-box-shadow:  0 1px 1px rgba(0,0,0,0.2),inset -1px -1px 0 #fff;
+	box-shadow: 0 1px 1px rgba(0,0,0,0.2),inset -1px -1px 0 #fff;
 }
 
 #results-count {
-	width: 600px;
 	margin: 1em auto 0.5em auto;
 	font-size: 2em;
 }
+
+
+/* subject and course styles*/
 
 #subject-results {
 	margin-bottom: 1.5em;
@@ -82,38 +96,44 @@ a {
 	margin-bottom: 10em;
 }
 
-.course, .subject {
+.subject, .course {
 	margin: 0.5em 0;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
 }
 
-#search input, .course {
-	border: 1px solid #adadad;
-	-webkit-box-shadow:  0 1px 1px rgba(0,0,0,0.2),inset -1px -1px 0 #fff;
-	box-shadow: 0 1px 1px rgba(0,0,0,0.2),inset -1px -1px 0 #fff;
-}
-
-.subject {
-	border: 1px solid #adadad;
-	-webkit-box-shadow:  0 1px 1px rgba(0,0,0,0.2);
-	box-shadow: 0 1px 1px rgba(0,0,0,0.2);
-}
-
-.subject .header {
+.subject .header, .course .header {
 	height: 8em;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
 	cursor: pointer;
-}
-
-.course .header {
-	height: 8em;
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	cursor: pointer;
+}
+
+.subject .icon-wrapper, .course .icon-wrapper {
+	position: relative;
+	top: -1px;
+	height: 100%;
+	width: 8em;
+	border: 1px solid rgba(0,0,0,0.3);
+	-webkit-box-shadow: inset -1px -1px 0 rgba(255,255,255,0.3),inset 1px 1px 0 rgba(255,255,255,0.3);
+	box-shadow: inset -1px -1px 0 rgba(255,255,255,0.3),inset 1px 1px 0 rgba(255,255,255,0.3);
+}
+
+.subject .title { 
+	margin: 0 0 0 1.5em; 
+	padding: 0.75em 0;
+	float: left;
+}
+
+.subject .icon-wrapper {
+	right: -1px;
+	float: right;
+	-webkit-border-radius: 0 5px 5px 0;
+	border-radius: 0 5px 5px 0;
 }
 
 .course .title { 
@@ -126,23 +146,51 @@ a {
 }
 
 .course .icon-wrapper {
-	position: relative;
-	height: 100%;
-	width: 8em;
 	left: -1px;
-	top: -1px;
 	float: left;
-	border: 1px solid rgba(0,0,0,0.3);
 	-webkit-border-radius: 5px 0 0 5px;
 	border-radius: 5px 0 0 5px;
-	-webkit-box-shadow: inset -1px -1px 0 rgba(255,255,255,0.3),inset 1px 1px 0 rgba(255,255,255,0.3);
-	box-shadow: inset -1px -1px 0 rgba(255,255,255,0.3),inset 1px 1px 0 rgba(255,255,255,0.3);
 }
 
-.course.selected .header, .subject .header {
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
+.icon {
+	margin: 1em;
+	height: 6em;
+	width: 6em;
+	background-repeat: no-repeat;
+	background-size: 6em 6em;
 }
+
+
+/* course page styles*/
+
+.details {
+	padding: 0 3em 4em 3em;
+}
+
+.details h2 {
+	margin-top: 0.7em;
+	font-size: 2.2em;
+	font-weight: 400;
+}
+
+.details p { 
+	margin: 0.3em 0 0.5em 0;
+	font-size: 1.8em;
+	line-height: 1.4em;
+}
+
+p.offered {
+	margin-top: 0.5em;
+}
+
+.offered span {
+	margin: 0 0.5em 0 0;
+	padding: 0.2em 0.5em;
+	border-radius: 0.4em;
+}
+
+
+/* experimental styles with pre-req tree */
 
 .pre-reqs {
 	width: 1000px;
@@ -179,61 +227,9 @@ a {
 	background-size: 4em 4em;
 }
 
-.subject .title { 
-	margin: 0 0 0 1.5em; 
-	padding: 0.75em 0;
-	float: left;
-}
 
-.subject .icon-wrapper {
-	position: relative;
-	height: 100%;
-	width: 8em;
-	top: -1px;
-	right: -1px;
-	float: right;
-	border: 1px solid rgba(0,0,0,0.3);
-	-webkit-border-radius: 0 5px 5px 0;
-	border-radius: 0 5px 5px 0;
-	-webkit-box-shadow: inset -1px -1px 0 rgba(255,255,255,0.3),inset 1px 1px 0 rgba(255,255,255,0.3);
-	box-shadow: inset -1px -1px 0 rgba(255,255,255,0.3),inset 1px 1px 0 rgba(255,255,255,0.3);
-}
+/* opened course styles */
 
-.icon {
-	margin: 1em;
-	height: 6em;
-	width: 6em;
-	background-repeat: no-repeat;
-	background-size: 6em 6em;
-}
-
-.details {
-	padding: 0 3em 4em 3em;
-}
-
-.details h2 {
-	margin: 0.7em 0 0 0;
-	font-size: 2.2em;
-	font-weight: 400;
-}
-
-.details p { 
-	margin: 0.2em 0;
-	font-size: 1.8em;
-	line-height: 1.4em;
-}
-
-p.offered {
-	margin: 0.5em 0 0 0;
-}
-
-.offered span {
-	margin: 0 0.5em 0 0;
-	padding: 0.1em 0.5em;
-	border-radius: 0.3em;
-}
-
-/*effect when opened*/
 .course.opened {
 	-webkit-border-radius: 4px 0 4px 4px;
 	border-radius: 4px 0 4px 4px;;
@@ -252,7 +248,7 @@ p.offered {
 	cursor: default;
 }
 
-/*CSS wrapper effect*/
+/* CSS wrapper effect */
 .course.opened .header:before, .course.opened .header:after {
 	content: "";
 	position: absolute;
@@ -271,7 +267,8 @@ p.offered {
 	right: -1px;
 }
 
-/*adjustments for smaller screen size*/
+
+/* adjustments for smaller screen size */
 @media only screen and (max-width : 475px) {
 	header, #search, #course-results, #subject-results { width: 400px; }
 	h2 { font-size: 2.5em; }
