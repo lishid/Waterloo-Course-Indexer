@@ -1,12 +1,5 @@
 /*
-- colors
-	- white: #F9FFF2
-	- light green: #B5E655
-	- green: #96CA2D
-	- blue: #4BB5C1
-	- dark: #00191C
-
-- order (experimental):
+Order:
 	1. Positioning
 	2. Display & Box Model
 	3. Color
@@ -64,6 +57,7 @@ a {
 	padding: 0.5em 0 0.5em 2.8em;
 	color: #00191C;
 	font-size: 1.8em;
+	font-family: inherit;
 	text-transform: uppercase;
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
