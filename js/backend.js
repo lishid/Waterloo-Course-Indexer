@@ -144,20 +144,6 @@ var BACKEND = (function (object) {
 		});
 	}
 
-	function loadSVGToCSS (svg) {
-		var finalCSS = "";
-		for(var key in svg) {
-			if(key === "generic") {
-				finalCSS += ".icon ";
-			}
-			else {
-				finalCSS += ".icon-wrapper .icon-" + key; 
-			}
-			finalCSS += "{ background-image: url(\"" + getDataURI("image/svg+xml", svg[key]) + "\") }\n";
-		}
-		$("head").append("<style type='text/css'>" + finalCSS + "</style>");
-	}
-
 	object.getCoursesByQuery = getCoursesByQuery;
 	object.getCourse = getCourse;
 
