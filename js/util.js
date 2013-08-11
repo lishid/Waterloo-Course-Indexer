@@ -1,12 +1,4 @@
-function subset(map, prefix) {
-	var results = {};
-	for (var key in map) {
-		if (key.startWith(prefix)) {
-			results[key] = map[key];
-		}
-	}
-	return results;
-}
+// Prototype extensions
 
 String.prototype.startWith = function (str) {
 	return this.indexOf(str) === 0;
@@ -20,6 +12,13 @@ String.prototype.replaceAll = function (find, replace) {
 	return this.replace(new RegExp(find, 'g'), replace);
 }
 
+String.prototype.toTitleCase = function (){
+	return this.replace(/\w\S*/g, function(txt)
+		{
+			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+		});
+}
+
 Object.size = function(object) {
 	var count = 0;
 	for (var key in object){
@@ -28,6 +27,19 @@ Object.size = function(object) {
 		}
 	}
 	return count;
+}
+
+
+// Util functions
+
+function subset(map, prefix) {
+	var results = {};
+	for (var key in map) {
+		if (key.startWith(prefix)) {
+			results[key] = map[key];
+		}
+	}
+	return results;
 }
 
 function sortedEach(object, func) {

@@ -161,7 +161,7 @@ a {
 }
 
 
-/* course page styles*/
+/* course page styles */
 
 .details {
 	padding: 0 3em 4em 3em;
@@ -189,6 +189,10 @@ p.offered {
 	border-radius: 0.4em;
 }
 
+p.course-link {
+	margin-top: 1.2em;
+	text-decoration: underline;
+}
 
 /* experimental styles with pre-req tree */
 

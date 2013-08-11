@@ -15,24 +15,26 @@ $(document).ready(function() {
 		"AFM": "money", "ACTSC": "bar-chart", "ANTH": "man-woman", "AHS": "dropper", "APPLS": "japanese", "AMATH": "calculator", "ARCH": "tower", "ARTS": "pen", "ARBUS": "business-person", "AVIA": "airplane", "BIOL": "microscope", "BUS": "business-person", "BET": "idea", "CHE": "fire", "CHEM": "beaker", "CHINA": "chinese", "CMW": "church", "CIVE": "road", "CLAS": "ankh", "CO": "puzzle", "COMM": "money", "CS": "console", "COOP": "work", "CROAT": "translation", "DAC": "film", "DRAMA": "mask", "DUTCH": "translation", "EARTH": "earth", "EASIA": "china-map", "ECON": "line-chart", "ECE": "chip", "ENGL": "pen", "ESL": "translation", "ENBUS": "recycle", "ERS": "recycle", "ENVE": "recycle", "ENVS": "recycle", "FINE": "palette", "FR": "translation", "GENE": "hard-hat", "GEOG": "globe", "GEOE": "mountain", "GER": "translation", "GERON": "aging", "GBDA": "film", "GRK": "translation", "HLTH": "first-aid", "HRM": "people", "HUMSC": "man-woman", "INDEV": "earth", "INTST": "earth", "INTTS": "earth", "ITAL": "translation", "JAPAN": "japanese", "JS": "jewish", "KIN": "run", "KOREA": "translation", "LAT": "translation", "LS": "gavel", "MATBUS": "business-person", "MSCI": "organize", "MNS": "atom", "MATH": "calculator", "MTHEL": "calculator", "ME": "gear", "MTE": "gear", "MEDVL": "ankh", "MUSIC": "music", "NE": "atom", "NATST": "native", "OPTOM": "eye", "PACS": "peace", "PHARM": "pill", "PHIL": "thinking", "PHYS": "atom", "PLAN": "plan", "POLSH": "translation", "PSCI": "congress", "PORT": "translation", "PD": "wtf", "PDPHRM": "wtf", "PSYCH": "brain", "PMATH": "infinity", "REC": "island", "RS": "church", "RUSS": "translation", "SCI": "magnet", "SCBUS": "magnet", "SMF": "man-woman", "SDS": "network", "SOCWK": "network", "SWREN": "network", "STV": "network",  "SOC": "network", "SE": "console", "SPAN": "translation", "SPCOM": "speech", "STAT": "bar-chart", "SI": "islam", "SYDE": "rocket", "UNIV": "goose", "VCULT": "film", "WS": "female", "WKRPT": "wtf"
 	};
 
+	// Get the svg filename of a subject from mapping
 	function getIcon (subject) {
 		return subjectToIconMap[subject] || "generic";
 	}
 
+	// Load search results that are provided by the backend
 	function loadSearchResult (results) {
 		var numSubjects = Object.size(results);
 		var numCourses = 0;
 
 		searchResults.empty();
 
-		//Load subjects
+		// Load subjects
 		if (numSubjects > 1) {
 			for (var subject in results) {
 				subjectResults.append(generateHTML("subject", subject));
 			}
 		}
 
-		//Load courses (within limit)
+		// Load courses (within limit)
 		for (var subject in results) {
 			for (var number in results[subject]) {
 				numCourses++;
@@ -44,6 +46,7 @@ $(document).ready(function() {
 		showSearchResult(numCourses, numSubjects);
 	}
 
+	// Setup course header before more data is fetched
 	function setupCourse (subject, number) {
 		courseResults.append(generateHTML("opened-course", subject, number));
 
@@ -54,11 +57,18 @@ $(document).ready(function() {
 		container.find(".header").width(width + 22);
 	}
 
-	//Load course details; hide search list
+	// Load course details
 	function showCourse (course) {
-		var container = $("#" + course.subject + course.number);
+		function getHTML (section) {
+			if (course[section]) {
+				return "<h2>" + section.toTitleCase() + "</h2><p>" + course[section] + "</p>";
+			} else {
+				return "";
+			}
+		}
 
-		var description = "<h2>Description</h2><p>" + course.description + "</p>";
+		var container = $("#" + course.subject + course.number);
+		var html = "";
 
 		var terms = ["Fall", "Winter", "Spring"];
 		var abbrs = ["F", "W", "S"];
@@ -70,9 +80,20 @@ $(document).ready(function() {
 			availability += (jQuery.inArray(abbrs[i], course.offered) !== -1) ? "<span class='offered'>" + terms[i] + "</span>" : "";
 		}
 		availability += "</p>";
-		container.find(".details").empty().append(description + availability).show();
+		html += availability;
+
+		html += getHTML("description");
+		html += getHTML("notes");
+		html += getHTML("components");
+		html += getHTML("credits");
+		if (course.url) {
+			html += "<p class='course-link'><a href=" + course.url + ">View official course description</a></p>";
+		}
+
+		container.find(".details").empty().append(html).show();
 	}; 
 
+	// Display number of results found
 	function showSearchResult (courseCount, subjectCount) {
 		if (courseCount > 0) {
 			var text = "";
@@ -89,6 +110,7 @@ $(document).ready(function() {
 		}
 	}
 
+	// Enable search by listening to input on search bar
 	function enableSearch () {
 		searchBar.on("input", function (e) {
 			if (window.location.hash) {
@@ -103,6 +125,7 @@ $(document).ready(function() {
 		});
 	}
 
+	// Generate HTML for a component
 	function generateHTML (component, subject, number) {
 		var id = subject + number || "";
 		var icon = "<div class='icon-wrapper'><div class='icon icon-" + getIcon(subject) + "'></div></div>";
