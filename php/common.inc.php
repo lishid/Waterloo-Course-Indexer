@@ -4,11 +4,11 @@ require_once("util.inc.php");
 require_once("conf.inc.php");
 
 function commonParseOfferedFromDescription($description, $offered) {
-	preg_match("/\[([^\]]*)Offered: ([FWS,]*)\]/", $description, $matches);
+	preg_match("/\[([^\]]*)Offered: ([FWSJAM, ]*)\]/", $description, $matches);
 	if(count($matches) > 0) {
 		$terms = preg_split("/,/", $matches[count($matches) - 1]);
 		foreach($terms as $term) {
-			array_push($offered, $term);
+			array_push($offered, trim($term));
 		}
 		for($i = count($matches) - 2; $i > 0; $i--) {
 			array_push($offered, $matches[$i]);
@@ -18,11 +18,11 @@ function commonParseOfferedFromDescription($description, $offered) {
 }
 
 function commonParseOfferedFromNote($notes, $offered) {
-	preg_match("/Offered: ([FWS,]*)/", $notes, $matches);
+	preg_match("/Offered: ([FWSJAM, ]*)/", $notes, $matches);
 	if(count($matches) > 0) {
 		$terms = preg_split("/,/", $matches[1]);
 		foreach($terms as $term) {
-			array_push($offered, $term);
+			array_push($offered, trim($term));
 		}
 	}
 	return $offered;
