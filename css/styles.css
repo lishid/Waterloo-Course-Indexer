@@ -57,6 +57,7 @@ a {
 /* search bar styles */
  
 #search input {
+	display: none;
 	margin-top: 1em;
 	padding: 0.5em 1em 0.5em 2.8em;
 	width: 100%;
