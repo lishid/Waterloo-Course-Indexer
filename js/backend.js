@@ -5,6 +5,8 @@ var BACKEND = (function (object) {
 	loadCourses();
 	loadSubjectIndex();
 	loadSVG();
+	var componentsLoaded = 0;
+	var totalComponents = 3;
 
 	// {subjectprefix:{subject:{courses}}}
 	var subjectCache = {};
@@ -112,25 +114,25 @@ var BACKEND = (function (object) {
 	function loadSubjectIndex () {
 		safeAjax({
 			url: "get.php?subjects",
-			dataType: "json",
-			async: false
+			dataType: "json"
 		}, function (data) {
 			subjectIndex = data;
 			object.departments = subjectIndex["departments"];
 			object.subjects = subjectIndex["subjects"];
 			console.log("Subjects loaded");
+			componentLoad();
 		});
 	}
 
 	function loadCourses () {
 		safeAjax({
 			url: "get.php?index",
-			dataType: "json",
-			async: false
+			dataType: "json"
 		}, function (data) {
 			courseIndex = data;
 			object.courseIndex = data;
 			console.log("Courses loaded");
+			componentLoad();
 		});
 	}
 
@@ -141,11 +143,30 @@ var BACKEND = (function (object) {
 		}, function (data) {
 			loadSVGToCSS(data);
 			console.log("SVG loaded");
+			componentLoad();
 		});
+	}
+
+	function componentLoad() {
+		componentsLoaded++;
+		if(componentsLoaded >= totalComponents) {
+			if(uiCallback) {
+				uiCallback();
+			}
+		}
+	}
+	
+	var uiCallback;
+	function registerUICallback(callback) {
+		if(componentsLoaded >= totalComponents) {
+			callback();
+		}
+		uiCallback = callback;
 	}
 
 	object.getCoursesByQuery = getCoursesByQuery;
 	object.getCourse = getCourse;
+	object.registerUICallback = registerUICallback;
 
 	return object;
 }(BACKEND || {}));
