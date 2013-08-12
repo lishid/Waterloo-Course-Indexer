@@ -4,12 +4,11 @@ $(document).ready(function() {
 	var COURSE_LIMIT = 5;
 
 	//Cached selectors
-	var body = $("body");
-	var searchBar = $("#search input");
-	var searchResults = $("#subject-results, #course-results, #results-count");
-	var resultCount = $("#results-count");
-	var subjectResults = $("#subject-results");
-	var courseResults = $("#course-results");
+	var $searchBar = $("#search input");
+	var $searchResults = $("#subject-results, #course-results, #results-count");
+	var $resultCount = $("#results-count");
+	var $subjectResults = $("#subject-results");
+	var $courseResults = $("#course-results");
 
 	var subjectToIconMap = {
 		"AFM": "money", "ACTSC": "bar-chart", "ANTH": "man-woman", "AHS": "dropper", "APPLS": "japanese", "AMATH": "calculator", "ARCH": "tower", "ARTS": "pen", "ARBUS": "business-person", "AVIA": "airplane", "BIOL": "microscope", "BUS": "business-person", "BET": "idea", "CHE": "fire", "CHEM": "beaker", "CHINA": "chinese", "CMW": "church", "CIVE": "road", "CLAS": "ankh", "CO": "puzzle", "COMM": "money", "CS": "console", "COOP": "work", "CROAT": "translation", "DAC": "film", "DRAMA": "mask", "DUTCH": "translation", "EARTH": "earth", "EASIA": "china-map", "ECON": "line-chart", "ECE": "chip", "ENGL": "pen", "ESL": "translation", "ENBUS": "recycle", "ERS": "recycle", "ENVE": "recycle", "ENVS": "recycle", "FINE": "palette", "FR": "translation", "GENE": "hard-hat", "GEOG": "globe", "GEOE": "mountain", "GER": "translation", "GERON": "aging", "GBDA": "film", "GRK": "translation", "HLTH": "first-aid", "HRM": "people", "HUMSC": "man-woman", "INDEV": "earth", "INTST": "earth", "INTTS": "earth", "ITAL": "translation", "JAPAN": "japanese", "JS": "jewish", "KIN": "run", "KOREA": "translation", "LAT": "translation", "LS": "gavel", "MATBUS": "business-person", "MSCI": "organize", "MNS": "atom", "MATH": "calculator", "MTHEL": "calculator", "ME": "gear", "MTE": "gear", "MEDVL": "ankh", "MUSIC": "music", "NE": "atom", "NATST": "native", "OPTOM": "eye", "PACS": "peace", "PHARM": "pill", "PHIL": "thinking", "PHYS": "atom", "PLAN": "plan", "POLSH": "translation", "PSCI": "congress", "PORT": "translation", "PD": "wtf", "PDPHRM": "wtf", "PSYCH": "brain", "PMATH": "infinity", "REC": "island", "RS": "church", "RUSS": "translation", "SCI": "magnet", "SCBUS": "magnet", "SMF": "man-woman", "SDS": "network", "SOCWK": "network", "SWREN": "network", "STV": "network",  "SOC": "network", "SE": "console", "SPAN": "translation", "SPCOM": "speech", "STAT": "bar-chart", "SI": "islam", "SYDE": "rocket", "UNIV": "goose", "VCULT": "film", "WS": "female", "WKRPT": "wtf"
@@ -25,12 +24,12 @@ $(document).ready(function() {
 		var numSubjects = Object.size(results);
 		var numCourses = 0;
 
-		searchResults.empty();
+		$searchResults.empty();
 
 		// Load subjects
 		if (numSubjects > 1) {
 			for (var subject in results) {
-				subjectResults.append(generateHTML("subject", subject));
+				$subjectResults.append(generateHTML("subject", subject));
 			}
 		}
 
@@ -39,7 +38,7 @@ $(document).ready(function() {
 			for (var number in results[subject]) {
 				numCourses++;
 				if (numCourses <= COURSE_LIMIT) {
-					courseResults.append(generateHTML("course", subject, number));
+					$courseResults.append(generateHTML("course", subject, number));
 				}
 			}
 		}
@@ -48,7 +47,7 @@ $(document).ready(function() {
 
 	// Setup course header before more data is fetched
 	function setupCourse (subject, number) {
-		courseResults.append(generateHTML("opened-course", subject, number));
+		$courseResults.append(generateHTML("opened-course", subject, number));
 
 		var container = $("#" + subject + number);
 		container.addClass("opened");
@@ -106,13 +105,13 @@ $(document).ready(function() {
 				text = "Found 1 result:";
 			}
 
-			resultCount.text(text);
+			$resultCount.text(text);
 		}
 	}
 
 	// Enable search by listening to input on search bar
 	function enableSearch () {
-		searchBar.on("input", function (e) {
+		$searchBar.on("input", function (e) {
 			if (window.location.hash) {
 				window.location.hash = "";
 			}
@@ -120,7 +119,7 @@ $(document).ready(function() {
 			if (query) {
 				BACKEND.getCoursesByQuery(query, loadSearchResult);
 			} else {
-				searchResults.empty();
+				$searchResults.empty();
 			}
 		});
 	}
@@ -147,7 +146,7 @@ $(document).ready(function() {
 
 	function init () {
 		function work () {
-			searchResults.empty();
+			$searchResults.empty();
 			if (window.location.hash) {
 				var re = /#([A-Za-z]+)\s*(.*)/;
 				var result = window.location.hash.match(re);
@@ -160,19 +159,19 @@ $(document).ready(function() {
 						BACKEND.getCourse(subject, number, showCourse);	
 					} else {
 						document.title = "Home - UWaterloo Course Indexer";
-						searchBar.val("");
+						$searchBar.val("");
 						window.location.hash = "";
 					}
 				} else if (result && subject) {
 					document.title = subject + " course - UWaterloo Course Indexer";			
-					searchBar.val(subject + " ").focus();
-					BACKEND.getCoursesByQuery(searchBar.val(), loadSearchResult);
+					$searchBar.val(subject + " ").focus();
+					BACKEND.getCoursesByQuery($searchBar.val(), loadSearchResult);
 				}
 			} else {
 				document.title = "Home - UWaterloo Course Indexer";
-				searchBar.focus();
-				if (searchBar.val()) {
-					BACKEND.getCoursesByQuery(searchBar.val(), loadSearchResult);		
+				$searchBar.focus();
+				if ($searchBar.val()) {
+					BACKEND.getCoursesByQuery($searchBar.val(), loadSearchResult);		
 				}
 			}
 			enableSearch();
