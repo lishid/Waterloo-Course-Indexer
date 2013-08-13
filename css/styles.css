@@ -165,6 +165,7 @@ a {
 /* course page styles */
 
 .details {
+	width: 536px;
 	padding: 0 3em 4em 3em;
 }
 

@@ -1,7 +1,10 @@
-var spinnerOption = {
-	lines: 11, length: 14, width: 5, radius: 21, corners: 1, rotate: 0, direction: 1, color: '#222', speed: 1, trail: 42, shadow: false, hwaccel: false, className: 'spinner', zIndex: 2e9, top: '100', left: 'auto'
+var mainSpinnerOption = {
+	lines: 11, length: 14, width: 5, radius: 21, corners: 1, rotate: 0, direction: 1, color: "#222", speed: 1, trail: 42, shadow: false, hwaccel: false, className: "spinner", zIndex: 2e9, top: "100", left: "auto"
 };
-var spinner = new Spinner(spinnerOption).spin(document.getElementById("loading-screen"));
+var courseSpinnerOption = $.extend({}, mainSpinnerOption);
+courseSpinnerOption.top = "250";
+
+var spinner = new Spinner(mainSpinnerOption).spin(document.getElementById("loading-screen"));
 
 
 $(document).ready(function() {
@@ -60,6 +63,7 @@ $(document).ready(function() {
 
 		var width = container.find(".header").width();
 		container.find(".header").width(width + 22);
+		spinner = new Spinner(courseSpinnerOption).spin(document.getElementById("loading-screen"));
 	}
 
 	// Load course details
@@ -95,7 +99,8 @@ $(document).ready(function() {
 			html += "<p class='course-link'><a href=" + course.url + ">View official course description</a></p>";
 		}
 
-		container.find(".details").empty().append(html).show();
+		spinner.stop();
+		container.find(".details").empty().append(html).slideDown();
 	}; 
 
 	// Display number of results found
