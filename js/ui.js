@@ -196,7 +196,7 @@ $(document).ready(function() {
 		}
 
 		work();
-		window.addEventListener("popstate", work);
+		window.addEventListener("hashchange", work);
 	}
 
 	BACKEND.registerUICallback(stopLoadingScreen);
