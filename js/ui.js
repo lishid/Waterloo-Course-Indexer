@@ -60,24 +60,18 @@ $(document).ready(function() {
 		var subject = result[1];
 		var number = result[2];
 		courseDiv.addClass("opened");
-		var width = courseDiv.find(".header").width();
-		courseDiv.find(".header").width(width + 22);
 		BACKEND.getCourse(subject, number, showCourse);
 	}
 
 	// Close an already expanded course
 	function closeCourse (courseDiv) {
-		courseDiv.find(".details").slideUp(function() {
-			var width = courseDiv.find(".header").width();
-			courseDiv.find(".header").width(width - 22);
-			courseDiv.removeClass("opened");
-		});
+		courseDiv.removeClass("opened");
+		courseDiv.find(".details").slideUp(200);
 	}
 
 	// Setup course header before more data is fetched
 	function setupCourse (subject, number) {
 		$courseResults.append(generateHTML("opened-course", subject, number));
-
 		var container = $("#" + subject + number);
 		container.addClass("opened");
 
@@ -120,7 +114,7 @@ $(document).ready(function() {
 		}
 
 		spinner.stop();
-		container.find(".details").empty().append(html).slideDown();
+		container.find(".details").empty().append(html).slideDown(300);
 	}; 
 
 	// Display number of results found

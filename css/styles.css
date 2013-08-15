@@ -116,7 +116,9 @@ a {
 }
 
 .subject .header, .course .header {
+	position: relative;
 	height: 8em;
+	width: 598px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
 	cursor: pointer;
@@ -124,6 +126,11 @@ a {
 	-webkit-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	-webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .subject .icon-wrapper, .course .icon-wrapper {
@@ -259,6 +266,7 @@ p.course-link {
 }
 .course.opened .header {
 	position: relative;
+	width: 619px;
 	left: -11px;
 	top: -1px;
 	border: 1px solid #adadad;
