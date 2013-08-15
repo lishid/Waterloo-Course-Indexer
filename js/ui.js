@@ -56,7 +56,6 @@ $(document).ready(function() {
 
 	// Expand the course without changing the hash
 	function expandCourse (courseDiv) {
-		spinner = new Spinner(courseSpinnerOption).spin(document.getElementById("loading-screen"));
 		var result = courseDiv.attr("id").match(/([A-Za-z]+)\s*(.*)/);
 		var subject = result[1];
 		var number = result[2];
@@ -64,6 +63,15 @@ $(document).ready(function() {
 		var width = courseDiv.find(".header").width();
 		courseDiv.find(".header").width(width + 22);
 		BACKEND.getCourse(subject, number, showCourse);
+	}
+
+	// Close an already expanded course
+	function closeCourse (courseDiv) {
+		courseDiv.find(".details").slideUp(function() {
+			var width = courseDiv.find(".header").width();
+			courseDiv.find(".header").width(width - 22);
+			courseDiv.removeClass("opened");
+		});
 	}
 
 	// Setup course header before more data is fetched
@@ -211,6 +219,8 @@ $(document).ready(function() {
 		$courseResults.on("click", ".course", function (evt) {
 			if (!$(this).hasClass("opened")) {
 				expandCourse($(this));
+			} else {
+				closeCourse($(this));
 			}
 			evt.preventDefault();
 		});
