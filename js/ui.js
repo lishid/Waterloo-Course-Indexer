@@ -75,8 +75,6 @@ $(document).ready(function() {
 		var container = $("#" + subject + number);
 		container.addClass("opened");
 
-		var width = container.find(".header").width();
-		container.find(".header").width(width + 22);
 		spinner = new Spinner(courseSpinnerOption).spin(document.getElementById("loading-screen"));
 	}
 
