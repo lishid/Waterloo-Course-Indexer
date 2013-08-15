@@ -20,7 +20,7 @@ body {
 
 /* header styles */
 
-header, #search, #results-count, #course-results, #subject-results {
+header, #search, #results-count, #course-results, #subject-results, #noscript {
 	margin: 0 auto;
 	width: 600px;
 }
@@ -51,6 +51,18 @@ h3 { font-size: 2em; }
 a {
 	color: inherit;
 	text-decoration: none;
+}
+
+#noscript {
+	margin-top: 5em;
+}
+
+#noscript p {
+	font-size: 1.8em;
+}
+
+#noscript a {
+	text-decoration: underline;
 }
 
 
