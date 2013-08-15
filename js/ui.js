@@ -54,6 +54,18 @@ $(document).ready(function() {
 		showSearchResult(numCourses, numSubjects);
 	}
 
+	// Expand the course without changing the hash
+	function expandCourse (courseDiv) {
+		spinner = new Spinner(courseSpinnerOption).spin(document.getElementById("loading-screen"));
+		var result = courseDiv.attr("id").match(/([A-Za-z]+)\s*(.*)/);
+		var subject = result[1];
+		var number = result[2];
+		courseDiv.addClass("opened");
+		var width = courseDiv.find(".header").width();
+		courseDiv.find(".header").width(width + 22);
+		BACKEND.getCourse(subject, number, showCourse);
+	}
+
 	// Setup course header before more data is fetched
 	function setupCourse (subject, number) {
 		$courseResults.append(generateHTML("opened-course", subject, number));
@@ -166,8 +178,7 @@ $(document).ready(function() {
 		function work () {
 			$searchResults.empty();
 			if (window.location.hash) {
-				var re = /#([A-Za-z]+)\s*(.*)/;
-				var result = window.location.hash.match(re);
+				var result = window.location.hash.match(/#([A-Za-z]+)\s*(.*)/);
 				var subject = result[1];
 				var number = result[2];
 				if (result && subject && number) {
@@ -197,6 +208,12 @@ $(document).ready(function() {
 
 		work();
 		window.addEventListener("hashchange", work);
+		$courseResults.on("click", ".course", function (evt) {
+			if (!$(this).hasClass("opened")) {
+				expandCourse($(this));
+			}
+			evt.preventDefault();
+		});
 	}
 
 	BACKEND.registerUICallback(stopLoadingScreen);
