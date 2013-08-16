@@ -101,13 +101,13 @@ var BACKEND = (function (object) {
 		return results;
 	}
 
-	function getCourse (subject, number, callback) {
+	function getCourse (subject, number, fullDetails, callback) {
 		safeAjax({
 			url: "get.php?course&subject=" + subject + "&number=" + number,
 			dataType: "json"
 		}, function(data) {
 			console.log(data);
-			callback(data);
+			callback(data, fullDetails);
 		});
 	}
 

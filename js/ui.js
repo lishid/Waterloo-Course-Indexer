@@ -60,7 +60,7 @@ $(document).ready(function() {
 		var subject = result[1];
 		var number = result[2];
 		courseDiv.addClass("opened");
-		BACKEND.getCourse(subject, number, showCourse);
+		BACKEND.getCourse(subject, number, false, showCourse);
 	}
 
 	// Close an already expanded course
@@ -79,10 +79,12 @@ $(document).ready(function() {
 	}
 
 	// Load course details
-	function showCourse (course) {
-		function getHTML (section) {
-			if (course[section]) {
-				return "<h2>" + section.toTitleCase() + "</h2><p>" + course[section] + "</p>";
+	function showCourse (course, fullDetails) {
+		function getHTML (section, limit) {
+			if (course[section] && limit) {
+				return "<h2>" + section.toTitleCase() + "</h2><p>" + course[section].trunc(limit) + "</p>";
+			} else if (course[section]) {
+				return "<h2>" + section.toTitleCase() + "</h2><p>" + course[section] + "</p>";		
 			} else {
 				return "";
 			}
@@ -103,12 +105,16 @@ $(document).ready(function() {
 		availability += "</p>";
 		html += availability;
 
-		html += getHTML("description");
-		html += getHTML("notes");
-		html += getHTML("components");
-		html += getHTML("credits");
-		if (course.url) {
-			html += "<p class='course-link'><a href=" + course.url + ">View official course description</a></p>";
+		if (!fullDetails) {
+			html += getHTML("description", 200);
+		} else {
+			html += getHTML("description");
+			html += getHTML("notes");
+			html += getHTML("components");
+			html += getHTML("credits");
+			if (course.url) {
+				html += "<p class='course-link'><a href=" + course.url + ">View official course description</a></p>";
+			}	
 		}
 
 		spinner.stop();
@@ -185,7 +191,7 @@ $(document).ready(function() {
 					if (BACKEND.courseIndex[subject] && BACKEND.courseIndex[subject][number]) {
 						document.title = subject + " " + number + " - UWaterloo Course Indexer";
 						setupCourse(subject, number);
-						BACKEND.getCourse(subject, number, showCourse);	
+						BACKEND.getCourse(subject, number, true, showCourse);	
 					} else {
 						document.title = "Home - UWaterloo Course Indexer";
 						$searchBar.val("");
