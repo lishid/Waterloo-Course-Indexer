@@ -82,7 +82,6 @@ function requisiteParseItem($input) {
 		$program = substr($input, 18);
 		if($program != "") {
 			$result[] = array("program", parseRequisiteOr($program, ""));
-			$result["program"] = parseRequisiteOr($program, "");
 		}
 	}
 	else if(startsWith($input, "Not open to")) {
