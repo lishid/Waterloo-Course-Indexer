@@ -71,7 +71,7 @@ $(document).ready(function() {
 
 	// Setup course header before more data is fetched
 	function setupCourse (subject, number) {
-		$courseResults.append(generateHTML("opened-course", subject, number));
+		$courseResults.append(generateHTML("course", subject, number));
 		var container = $("#" + subject + number);
 		container.addClass("opened");
 
@@ -107,13 +107,14 @@ $(document).ready(function() {
 
 		if (!fullDetails) {
 			html += getHTML("description", 200);
+			html += "<p class='course-link'><a href=#" + course.subject + course.number + ">Course details</a></p>";
 		} else {
 			html += getHTML("description");
 			html += getHTML("notes");
 			html += getHTML("components");
 			html += getHTML("credits");
 			if (course.url) {
-				html += "<p class='course-link'><a href=" + course.url + ">View official course description</a></p>";
+				html += "<p class='official-link'><a href=" + course.url + ">View official course description</a></p>";
 			}	
 		}
 
@@ -162,12 +163,8 @@ $(document).ready(function() {
 			return "<a href='#" + subject + "'><div class='subject " + BACKEND.subjects[subject].department + "' id='" + subject + "'><div class='header'><div class='title'><h2><span class='code'>" + subject + "</span></h2><h3><span class='name'>" + BACKEND.subjects[subject].title + "</span></h3></div>" + icon + "</div></div></a>";
 		}
 
-		var courseHTML = "<div class='course " + BACKEND.subjects[subject].department + "' id='" + id + "'><div class='header'>" + icon + "<div class='title'><h2><span class='code'>" + subject + " " + number + "</span></h2><h3><span class='name'>" + BACKEND.courseIndex[subject][number].trunc(50) + "</span></h3></div></div><div class='details' style='display: none'></div></div>";
-
-		if (component === "course") {
-			return "<a href='#" + id + "'>" + courseHTML + "</a>";
-		} else if (component === "opened-course") {
-			return courseHTML;
+		else if (component === "course") {
+			return "<div class='course " + BACKEND.subjects[subject].department + "' id='" + id + "'><div class='header'>" + icon + "<div class='title'><h2><span class='code'>" + subject + " " + number + "</span></h2><h3><span class='name'>" + BACKEND.courseIndex[subject][number].trunc(50) + "</span></h3></div></div><div class='details' style='display: none'></div></div>";
 		} else if (component === "small-course") {
 			return "<a href='" + id + "'><div class='course small " + BACKEND.subjects[subject].department + "' id='" + id + "'><div class='header'>" + icon + "<div class='title'><h2><span class='code'>" + subject + " " + number + "</span></h2></div></div></div></a>";
 		}
@@ -214,11 +211,11 @@ $(document).ready(function() {
 
 		work();
 		window.addEventListener("hashchange", work);
-		$courseResults.on("click", ".course", function (evt) {
-			if (!$(this).hasClass("opened")) {
-				expandCourse($(this));
+		$courseResults.on("click", ".course .header", function (evt) {
+			if (!$(this).parent().hasClass("opened")) {
+				expandCourse($(this).parent());
 			} else {
-				closeCourse($(this));
+				closeCourse($(this).parent());
 			}
 			evt.preventDefault();
 		});
