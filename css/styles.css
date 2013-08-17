@@ -271,7 +271,6 @@ p.official-link, p.course-link {
 	border: 1px solid #adadad;
 	-webkit-border-radius: 0;
 	border-radius: 0;
-	cursor: default;
 	-moz-user-select: text;
 	-webkit-user-select: text;
 	-ms-user-select: text;
