@@ -107,6 +107,10 @@ a {
 	margin-bottom: 10em;
 }
 
+#subject-results a {
+	text-decoration: none;
+}
+
 .subject, .course {
 	margin: 0.5em 0;
 	-webkit-border-radius: 4px;
