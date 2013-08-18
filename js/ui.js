@@ -21,6 +21,7 @@ $(document).ready(function() {
 	var $courseResults = $("#course-results");
 
 	var loadedCourses = 0;
+	var prevSearch = "";
 
 	var subjectToIconMap = {
 		"AFM": "money", "ACTSC": "bar-chart", "ANTH": "man-woman", "AHS": "dropper", "APPLS": "japanese", "AMATH": "calculator", "ARCH": "tower", "ARTS": "pen", "ARBUS": "business-person", "AVIA": "airplane", "BIOL": "microscope", "BUS": "business-person", "BET": "idea", "CHE": "fire", "CHEM": "beaker", "CHINA": "chinese", "CMW": "church", "CIVE": "road", "CLAS": "ankh", "CO": "puzzle", "COMM": "money", "CS": "console", "COOP": "work", "CROAT": "translation", "DAC": "film", "DRAMA": "mask", "DUTCH": "translation", "EARTH": "earth", "EASIA": "china-map", "ECON": "line-chart", "ECE": "chip", "ENGL": "pen", "ESL": "translation", "ENBUS": "recycle", "ERS": "recycle", "ENVE": "recycle", "ENVS": "recycle", "FINE": "palette", "FR": "translation", "GENE": "hard-hat", "GEOG": "globe", "GEOE": "mountain", "GER": "translation", "GERON": "aging", "GBDA": "film", "GRK": "translation", "HLTH": "first-aid", "HRM": "people", "HUMSC": "man-woman", "INDEV": "earth", "INTST": "earth", "INTTS": "earth", "ITAL": "translation", "JAPAN": "japanese", "JS": "jewish", "KIN": "run", "KOREA": "translation", "LAT": "translation", "LS": "gavel", "MATBUS": "business-person", "MSCI": "organize", "MNS": "atom", "MATH": "calculator", "MTHEL": "calculator", "ME": "gear", "MTE": "gear", "MEDVL": "ankh", "MUSIC": "music", "NE": "atom", "NATST": "native", "OPTOM": "eye", "PACS": "peace", "PHARM": "pill", "PHIL": "thinking", "PHYS": "atom", "PLAN": "plan", "POLSH": "translation", "PSCI": "congress", "PORT": "translation", "PD": "wtf", "PDPHRM": "wtf", "PSYCH": "brain", "PMATH": "infinity", "REC": "island", "RS": "church", "RUSS": "translation", "SCI": "magnet", "SCBUS": "magnet", "SMF": "man-woman", "SDS": "network", "SOCWK": "network", "SWREN": "network", "STV": "network",  "SOC": "network", "SE": "console", "SPAN": "translation", "SPCOM": "speech", "STAT": "bar-chart", "SI": "islam", "SYDE": "rocket", "UNIV": "goose", "VCULT": "film", "WS": "female", "WKRPT": "wtf"
@@ -169,21 +170,6 @@ $(document).ready(function() {
 		}
 	}
 
-	// Enable search by listening to input on search bar
-	function enableSearch () {
-		$searchBar.on("input", function (e) {
-			if (window.location.hash) {
-				window.location.hash = "";
-			}
-			var query = $(this).val();
-			if (query) {
-				BACKEND.getCoursesByQuery(query, loadSearchResult);
-			} else {
-				$searchResults.empty();
-			}
-		});
-	}
-
 	// Generate HTML for a component
 	function generateHTML (component, subject, number) {
 		var id = subject + number || "";
@@ -205,6 +191,39 @@ $(document).ready(function() {
 		$searchBar.show();
 		$searchResults.show();
 		init();
+	}
+
+	// Handlers
+
+	// Enable search by listening to input on search bar
+	function enableSearch () {
+		function checkChange () {
+			var newSearch = $searchBar.val();
+			if (newSearch !== prevSearch) {
+				if (newSearch) {
+					BACKEND.getCoursesByQuery(newSearch, loadSearchResult);
+				} else {
+					$searchResults.empty();
+				}
+				prevSearch = newSearch;
+			}
+		}
+
+		if (!isIE) {
+			$searchBar.on("input", function (e) {
+				if (window.location.hash) {
+					window.location.hash = "";
+				}
+				var query = $(this).val();
+				if (query) {
+					BACKEND.getCoursesByQuery(query, loadSearchResult);
+				} else {
+					$searchResults.empty();
+				}
+			});		
+		} else {
+			setInterval(checkChange, 50);
+		}
 	}
 
 	function attachScrollHandler () {

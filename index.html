@@ -35,7 +35,16 @@
 		<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
 		<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script> -->
 		<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/spin.js/1.2.7/spin.min.js"></script> -->
-		
+		<!--[if IE]>
+			<script>
+				isIE = true;
+			</script>
+		<![endif]-->
+		<![if !IE]>
+			<script>
+				isIE = false;
+			</script>
+		<![endif]>
 		<script>window.jQuery || document.write("<script src='js/vendor/jquery-1.10.2.min.js'><\/script>")</script>
 		<!-- <script>window.Raphael || document.write("<script src='js/vendor/raphael-min.js'><\/script>")</script> -->
 		<script>window.Spinner || document.write("<script src='js/vendor/spin-min.js'><\/script>")</script>
