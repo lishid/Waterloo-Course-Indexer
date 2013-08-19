@@ -250,7 +250,7 @@ $(document).ready(function() {
 
 	function attachScrollHandler () {
 		$(window).scroll(function() {  
-			if($(window).scrollTop() + $(window).height() > $(document).height() - 150) {
+			if (withinDistanceFromPageBottom(100) && currentState === pageState.MAIN_SEARCH) {
 				BACKEND.getCoursesByQuery($searchBar.val(), loadMoreCourses);
 			}
 		});

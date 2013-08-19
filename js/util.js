@@ -83,6 +83,10 @@ function safeAjax(params, callback, retryTimeout, retryTimes) {
 	ajaxCall();
 }
 
-function getDataURI(mime, data) {
+function getDataURI (mime, data) {
 	return "data:" + mime + ";charset=UTF-8," + encodeURIComponent(data);
+}
+
+function withinDistanceFromPageBottom (distanceInPixel) {
+	return ($(window).scrollTop() + $(window).height() > $(document).height() - distanceInPixel);
 }
