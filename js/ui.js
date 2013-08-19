@@ -26,6 +26,15 @@ $(document).ready(function() {
 	var loadedCourses = 0;
 	var prevSearch = "";
 
+	//State enum
+	var pageState = {
+	    MAIN_SEARCH: 0,
+	    SHOW_SUBJECT: 1,
+	    SHOW_COURSE: 2
+	}
+
+	var currentState = pageState.MAIN_SEARCH;
+
 	var subjectToIconMap = {
 		"AFM": "money", "ACTSC": "bar-chart", "ANTH": "man-woman", "AHS": "dropper", "APPLS": "japanese", "AMATH": "calculator", "ARCH": "tower", "ARTS": "pen", "ARBUS": "business-person", "AVIA": "airplane", "BIOL": "microscope", "BUS": "business-person", "BET": "idea", "CHE": "fire", "CHEM": "beaker", "CHINA": "chinese", "CMW": "church", "CIVE": "road", "CLAS": "ankh", "CO": "puzzle", "COMM": "money", "CS": "console", "COOP": "work", "CROAT": "translation", "DAC": "film", "DRAMA": "mask", "DUTCH": "translation", "EARTH": "earth", "EASIA": "china-map", "ECON": "line-chart", "ECE": "chip", "ENGL": "pen", "ESL": "translation", "ENBUS": "recycle", "ERS": "recycle", "ENVE": "recycle", "ENVS": "recycle", "FINE": "palette", "FR": "translation", "GENE": "hard-hat", "GEOG": "globe", "GEOE": "mountain", "GER": "translation", "GERON": "aging", "GBDA": "film", "GRK": "translation", "HLTH": "first-aid", "HRM": "people", "HUMSC": "man-woman", "INDEV": "earth", "INTST": "earth", "INTTS": "earth", "ITAL": "translation", "JAPAN": "japanese", "JS": "jewish", "KIN": "run", "KOREA": "translation", "LAT": "translation", "LS": "gavel", "MATBUS": "business-person", "MSCI": "organize", "MNS": "atom", "MATH": "calculator", "MTHEL": "calculator", "ME": "gear", "MTE": "gear", "MEDVL": "ankh", "MUSIC": "music", "NE": "atom", "NATST": "native", "OPTOM": "eye", "PACS": "peace", "PHARM": "pill", "PHIL": "thinking", "PHYS": "atom", "PLAN": "plan", "POLSH": "translation", "PSCI": "congress", "PORT": "translation", "PD": "wtf", "PDPHRM": "wtf", "PSYCH": "brain", "PMATH": "infinity", "REC": "island", "RS": "church", "RUSS": "translation", "SCI": "magnet", "SCBUS": "magnet", "SMF": "man-woman", "SDS": "network", "SOCWK": "network", "SWREN": "network", "STV": "network",  "SOC": "network", "SE": "console", "SPAN": "translation", "SPCOM": "speech", "STAT": "bar-chart", "SI": "islam", "SYDE": "rocket", "UNIV": "goose", "VCULT": "film", "WS": "female", "WKRPT": "wtf"
 	};
@@ -199,6 +208,13 @@ $(document).ready(function() {
 		init();
 	}
 
+	function clearSearch () {		
+		document.title = "Home - UWaterloo Course Indexer";
+		$searchBar.val("");
+		$searchResults.empty();
+		currentState = pageState.MAIN_SEARCH;
+	}
+
 	// Handlers
 
 	// Enable search by listening to input on search bar
@@ -259,33 +275,44 @@ $(document).ready(function() {
 				var result = window.location.hash.match(/#([A-Za-z]+)\s*(.*)/);
 				var subject = result[1];
 				var number = result[2];
-				if (result && subject && number) {
-					if (BACKEND.courseIndex[subject] && BACKEND.courseIndex[subject][number]) {
+				// Valid subject
+				if (result && subject && BACKEND.courseIndex[subject]) {
+					// Valid course
+					if (number && BACKEND.courseIndex[subject][number]) {
+						currentState = pageState.SHOW_COURSE;
 						document.title = subject + " " + number + " - UWaterloo Course Indexer";
 						setupCourse(subject, number);
-						BACKEND.getCourse(subject, number, true, showCourse);	
-					} else {
-						document.title = "Home - UWaterloo Course Indexer";
-						$searchBar.val("");
-						window.location.hash = "";
+						BACKEND.getCourse(subject, number, true, showCourse);
+						currentState = pageState.SHOW_SUBJECT;
 					}
-				} else if (result && subject) {
-					document.title = subject + " course - UWaterloo Course Indexer";			
-					$searchBar.val(subject + " ").focus();
-					BACKEND.getCoursesByQuery($searchBar.val(), loadSearchResult);
+					// Invalid number
+					else if (number) {
+						clearSearch();
+					}
+					// Valid subject
+					else {
+						document.title = subject + " course - UWaterloo Course Indexer";	
+						$searchBar.val(subject + " ").focus();
+						BACKEND.getCoursesByQuery($searchBar.val(), loadSearchResult);
+					}
+				}
+				// Invalid subject
+				else {
+					clearSearch();
 				}
 			} else {
 				document.title = "Home - UWaterloo Course Indexer";
 				$searchBar.focus();
+				currentState = pageState.MAIN_SEARCH;
 				if ($searchBar.val()) {
 					BACKEND.getCoursesByQuery($searchBar.val(), loadSearchResult);		
 				}
 			}
-			enableSearch();
 		}
 
 		work();
 		window.addEventListener("hashchange", work);
+		enableSearch();
 		attachScrollHandler();
 		attachCourseHandler();
 	}
