@@ -29,8 +29,7 @@ $(document).ready(function() {
 	//State enum
 	var pageState = {
 	    MAIN_SEARCH: 0,
-	    SHOW_SUBJECT: 1,
-	    SHOW_COURSE: 2
+	    COURSE_DETAILS: 1
 	}
 
 	var currentState = pageState.MAIN_SEARCH;
@@ -279,11 +278,10 @@ $(document).ready(function() {
 				if (result && subject && BACKEND.courseIndex[subject]) {
 					// Valid course
 					if (number && BACKEND.courseIndex[subject][number]) {
-						currentState = pageState.SHOW_COURSE;
+						currentState = pageState.COURSE_DETAILS;
 						document.title = subject + " " + number + " - UWaterloo Course Indexer";
 						setupCourse(subject, number);
 						BACKEND.getCourse(subject, number, true, showCourse);
-						currentState = pageState.SHOW_SUBJECT;
 					}
 					// Invalid number
 					else if (number) {
