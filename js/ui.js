@@ -3,6 +3,9 @@ var mainSpinnerOption = {
 };
 var courseSpinnerOption = $.extend({}, mainSpinnerOption);
 courseSpinnerOption.top = "250";
+var expandedSpinnerOption = {
+	lines: 11, length: 9, width: 3, radius: 15, corners: 1, rotate: 0, direction: 1, color: "#222", speed: 1, trail: 42, shadow: false, hwaccel: false, className: "spinner", zIndex: 2e9, top: "15", left: "auto"
+};
 
 var spinner = new Spinner(mainSpinnerOption).spin(document.getElementById("loading-screen"));
 
@@ -90,7 +93,7 @@ $(document).ready(function() {
 		var result = courseDiv.attr("id").match(/([A-Za-z]+)\s*(.*)/);
 		var subject = result[1];
 		var number = result[2];
-		courseDiv.addClass("opened");
+		spinner = new Spinner(expandedSpinnerOption).spin(document.getElementById(courseDiv.attr("id")));
 		BACKEND.getCourse(subject, number, false, showCourse);
 	}
 
@@ -121,7 +124,7 @@ $(document).ready(function() {
 			}
 		}
 
-		var container = $("#" + course.subject + course.number);
+		var courseDiv = $("#" + course.subject + course.number);
 		var html = "";
 
 		var terms = ["Fall", "Winter", "Spring"];
@@ -150,7 +153,10 @@ $(document).ready(function() {
 		}
 
 		spinner.stop();
-		container.find(".details").empty().append(html).slideDown(300);
+		if (!fullDetails) {
+			courseDiv.addClass("opened");
+		}
+		courseDiv.find(".details").empty().append(html).slideDown(300);
 	}; 
 
 	// Display number of results found
