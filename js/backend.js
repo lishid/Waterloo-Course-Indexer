@@ -8,9 +8,9 @@ var BACKEND = (function (object) {
 	var componentsLoaded = 0;
 	var totalComponents = 3;
 
-	// {subjectprefix:{subject:{courses}}}
+	// { subjectprefix: {subject: { courses }}}
 	var subjectCache = {};
-	// {subject:{numberprefix:{courses}}}
+	// { subject: { numberprefix: { courses }}}
 	var courseCaches = {};
 
 	function getCoursesByQuery (query, callback) {
@@ -45,14 +45,14 @@ var BACKEND = (function (object) {
 
 		var length = subject.length;
 		if(!subjectCache[subject]){
-			//From prev cached
+			// From prev cached
 			if(length > 1) {
 				var cached = subjectCache[subject.substring(0, length - 1)];
 				if(cached) {
 					subjectCache[subject] = subset(cached, subject);
 				}
 			}
-			//Create new otherwise
+			// Create new otherwise
 			if(!subjectCache[subject]) {
 				subjectCache[subject] = subset(courseIndex, subject);
 			}
@@ -65,14 +65,14 @@ var BACKEND = (function (object) {
 		var results = {};
 
 		for (var key in subjectMap) {
-			//{numberprefix:{courses}}
+			// { numberprefix: { courses }}
 			var courseList = courseCaches[key];
 			var cachedCourseList;
-			//Cache found for subject
+			// Cache found for subject
 			if(courseList) {
 				var length = number.length;
 				cachedCourseList = courseList[number];
-				//Cached search
+				// Cached search
 				if(!cachedCourseList){
 					if(length > 1) {
 						var cached = courseList[number.substring(0, length - 1)];
@@ -83,13 +83,13 @@ var BACKEND = (function (object) {
 					}
 				}
 			}
-			//Create cache for subject
+			// Create cache for subject
 			else {
 				courseList = {};
 				courseCaches[key] = courseList;
 			}
 
-			//Do a full search if not cached or from a cached search
+			// Do a full search if not cached or from a cached search
 			if(!cachedCourseList) {
 				cachedCourseList = subset(subjectMap[key], number);
 				courseList[number] = cachedCourseList;
