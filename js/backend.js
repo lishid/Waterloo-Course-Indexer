@@ -1,7 +1,9 @@
 var BACKEND = (function (object) {
 	var courseIndex;
+	var departmentIndex;
 	var subjectIndex;
 	var svg;
+	var courseDataCache = {};
 	loadCourses();
 	loadSubjectIndex();
 	loadSVG();
@@ -101,14 +103,38 @@ var BACKEND = (function (object) {
 		return results;
 	}
 
-	function getCourse (subject, number, fullDetails, callback) {
-		safeAjax({
-			url: "get.php?course&subject=" + subject + "&number=" + number,
-			dataType: "json"
-		}, function(data) {
-			console.log(data);
-			callback(data, fullDetails);
-		});
+	function getCourse (subject, number, callback) {
+		if(courseDataCache[subject]) {
+			callback(courseDataCache[subject][number]);
+		}
+		else {
+			safeAjax({
+				url: "get.php?courses&subject=" + subject,
+				dataType: "json"
+			}, function(data) {
+				console.log(data);
+				courseDataCache[subject] = data;
+				callback(data[number]);
+			});
+		}
+	}
+
+	function getSubjectIndex(subject) {
+		return subjectIndex[subject];
+	}
+
+	function getDepartmentIndex(subject) {
+		return departmentIndex[subject];
+	}
+
+	function getCourseIndexList(subject) {
+		return courseIndex[subject];
+	}
+
+	function getCourseIndex(subject, number) {
+		if(courseIndex[subject]){
+			return courseIndex[subject][number];
+		}
 	}
 
 	function loadSubjectIndex () {
@@ -116,9 +142,8 @@ var BACKEND = (function (object) {
 			url: "get.php?subjects",
 			dataType: "json"
 		}, function (data) {
-			subjectIndex = data;
-			object.departments = subjectIndex["departments"];
-			object.subjects = subjectIndex["subjects"];
+			departmentIndex = data["departments"];
+			subjectIndex = data["subjects"];
 			console.log("Subjects loaded");
 			componentLoad();
 		});
@@ -130,7 +155,6 @@ var BACKEND = (function (object) {
 			dataType: "json"
 		}, function (data) {
 			courseIndex = data;
-			object.courseIndex = data;
 			console.log("Courses loaded");
 			componentLoad();
 		});
@@ -166,6 +190,10 @@ var BACKEND = (function (object) {
 
 	object.getCoursesByQuery = getCoursesByQuery;
 	object.getCourse = getCourse;
+	object.getSubjectIndex = getSubjectIndex;
+	object.getDepartmentIndex = getDepartmentIndex;
+	object.getCourseIndexList = getCourseIndexList;
+	object.getCourseIndex = getCourseIndex;
 	object.registerUICallback = registerUICallback;
 
 	return object;

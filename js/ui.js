@@ -13,6 +13,7 @@ $(document).ready(function() {
 	var loadedCourses = 0;
 	var prevSearch = "";
 	var currentState = pageState.MAIN_SEARCH;
+	var showFullCourse = false;
 
 
 	// UI Rendering methods
@@ -44,7 +45,7 @@ $(document).ready(function() {
 		// Load subjects
 		if (numSubjects > 1) {
 			for (var subject in results) {
-				$subjectResults.append(generateHTML("subject", subject));
+				$subjectResults.append(generateSubjectHTML(subject));
 			}
 		}
 		// Load courses (within limit)
@@ -52,7 +53,7 @@ $(document).ready(function() {
 			for (var number in results[subject]) {
 				numCourses++;
 				if (numCourses <= COURSE_LIMIT) {
-					$courseResults.append(generateHTML("course", subject, number));
+					$courseResults.append(generateCourseHTML(subject, number));
 				}
 			}
 		}
@@ -73,7 +74,7 @@ $(document).ready(function() {
 			for (var number in results[subject]) {
 				count++;
 				if (count >= startIdx && count <= endIdx) {
-					$courseResults.append(generateHTML("course", subject, number));
+					$courseResults.append(generateCourseHTML(subject, number));
 					loaded++;
 				} else if (count > endIdx) {	
 					loadedCourses += loaded;
@@ -90,7 +91,8 @@ $(document).ready(function() {
 		var subject = result[1];
 		var number = result[2];
 		spinner = new Spinner(expandedSpinnerOption).spin(document.getElementById(courseDiv.attr("id")));
-		BACKEND.getCourse(subject, number, false, showCourse);
+		showFullCourse = false;
+		BACKEND.getCourse(subject, number, showCourse);
 	}
 
 	// Close an already expanded course
@@ -101,7 +103,7 @@ $(document).ready(function() {
 
 	// Setup course header before more data is fetched
 	function setupCourse (subject, number) {
-		$courseResults.append(generateHTML("course", subject, number));
+		$courseResults.append(generateCourseHTML(subject, number));
 		var container = $("#" + subject + number);
 		container.addClass("opened");
 
@@ -109,7 +111,7 @@ $(document).ready(function() {
 	}
 
 	// Load course details
-	function showCourse (course, fullDetails) {
+	function showCourse (course) {
 		function getHTML (section, limit) {
 			if (course[section] && limit) {
 				return "<h2>" + section.toTitleCase() + "</h2><p>" + course[section].trunc(limit) + "</p>";
@@ -135,7 +137,7 @@ $(document).ready(function() {
 		availability += "</p>";
 		html += availability;
 
-		if (!fullDetails) {
+		if (!showFullCourse) {
 			html += getHTML("description", 200);
 			html += "<p class='course-link'><a href=#" + course.subject + course.number + ">Course details</a></p>";
 		} else {
@@ -149,27 +151,52 @@ $(document).ready(function() {
 		}
 
 		spinner.stop();
-		if (!fullDetails) {
+		if (!showFullCourse) {
 			courseDiv.addClass("opened");
 		}
 		courseDiv.find(".details").empty().append(html).slideDown(300);
 	}; 
 
-	// Generate HTML for a component
+	// This should now be deprecated. If needed, move small-course out of here or delete this function
+	// Otherwise, just delete it
+	// MAKE SURE you also delete .small if it's no longer needed
 	function generateHTML (component, subject, number) {
 		var id = subject + number || "";
 		var icon = "<div class='icon-wrapper'><div class='icon icon-" + getIcon(subject) + "'></div></div>";
 
-		if (component === "subject") {
-			return "<a href='#" + subject + "'><div class='subject " + BACKEND.subjects[subject].department + "' id='" + subject + "'><div class='header'><div class='title'><h2><span class='code'>" + subject + "</span></h2><h3><span class='name'>" + BACKEND.subjects[subject].title + "</span></h3></div>" + icon + "</div></div></a>";
+		if (component === "small-course") {
+			return "<a href='" + id + "'><div class='course small " + BACKEND.getSubjectIndex(subject).department + "' id='" + id + "'><div class='header'>" + icon + "<div class='title'><h2><span class='code'>" + subject + " " + number + "</span></h2></div></div></div></a>";
 		}
+	}
 
-		else if (component === "course") {
-			return "<div class='course " + BACKEND.subjects[subject].department + "' id='" + id + "'><div class='header'>" + icon + "<div class='title'><h2><span class='code'>" + subject + " " + number + "</span></h2><h3><span class='name'>" + BACKEND.courseIndex[subject][number].trunc(50) + "</span></h3></div></div><div class='details' style='display: none'></div></div>";
-		} else if (component === "small-course") {
-			return "<a href='" + id + "'><div class='course small " + BACKEND.subjects[subject].department + "' id='" + id + "'><div class='header'>" + icon + "<div class='title'><h2><span class='code'>" + subject + " " + number + "</span></h2></div></div></div></a>";
-		}
-	}			
+	function generateSubjectHTML (subject) {
+		var icon = generateSubjectIconHTML(subject);
+		var subjectObject = BACKEND.getSubjectIndex(subject);
+		var department = subjectObject.department;
+		var title = subjectObject.title;
+		return "<a href='#" + subject + "'>" + 
+			"<div class='subject " + department + "' id='" + subject + "'>" + 
+			"<div class='header'><div class='title'>" + 
+			"<h2><span class='code'>" + subject + "</span></h2>" + 
+			"<h3><span class='name'>" + title + "</span></h3>" + 
+			"</div>" + icon + "</div></div></a>";
+	}
+
+	function generateCourseHTML (subject, number) {
+		var id = subject + number;
+		var icon = generateSubjectIconHTML(subject);
+		var department = BACKEND.getSubjectIndex(subject).department;
+		var courseTitle = BACKEND.getCourseIndex(subject, number).trunc(50);
+		return "<div class='course " + department + "' id='" + id + "'>" + 
+		"<div class='header'>" + icon + "<div class='title'>" + 
+		"<h2><span class='code'>" + subject + " " + number + "</span></h2>" + 
+		"<h3><span class='name'>" + courseTitle + "</span></h3>" + 
+		"</div></div><div class='details' style='display: none'></div></div>";
+	}
+
+	function generateSubjectIconHTML(subject) {
+		return "<div class='icon-wrapper'><div class='icon icon-" + getIcon(subject) + "'></div></div>";
+	}
 
 
 	// Handlers
@@ -199,7 +226,7 @@ $(document).ready(function() {
 				} else {
 					$searchResults.empty();
 				}
-			});		
+			});
 		}
 		// Use interval for IE since deletion doesn't trigger "input"
 		else {
@@ -238,7 +265,7 @@ $(document).ready(function() {
 		init();
 	}
 
-	function clearSearch () {		
+	function clearSearch () {
 		document.title = "Home - UWaterloo Course Indexer";
 		$searchBar.val("");
 		$searchResults.empty();
@@ -260,13 +287,14 @@ $(document).ready(function() {
 				var subject = result[1];
 				var number = result[2];
 				// Valid subject
-				if (result && subject && BACKEND.courseIndex[subject]) {
+				if (result && subject && BACKEND.getCourseIndexList(subject)) {
 					// Valid course
-					if (number && BACKEND.courseIndex[subject][number]) {
+					if (number && BACKEND.getCourseIndex(subject, number)) {
 						currentState = pageState.COURSE_DETAILS;
 						document.title = subject + " " + number + " - UWaterloo Course Indexer";
 						setupCourse(subject, number);
-						BACKEND.getCourse(subject, number, true, showCourse);
+						showFullCourse = true;
+						BACKEND.getCourse(subject, number, showCourse);
 					}
 					// Invalid number
 					else if (number) {
