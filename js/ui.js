@@ -1,46 +1,37 @@
-var mainSpinnerOption = {
-	lines: 11, length: 14, width: 5, radius: 21, corners: 1, rotate: 0, direction: 1, color: "#222", speed: 1, trail: 42, shadow: false, hwaccel: false, className: "spinner", zIndex: 2e9, top: "100", left: "auto"
-};
-var courseSpinnerOption = $.extend({}, mainSpinnerOption);
-courseSpinnerOption.top = "250";
-var expandedSpinnerOption = {
-	lines: 11, length: 9, width: 3, radius: 15, corners: 1, rotate: 0, direction: 1, color: "#222", speed: 1, trail: 42, shadow: false, hwaccel: false, className: "spinner", zIndex: 2e9, top: "15", left: "auto"
-};
-
 var spinner = new Spinner(mainSpinnerOption).spin(document.getElementById("loading-screen"));
-
 
 $(document).ready(function() {
 
-	//Tweakable params
-	var COURSE_LIMIT = 5;  // how many courses are loaded initially
-	var COURSE_BATCH_SIZE = 5;  // how many more courses are loaded when page end is reached
-
-	//Cached selectors
+	// Cached selectors
 	var $searchBar = $("#search input");
 	var $searchResults = $("#subject-results, #course-results, #results-count");
 	var $resultCount = $("#results-count");
 	var $subjectResults = $("#subject-results");
 	var $courseResults = $("#course-results");
 
+	// State trackers
 	var loadedCourses = 0;
 	var prevSearch = "";
-
-	//State enum
-	var pageState = {
-	    MAIN_SEARCH: 0,
-	    COURSE_DETAILS: 1
-	}
-
 	var currentState = pageState.MAIN_SEARCH;
 
-	var subjectToIconMap = {
-		"AFM": "money", "ACTSC": "bar-chart", "ANTH": "man-woman", "AHS": "dropper", "APPLS": "japanese", "AMATH": "calculator", "ARCH": "tower", "ARTS": "pen", "ARBUS": "business-person", "AVIA": "airplane", "BIOL": "microscope", "BUS": "business-person", "BET": "idea", "CHE": "fire", "CHEM": "beaker", "CHINA": "chinese", "CMW": "church", "CIVE": "road", "CLAS": "ankh", "CO": "puzzle", "COMM": "money", "CS": "console", "COOP": "work", "CROAT": "translation", "DAC": "film", "DRAMA": "mask", "DUTCH": "translation", "EARTH": "earth", "EASIA": "china-map", "ECON": "line-chart", "ECE": "chip", "ENGL": "pen", "ESL": "translation", "ENBUS": "recycle", "ERS": "recycle", "ENVE": "recycle", "ENVS": "recycle", "FINE": "palette", "FR": "translation", "GENE": "hard-hat", "GEOG": "globe", "GEOE": "mountain", "GER": "translation", "GERON": "aging", "GBDA": "film", "GRK": "translation", "HLTH": "first-aid", "HRM": "people", "HUMSC": "man-woman", "INDEV": "earth", "INTST": "earth", "INTTS": "earth", "ITAL": "translation", "JAPAN": "japanese", "JS": "jewish", "KIN": "run", "KOREA": "translation", "LAT": "translation", "LS": "gavel", "MATBUS": "business-person", "MSCI": "organize", "MNS": "atom", "MATH": "calculator", "MTHEL": "calculator", "ME": "gear", "MTE": "gear", "MEDVL": "ankh", "MUSIC": "music", "NE": "atom", "NATST": "native", "OPTOM": "eye", "PACS": "peace", "PHARM": "pill", "PHIL": "thinking", "PHYS": "atom", "PLAN": "plan", "POLSH": "translation", "PSCI": "congress", "PORT": "translation", "PD": "wtf", "PDPHRM": "wtf", "PSYCH": "brain", "PMATH": "infinity", "REC": "island", "RS": "church", "RUSS": "translation", "SCI": "magnet", "SCBUS": "magnet", "SMF": "man-woman", "SDS": "network", "SOCWK": "network", "SWREN": "network", "STV": "network",  "SOC": "network", "SE": "console", "SPAN": "translation", "SPCOM": "speech", "STAT": "bar-chart", "SI": "islam", "SYDE": "rocket", "UNIV": "goose", "VCULT": "film", "WS": "female", "WKRPT": "wtf"
-	};
 
-	// Get the svg filename of a subject from mapping
-	function getIcon (subject) {
-		return subjectToIconMap[subject] || "generic";
+	// UI Rendering methods
+
+	// Display number of results found
+	function showSearchResult (courseCount, subjectCount) {
+		if (courseCount > 0) {
+			var text = "";
+
+			if (subjectCount > 1) {
+				text = "Found " + courseCount + " results in " + subjectCount + " subjects:";
+			} else if (courseCount > 1) {
+				text = "Found " + courseCount + " results:";
+			} else {
+				text = "Found 1 result:";
+			}
+
+			$resultCount.text(text);
+		}
 	}
 
 	// Load search results that are provided by the backend
@@ -56,7 +47,6 @@ $(document).ready(function() {
 				$subjectResults.append(generateHTML("subject", subject));
 			}
 		}
-
 		// Load courses (within limit)
 		for (var subject in results) {
 			for (var number in results[subject]) {
@@ -66,10 +56,12 @@ $(document).ready(function() {
 				}
 			}
 		}
+
 		loadedCourses = Math.min(numCourses, COURSE_LIMIT);
 		showSearchResult(numCourses, numSubjects);
 	}
 
+	// Load some more courses, amount depending on COURSE_BATCH_SIZE
 	function loadMoreCourses (results) {
 		var count = 0;
 		var end = false;
@@ -83,16 +75,12 @@ $(document).ready(function() {
 				if (count >= startIdx && count <= endIdx) {
 					$courseResults.append(generateHTML("course", subject, number));
 					loaded++;
-				} else if (count > endIdx) {
-					end = true;
-					break;
+				} else if (count > endIdx) {	
+					loadedCourses += loaded;
+					return;
 				}
 			}
-			if (end) {
-				break;
-			}
 		}
-
 		loadedCourses += loaded;
 	}
 
@@ -167,23 +155,6 @@ $(document).ready(function() {
 		courseDiv.find(".details").empty().append(html).slideDown(300);
 	}; 
 
-	// Display number of results found
-	function showSearchResult (courseCount, subjectCount) {
-		if (courseCount > 0) {
-			var text = "";
-
-			if (subjectCount > 1) {
-				text = "Found " + courseCount + " results in " + subjectCount + " subjects:";
-			} else if (courseCount > 1) {
-				text = "Found " + courseCount + " results:";
-			} else {
-				text = "Found 1 result:";
-			}
-
-			$resultCount.text(text);
-		}
-	}
-
 	// Generate HTML for a component
 	function generateHTML (component, subject, number) {
 		var id = subject + number || "";
@@ -200,23 +171,10 @@ $(document).ready(function() {
 		}
 	}			
 
-	function stopLoadingScreen () {
-		spinner.stop();
-		$searchBar.show();
-		$searchResults.show();
-		init();
-	}
-
-	function clearSearch () {		
-		document.title = "Home - UWaterloo Course Indexer";
-		$searchBar.val("");
-		$searchResults.empty();
-		currentState = pageState.MAIN_SEARCH;
-	}
 
 	// Handlers
 
-	// Enable search by listening to input on search bar
+	// Enable search by listening to "input" on search bar
 	function enableSearch () {
 		function checkChange () {
 			var newSearch = $searchBar.val();
@@ -242,11 +200,14 @@ $(document).ready(function() {
 					$searchResults.empty();
 				}
 			});		
-		} else {
+		}
+		// Use interval for IE since deletion doesn't trigger "input"
+		else {
 			setInterval(checkChange, 50);
 		}
 	}
 
+	// Load more courses when scrolled to the bottom
 	function attachScrollHandler () {
 		$(window).scroll(function() {  
 			if (withinDistanceFromPageBottom(100) && currentState === pageState.MAIN_SEARCH) {
@@ -255,6 +216,7 @@ $(document).ready(function() {
 		});
 	}
 
+	// Expand or close course when clicking on the course header
 	function attachCourseHandler () {
 		$courseResults.on("click", ".course .header", function (evt) {
 			if (!$(this).parent().hasClass("opened")) {
@@ -265,6 +227,29 @@ $(document).ready(function() {
 			evt.preventDefault();
 		});
 	}
+
+	// Helper methods
+
+	// Stop spinner and show components
+	function stopLoadingScreen () {
+		spinner.stop();
+		$searchBar.show();
+		$searchResults.show();
+		init();
+	}
+
+	function clearSearch () {		
+		document.title = "Home - UWaterloo Course Indexer";
+		$searchBar.val("");
+		$searchResults.empty();
+		currentState = pageState.MAIN_SEARCH;
+	}
+
+	// Get the svg filename of a subject from mapping
+	function getIcon (subject) {
+		return subjectToIconMap[subject] || "generic";
+	}
+
 
 	function init () {
 		function work () {
