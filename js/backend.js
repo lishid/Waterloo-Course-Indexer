@@ -114,13 +114,13 @@ var BACKEND = (function (object) {
 			}, function(data) {
 				console.log(data);
 				callback(data);
-			});
-			safeAjax({
-				url: "get.php?courses&subject=" + subject,
-				dataType: "json"
-			}, function(data) {
-				console.log(data);
-				courseDataCache[subject] = data;
+				safeAjax({
+					url: "get.php?courses&subject=" + subject,
+					dataType: "json"
+				}, function(data) {
+					console.log(data);
+					courseDataCache[subject] = data;
+				});
 			});
 		}
 	}
