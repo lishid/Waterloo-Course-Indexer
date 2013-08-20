@@ -109,12 +109,18 @@ var BACKEND = (function (object) {
 		}
 		else {
 			safeAjax({
+				url: "get.php?course&subject=" + subject + "&number=" + number,
+				dataType: "json"
+			}, function(data) {
+				console.log(data);
+				callback(data);
+			});
+			safeAjax({
 				url: "get.php?courses&subject=" + subject,
 				dataType: "json"
 			}, function(data) {
 				console.log(data);
 				courseDataCache[subject] = data;
-				callback(data[number]);
 			});
 		}
 	}
