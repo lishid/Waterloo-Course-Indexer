@@ -88,12 +88,12 @@ function generateCourseData($subject, $number) {
 	$data["coreqDesc"] = substr($data["coreqDesc"], 7);
 	$data["notes"] = substr($data["notes"], 7, strlen($data["notes"]) - 8);
 
-	$prereq = recursiveSplit(trim($data["prereqDesc"], "."));
+	$data["prereq"] = recursiveSplit(trim($data["prereqDesc"], "."));
 
-	if(count($prereq) > 0) {
-		utilAppendFile(getcwd() . "/cache/prereq", $subject . $number . "\n" . 
-			$data["prereqDesc"] . "\n" . print_r($prereq, true) . "\n\n");
-	}
+	// if(count($data["prereq"]) > 0) {
+	// 	utilAppendFile(getcwd() . "/cache/prereq", $subject . $number . "\n" . 
+	// 		$data["prereqDesc"] . "\n" . print_r($data["prereq"], true) . "\n\n");
+	// }
 
 	foreach($data as $key => $value) {
 		if(!$value) {
@@ -121,7 +121,7 @@ function getSubjectsIndex() {
 function generateSubjectCoursesData($subject) {
 	$index = getSubjectIndex($subject);
 	foreach($index as $key => $value) {
-		$index[$key] = generateCourseData($subject, $key);
+		$index[$key] = getCourseData($subject, $key);
 	}
 	return $index;
 }
