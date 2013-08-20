@@ -91,7 +91,8 @@ function generateCourseData($subject, $number) {
 	$prereq = recursiveSplit(trim($data["prereqDesc"], "."));
 
 	if(count($prereq) > 0) {
-		utilAppendFile(getcwd() . "/cache/prereq", $data["prereqDesc"] . "\n" . print_r($prereq, true) . "\n\n");
+		utilAppendFile(getcwd() . "/cache/prereq", $subject . $number . "\n" . 
+			$data["prereqDesc"] . "\n" . print_r($prereq, true) . "\n\n");
 	}
 
 	foreach($data as $key => $value) {
