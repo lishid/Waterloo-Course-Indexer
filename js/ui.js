@@ -177,17 +177,20 @@ $(document).ready(function() {
 		var department = BACKEND.getSubjectIndex(subject).department;
 		var courseTitle = BACKEND.getCourseIndex(subject, number).trunc(50);
 		return "<div class='course " + department + "' id='" + id + "'>" + 
-		"<div class='header'>" + icon + "<div class='title'>" + 
-		"<h2><span class='code'>" + subject + " " + number + "</span></h2>" + 
-		"<h3><span class='name'>" + courseTitle + "</span></h3>" + 
-		"</div></div><div class='details' style='display: none'></div></div>";
+			"<div class='header'>" + icon + "<div class='title'>" + 
+			"<h2><span class='code'>" + subject + " " + number + "</span></h2>" + 
+			"<h3><span class='name'>" + courseTitle + "</span></h3>" + 
+			"</div></div><div class='details' style='display: none'></div></div>";
 	}
 
 	function generateSmallCourseHTML (subject, number) {
 		var id = subject + number || "";
 		var icon = generateSubjectIconHTML(subject);
-		return "<a href='" + id + "'><div class='course small " + BACKEND.getSubjectIndex(subject).department + "' id='" + id + "'><div class='header'>" + icon + "<div class='title'><h2><span class='code'>" + subject + " " + number + "</span></h2></div></div></div></a>";
-		}
+		return "<a href='" + id + "'>" + 
+			"<div class='course small " + BACKEND.getSubjectIndex(subject).department + "' id='" + id + "'>" + 
+			"<div class='header'>" + icon + "<div class='title'>" + 
+			"<h2><span class='code'>" + subject + " " + number + "</span></h2>" + 
+			"</div></div></div></a>";
 	}
 
 	function generateSubjectIconHTML(subject) {
