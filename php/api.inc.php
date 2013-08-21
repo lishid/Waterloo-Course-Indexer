@@ -1,7 +1,6 @@
 <?php
 
 require_once("util.inc.php");
-require_once("common.inc.php");
 require_once("conf.inc.php");
 
 function apiBaseUrl() {
@@ -9,7 +8,7 @@ function apiBaseUrl() {
 }
 
 function apiDownloadPage($filename, $urlSuffix) {
-	$data = utilDownloadPage("/cache/api/raw/" . $filename, apiBaseUrl() . $urlSuffix);
+	$data = utilDownloadPage("/cache/raw/api/" . $filename, apiBaseUrl() . $urlSuffix);
 	return json_decode($data, true);
 }
 

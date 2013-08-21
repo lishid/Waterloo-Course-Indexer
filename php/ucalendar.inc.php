@@ -1,7 +1,6 @@
 <?php
 
 require_once("util.inc.php");
-require_once("common.inc.php");
 require_once("conf.inc.php");
 
 function ucalendarBaseUrl() {
@@ -17,12 +16,12 @@ function ucalendarSubjectUrl($subject) {
 }
 
 function ucalendarDownloadIndexPage() {
-	$data = utilDownloadPage("/cache/ucalendar/raw/index/index", ucalendarIndexUrl());
+	$data = utilDownloadPage("/cache/raw/ucalendar/index/index", ucalendarIndexUrl());
 	return $data;
 }
 
 function ucalendarDownloadSubjectPage($subject) {
-	$data = utilDownloadPage("/cache/ucalendar/raw/subject/" . $subject, ucalendarSubjectUrl($subject));
+	$data = utilDownloadPage("/cache/raw/ucalendar/subject/" . $subject, ucalendarSubjectUrl($subject));
 	return $data;
 }
 
@@ -41,7 +40,7 @@ function ucalendarGetCourseData($subject, $number) {
 }
 
 function ucalendarGetSubjectData($subject) {
-	$filename = getcwd() . "/cache/ucalendar/subject/" . $subject;
+	$filename = getcwd() . "/cache/index/ucalendar/subject/" . $subject;
 	$data = utilCacheGet($filename);
 	if(!$data) {
 		$data = ucalendarGenerateSubjectData($subject);

@@ -73,9 +73,9 @@ function generateCourseData($subject, $number) {
 	$ucalendarData = ucalendarGetCourseData($subject, $number);
 	$data = array_merge_assoc($apiData, $ucalendarData);
 
-	$data["offered"] = commonParseOfferedFromDescription($data["description"], $data["offered"]);
-	$data["offered"] = commonParseOfferedFromNote($data["notes"], $data["offered"]);
-	$data["offered"] = commonFinalizeOffered($data["offered"]);
+	$data["offered"] = parseOfferedFromDescription($data["description"], $data["offered"]);
+	$data["offered"] = parseOfferedFromNote($data["notes"], $data["offered"]);
+	$data["offered"] = array_filter(array_unique($data["offered"]));;
 
 	if(startsWith($data["prereqDesc"], "Prerequisite")) {
 		$data["prereqDesc"] = substr($data["prereqDesc"], 14);
@@ -124,6 +124,32 @@ function generateSubjectCoursesData($subject) {
 		$index[$key] = getCourseData($subject, $key);
 	}
 	return $index;
+}
+
+
+function parseOfferedFromDescription($description, $offered) {
+	preg_match("/\[([^\]]*)Offered: ([FWSJAM, ]*)\]/", $description, $matches);
+	if(count($matches) > 0) {
+		$terms = preg_split("/,/", $matches[count($matches) - 1]);
+		foreach($terms as $term) {
+			array_push($offered, trim($term));
+		}
+		for($i = count($matches) - 2; $i > 0; $i--) {
+			array_push($offered, $matches[$i]);
+		}
+	}
+	return $offered;
+}
+
+function parseOfferedFromNote($notes, $offered) {
+	preg_match("/Offered: ([FWSJAM, ]*)/", $notes, $matches);
+	if(count($matches) > 0) {
+		$terms = preg_split("/,/", $matches[1]);
+		foreach($terms as $term) {
+			array_push($offered, trim($term));
+		}
+	}
+	return $offered;
 }
 
 ?>
