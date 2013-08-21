@@ -158,18 +158,6 @@ $(document).ready(function() {
 		courseDiv.find(".details").empty().append(html).slideDown(300);
 	}; 
 
-	// This should now be deprecated. If needed, move small-course out of here or delete this function
-	// Otherwise, just delete it
-	// MAKE SURE you also delete .small if it's no longer needed
-	function generateHTML (component, subject, number) {
-		var id = subject + number || "";
-		var icon = "<div class='icon-wrapper'><div class='icon icon-" + getIcon(subject) + "'></div></div>";
-
-		if (component === "small-course") {
-			return "<a href='" + id + "'><div class='course small " + BACKEND.getSubjectIndex(subject).department + "' id='" + id + "'><div class='header'>" + icon + "<div class='title'><h2><span class='code'>" + subject + " " + number + "</span></h2></div></div></div></a>";
-		}
-	}
-
 	function generateSubjectHTML (subject) {
 		var icon = generateSubjectIconHTML(subject);
 		var subjectObject = BACKEND.getSubjectIndex(subject);
@@ -193,6 +181,13 @@ $(document).ready(function() {
 		"<h2><span class='code'>" + subject + " " + number + "</span></h2>" + 
 		"<h3><span class='name'>" + courseTitle + "</span></h3>" + 
 		"</div></div><div class='details' style='display: none'></div></div>";
+	}
+
+	function generateSmallCourseHTML (subject, number) {
+		var id = subject + number || "";
+		var icon = generateSubjectIconHTML(subject);
+		return "<a href='" + id + "'><div class='course small " + BACKEND.getSubjectIndex(subject).department + "' id='" + id + "'><div class='header'>" + icon + "<div class='title'><h2><span class='code'>" + subject + " " + number + "</span></h2></div></div></div></a>";
+		}
 	}
 
 	function generateSubjectIconHTML(subject) {
