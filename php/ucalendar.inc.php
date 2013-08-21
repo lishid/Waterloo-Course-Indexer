@@ -45,10 +45,10 @@ function ucalendarGetSubjectData($subject) {
 	$data = utilCacheGet($filename);
 	if(!$data) {
 		$data = ucalendarGenerateSubjectData($subject);
-		utilCacheWrite($filename, json_encode($data));
+		utilCacheWrite($filename, utilEncodeJson($data));
 	}
 	else {
-		$data = json_decode($data, true);
+		$data = utilDecodeJson($data, true);
 	}
 	return $data;
 }

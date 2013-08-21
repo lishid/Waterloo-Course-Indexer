@@ -15,10 +15,10 @@ function getAllSubjectIndex() {
 	if(!$data) {
 		$data = generateAllSubjectIndex($subject);
 		knatsort($data);
-		utilCacheWrite($filename, json_encode($data));
+		utilCacheWrite($filename, utilEncodeJson($data));
 	}
 	else {
-		$data = json_decode($data, true);
+		$data = utilDecodeJson($data, true);
 	}
 	return $data;
 }
@@ -40,10 +40,10 @@ function getSubjectIndex($subject) {
 	if(!$data) {
 		$data = generateSubjectIndex($subject);
 		knatsort($data);
-		utilCacheWrite($filename, json_encode($data));
+		utilCacheWrite($filename, utilEncodeJson($data));
 	}
 	else {
-		$data = json_decode($data, true);
+		$data = utilDecodeJson($data, true);
 	}
 	return $data;
 }
@@ -60,10 +60,10 @@ function getCourseData($subject, $number) {
 	$data = utilCacheGet($filename);
 	if(!$data) {
 		$data = generateCourseData($subject, $number);
-		utilCacheWrite($filename, json_encode($data));
+		utilCacheWrite($filename, utilEncodeJson($data));
 	}
 	else {
-		$data = json_decode($data, true);
+		$data = utilDecodeJson($data, true);
 	}
 	return $data;
 }
@@ -110,10 +110,10 @@ function getSubjectsIndex() {
 	if(!$data) {
 		$data = ucalendarGetSubjectsIndex();
 		knatsort($data);
-		utilCacheWrite($filename, json_encode($data));
+		utilCacheWrite($filename, utilEncodeJson($data));
 	}
 	else {
-		$data = json_decode($data, true);
+		$data = utilDecodeJson($data, true);
 	}
 	return $data;
 }

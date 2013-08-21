@@ -1,5 +1,19 @@
 <?php
 
+function utilEncodeJson($data) {
+	array_walk_recursive($data, function(&$value){
+		$value = utf8_encode($value);
+	});
+	return json_encode($data);
+}
+
+function utilDecodeJson($data) {
+	$data = json_decode($data, true);
+	array_walk_recursive($data, function(&$value){
+		$value = utf8_decode($value);
+	});
+	return $data;
+}
 
 function utilDownloadPage($filename, $url) {
 	$filename = getcwd() . $filename;
