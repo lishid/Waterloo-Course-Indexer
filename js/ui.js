@@ -249,7 +249,7 @@ $(document).ready(function() {
 		});
 		$toTop.click(function (evt) {
 			evt.preventDefault();
-			$(document).scrollTop(0);
+			$("body").animate({ scrollTop: 0 }, 300);
 		});
 	}
 
