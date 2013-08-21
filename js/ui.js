@@ -238,10 +238,10 @@ $(document).ready(function() {
 	// Load more courses when scrolled to the bottom
 	function attachScrollHandler () {
 		$(window).scroll(function() {  
-			if (withinDistanceFromPageBottom(100) && currentState === pageState.MAIN_SEARCH) {
+			if (withinDistanceFromPageBottom(LOAD_MORE_THRESHOLD) && currentState === pageState.MAIN_SEARCH) {
 				BACKEND.getCoursesByQuery($searchBar.val(), loadMoreCourses);
 			}
-			if ($(document).scrollTop() > 300) {
+			if ($(document).scrollTop() > BACK_TO_TOP_THRESHOLD) {
 				$toTop.fadeIn();
 			} else {
 				$toTop.fadeOut();

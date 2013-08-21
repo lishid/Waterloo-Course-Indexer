@@ -15,6 +15,8 @@ var expandedSpinnerOption = {
 // Tweakable params
 var COURSE_LIMIT = 5;  // how many courses are loaded initially
 var COURSE_BATCH_SIZE = 5;  // how many more courses are loaded when page end is reached
+var BACK_TO_TOP_THRESHOLD = 300;  // "back to top" button will appear after page is scrolled down this far
+var LOAD_MORE_THRESHOLD = 100;  // scrolling beyond this distance to page end loads more courses if present
 
 // State enum
 var pageState = {
