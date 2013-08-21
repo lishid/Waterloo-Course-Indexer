@@ -72,6 +72,9 @@ a {
 	margin-top: 1em;
 	padding: 0.5em 1em 0.5em 2.8em;
 	width: 100%;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
 	color: #00191C;
