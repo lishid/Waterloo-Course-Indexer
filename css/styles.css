@@ -185,6 +185,44 @@ a {
 	background-size: 6em 6em;
 }
 
+#back-to-top {
+	display: none;
+	position: fixed;
+	bottom: 10px;
+	right: 10%;
+	color: #777;
+	font-size: 1.8em;
+	text-align: center;
+	cursor: pointer;
+}
+
+#back-to-top p {
+	margin: ;
+}
+
+#back-to-top a {
+	text-decoration: none;
+}
+
+#back-to-top span {
+	width: 60px;
+	height: 60px;
+	display: block;
+	margin: 7px auto;
+	background: #ddd url("../img/svg/arrow-up.svg") no-repeat center center;
+	background-size: 50px;
+	background-position: 5px 5px;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	-webkit-transition: .5s;
+	-moz-transition: .5s;
+	transition: .5s;
+}
+#back-to-top a:hover span {
+	background-color: #AAA;
+}
+
 
 /* course page styles */
 

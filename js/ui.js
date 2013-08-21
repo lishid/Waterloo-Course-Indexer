@@ -8,6 +8,7 @@ $(document).ready(function() {
 	var $resultCount = $("#results-count");
 	var $subjectResults = $("#subject-results");
 	var $courseResults = $("#course-results");
+	var $toTop = $("#back-to-top");
 
 	// State trackers
 	var loadedCourses = 0;
@@ -240,6 +241,15 @@ $(document).ready(function() {
 			if (withinDistanceFromPageBottom(100) && currentState === pageState.MAIN_SEARCH) {
 				BACKEND.getCoursesByQuery($searchBar.val(), loadMoreCourses);
 			}
+			if ($(document).scrollTop() > 300) {
+				$toTop.fadeIn();
+			} else {
+				$toTop.fadeOut();
+			}
+		});
+		$toTop.click(function (evt) {
+			evt.preventDefault();
+			$(document).scrollTop(0);
 		});
 	}
 
