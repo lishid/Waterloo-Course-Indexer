@@ -45,19 +45,19 @@ $(document).ready(function() {
 
 		// Load subjects
 		if (numSubjects > 1) {
-			for (var subject in results) {
+			sortedEach(results, function(subject){
 				$subjectResults.append(generateSubjectHTML(subject));
-			}
+			});
 		}
 		// Load courses (within limit)
-		for (var subject in results) {
-			for (var number in results[subject]) {
+		sortedEach(results, function(subject){
+			sortedEach(results[subject], function(number){
 				numCourses++;
 				if (numCourses <= COURSE_LIMIT) {
 					$courseResults.append(generateCourseHTML(subject, number));
 				}
-			}
-		}
+			});
+		});
 
 		loadedCourses = Math.min(numCourses, COURSE_LIMIT);
 		showSearchResult(numCourses, numSubjects);
@@ -71,18 +71,17 @@ $(document).ready(function() {
 		var startIdx = loadedCourses + 1;
 		var endIdx = loadedCourses + COURSE_BATCH_SIZE - 1;
 
-		for (var subject in results) {
-			for (var number in results[subject]) {
+		sortedEach(results, function(subject){
+			sortedEach(results[subject], function(number){
 				count++;
 				if (count >= startIdx && count <= endIdx) {
 					$courseResults.append(generateCourseHTML(subject, number));
 					loaded++;
-				} else if (count > endIdx) {	
-					loadedCourses += loaded;
-					return;
+				} else if (count > endIdx) {
+					return true;
 				}
-			}
-		}
+			});
+		});
 		loadedCourses += loaded;
 	}
 
