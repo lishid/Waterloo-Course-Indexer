@@ -265,6 +265,13 @@ $(document).ready(function() {
 		});
 	}
 
+	function attachBackToHomeHandler () {
+		$("#page-header").click(function () {
+			window.location.hash = "";
+			clearSearch();
+		});
+	}
+
 	// Helper methods
 
 	// Stop spinner and show components
@@ -336,6 +343,7 @@ $(document).ready(function() {
 		enableSearch();
 		attachScrollHandler();
 		attachCourseHandler();
+		attachBackToHomeHandler();
 	}
 
 	BACKEND.registerUICallback(stopLoadingScreen);
