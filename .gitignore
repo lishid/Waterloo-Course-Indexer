@@ -2,3 +2,4 @@
 /cache
 /*.jsonp
 /phpmyadmin
+/css/.sass-cache
