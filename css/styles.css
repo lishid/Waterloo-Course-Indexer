@@ -93,7 +93,7 @@ a {
 }
 
 #search input, .course, .subject {
-	border: 1px solid #adadad;
+	border: 1px solid #999;
 	-webkit-box-shadow:  0 1px 1px rgba(0,0,0,0.2),inset -1px -1px 0 #fff;
 	box-shadow: 0 1px 1px rgba(0,0,0,0.2),inset -1px -1px 0 #fff;
 }
@@ -200,10 +200,6 @@ a {
 	cursor: pointer;
 }
 
-#back-to-top p {
-	margin: ;
-}
-
 #back-to-top a {
 	text-decoration: none;
 }
@@ -279,7 +275,7 @@ p.official-link, p.course-link {
 	width: 619px;
 	left: -11px;
 	top: -1px;
-	border: 1px solid #adadad;
+	border: 1px solid #999;
 	-webkit-border-radius: 0;
 	border-radius: 0;
 	-moz-user-select: text;
@@ -309,12 +305,48 @@ p.official-link, p.course-link {
 
 
 /* adjustments for smaller screen size */
-@media only screen and (max-width : 475px) {
-	header, #search, #course-results, #subject-results { width: 400px; }
-	h2 { font-size: 2.5em; }
-	h3 { font-size: 1.5em; }
+@media only screen and (max-width : 650px) {
+	header, #search, #results-count, #course-results, #subject-results, #noscript {
+		width: 400px;
+	}
+	.subject .header, .course .header {
+		width: 398px;
+	}
+	h1 {
+		font-size: 3em;
+	}
+	h2 {
+		font-size: 2.5em;
+	}
+	header h3 {
+		font-size: 2em;
+	}
+	h3 {
+		font-size: 1.8em;
+	}
+	.course .title {
+		margin: 0 0.5em 0 9.5em;
+		padding: 1em 0;
+	}
+
+	#back-to-top {
+		right: 10px;
+	}
+	#back-to-top p {
+		margin: 0;
+	}
+	#back-to-top a {
+		font-size: 0.6em;
+	}
+	#back-to-top span {
+		width: 40px;
+		height: 40px;
+		margin: 0 auto;
+		background-size: 30px;
+		background-position: 5px 5px;
+	}
 }
 
-@media only screen and (max-width : 425px) {
+@media only screen and (max-width : 550px) {
 	header, #search, #course-results, #subject-results { width: 350px; }
 }
