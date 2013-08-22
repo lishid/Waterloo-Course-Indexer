@@ -188,7 +188,7 @@ a {
 	display: none;
 	position: fixed;
 	bottom: 10px;
-	right: 10%;
+	right: 50px;
 	color: #777;
 	font-size: 1.8em;
 	text-align: center;
@@ -298,6 +298,47 @@ p.official-link, p.course-link {
 
 
 /* adjustments for smaller screen size */
+@media only screen and (max-width : 900px) {
+	header, #search, #results-count, #course-results, #subject-results, #noscript {
+		width: 500px;
+	}
+	.subject .header, .course .header {
+		width: 498px;
+	}
+	h1 {
+		font-size: 3em;
+	}
+	h2 {
+		font-size: 2.8em;
+	}
+	header h3 {
+		font-size: 2.2em;
+	}
+	h3 {
+		font-size: 1.8em;
+	}
+	.course .title {
+		padding: 1em 0;
+	}
+
+	#back-to-top {
+		right: 10px;
+	}
+	#back-to-top p {
+		margin: 0;
+	}
+	#back-to-top a {
+		font-size: 0.8em;
+	}
+	#back-to-top span {
+		width: 50px;
+		height: 50px;
+		margin: 0 auto;
+		background-size: 40px;
+		background-position: 5px 5px;
+	}
+}
+
 @media only screen and (max-width : 650px) {
 	header, #search, #results-count, #course-results, #subject-results, #noscript {
 		width: 400px;
