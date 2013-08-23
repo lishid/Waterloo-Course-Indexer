@@ -1,12 +1,31 @@
-/*
-Order:
-	1. Positioning
-	2. Display & Box Model
-	3. Color
-	4. Text
-	5. Interaction
-	6. Other
-*/
+/* Mixins */
+
+@mixin border-radius($radius) {
+	-webkit-border-radius: $radius;
+	-moz-border-radius: $radius;
+	border-radius: $radius;
+}
+
+@mixin transition($time, $effect: ease) {
+	-webkit-transition: all $time $effect;
+	-moz-transition: all $time $effect;
+	-ms-transition: all $time $effect;
+	-o-transition: all $time $effect;
+	transition: all $time $effect;
+}
+
+@mixin user-select($effect) {
+	-moz-user-select: text;
+	-webkit-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+}
+
+@mixin square($side) {
+	width: $side;
+	height: $side;
+}
+
 
 body {
 	background-color: #fefefe;
@@ -17,17 +36,21 @@ body {
 	overflow-y: scroll;
 }
 
-
-/* header styles */
+/* overall styles */
 
 header, #search, #results-count, #course-results, #subject-results, #noscript {
 	margin: 0 auto;
 	width: 600px;
 }
 
-header {
+header, .subject .header, .course .header, #back-to-top {
 	cursor: pointer;
+}
 
+
+/* header styles */
+
+header {
 	h1 {
 		margin: 1em 0 0 0;
 		text-align: center;
@@ -57,6 +80,7 @@ a {
 
 #noscript {
 	margin-top: 5em;
+
 	p {
 		font-size: 1.8em;
 	}
@@ -75,8 +99,7 @@ a {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
-	-webkit-border-radius: 10px;
-	border-radius: 10px;
+	@include border-radius(10px);
 	color: #00191C;
 	background-image: url('../img/svg/search.svg');
 	background-repeat: no-repeat;
@@ -99,7 +122,6 @@ a {
 	font-size: 2em;
 }
 
-
 /* subject and course styles*/
 
 #subject-results {
@@ -115,33 +137,22 @@ a {
 
 .subject, .course {
 	margin: 0.5em 0;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
+	@include border-radius(4px);
 }
 
 .subject .header, .course .header {
 	position: relative;
 	height: 8em;
 	width: 598px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	cursor: pointer;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	-webkit-transition: all 0.2s ease;
-	-moz-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;
-	-o-transition: all 0.2s ease;
-	transition: all 0.2s ease;
+	@include border-radius(4px);
+	@include user-select(none);
+	@include transition(.2s);
 }
 
 .subject .icon-wrapper, .course .icon-wrapper {
 	position: relative;
 	top: -1px;
-	height: 100%;
-	width: 8em;
+	@include square(8em);
 	border: 1px solid rgba(0,0,0,0.3);
 	-webkit-box-shadow: inset -1px -1px 0 rgba(255,255,255,0.3),inset 1px 1px 0 rgba(255,255,255,0.3);
 	box-shadow: inset -1px -1px 0 rgba(255,255,255,0.3),inset 1px 1px 0 rgba(255,255,255,0.3);
@@ -156,8 +167,6 @@ a {
 .subject .icon-wrapper {
 	right: -1px;
 	float: right;
-	-webkit-border-radius: 0 5px 5px 0;
-	border-radius: 0 5px 5px 0;
 }
 
 .course .title { 
@@ -172,14 +181,12 @@ a {
 .course .icon-wrapper {
 	left: -1px;
 	float: left;
-	-webkit-border-radius: 5px 0 0 5px;
-	border-radius: 5px 0 0 5px;
+	@include border-radius(5px 0 0 5px);
 }
 
 .icon {
 	margin: 1em;
-	height: 6em;
-	width: 6em;
+	@include square(6em);
 	background-repeat: no-repeat;
 	background-size: 6em 6em;
 }
@@ -192,7 +199,6 @@ a {
 	color: #777;
 	font-size: 1.8em;
 	text-align: center;
-	cursor: pointer;
 
 	a {
 		text-decoration: none;	
@@ -200,20 +206,15 @@ a {
 	a:hover span {
 		background-color: #AAA;
 	}
-	span {		
-		width: 60px;
-		height: 60px;
+	span {
+		@include square(60px);
 		display: block;
 		margin: 7px auto;
 		background: #ddd url("../img/svg/arrow-up.svg") no-repeat center center;
 		background-size: 50px;
 		background-position: 5px 5px;
-		-webkit-border-radius: 30px;
-		-moz-border-radius: 30px;
-		border-radius: 30px;
-		-webkit-transition: .5s;
-		-moz-transition: .5s;
-		transition: .5s;
+		@include border-radius(30px);
+		@include transition(0.5s);
 	}
 }
 
@@ -268,32 +269,29 @@ p.official-link, p.course-link {
 		left: -11px;
 		top: -1px;
 		border: 1px solid #999;
-		-webkit-border-radius: 0;
-		border-radius: 0;
-		-moz-user-select: text;
-		-webkit-user-select: text;
-		-ms-user-select: text;
-		user-select: text;
+		@include border-radius(0);
+		@include user-select(text);
 	}
 }
 
 /* CSS wrapper effect */
-.course.opened .header:before, .course.opened .header:after {
-	content: "";
-	position: absolute;
-	display: block;
-	border-style: solid;
-	border-color: #666 transparent transparent transparent;
-	bottom: -11px;
-}
-
-.course.opened .header:before {
-	border-width: 11px 0 0 11px;
-	left: -1px;
-}
-.course.opened .header:after {
-	border-width: 11px 11px 0 0;
-	right: -1px;
+.course.opened .header {
+	&:before, &:after {
+		content: "";
+		position: absolute;
+		display: block;
+		border-style: solid;
+		border-color: #666 transparent transparent transparent;
+		bottom: -11px;
+	}
+	&:before {
+		border-width: 11px 0 0 11px;
+		left: -1px;
+	}
+	&:after {
+		border-width: 11px 11px 0 0;
+		right: -1px;
+	}
 }
 
 
@@ -331,8 +329,7 @@ p.official-link, p.course-link {
 		font-size: 0.8em;
 	}
 	#back-to-top span {
-		width: 50px;
-		height: 50px;
+		@include square(50px);
 		margin: 0 auto;
 		background-size: 40px;
 		background-position: 5px 5px;
@@ -365,19 +362,19 @@ p.official-link, p.course-link {
 
 	#back-to-top {
 		right: 10px;
-	}
-	#back-to-top p {
-		margin: 0;
-	}
-	#back-to-top a {
-		font-size: 0.6em;
-	}
-	#back-to-top span {
-		width: 40px;
-		height: 40px;
-		margin: 0 auto;
-		background-size: 30px;
-		background-position: 5px 5px;
+
+		p {
+			margin: 0;
+		}
+		a {
+			font-size: 0.6em;
+		}
+		span {
+			@include square(40px);
+			margin: 0 auto;
+			background-size: 30px;
+			background-position: 5px 5px;
+		}
 	}
 }
 
