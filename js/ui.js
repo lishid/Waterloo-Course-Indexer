@@ -112,6 +112,7 @@ $(document).ready(function() {
 
 	// Load course details
 	function showCourse (course) {
+		showPrereq(course.prereq, "and");
 		function getHTML (section, limit) {
 			if (course[section] && limit) {
 				return "<h2>" + section.toTitleCase() + "</h2><p>" + course[section].trunc(limit) + "</p>";
@@ -155,7 +156,29 @@ $(document).ready(function() {
 			courseDiv.addClass("opened");
 		}
 		courseDiv.find(".details").empty().append(html).slideDown(300);
-	}; 
+	}
+
+	function showPrereq (prereq, rel) {
+		var size = Object.size(prereq);
+		if (typeof prereq === "string") {
+			// render the course
+			console.log(rel + " " + prereq);
+		} else if (typeof prereq === "object" && size > 0) {
+			if (prereq[0] !== "program" && prereq[0] !== "programexclude" && prereq[0] !== "level") {
+				if (prereq[0] === "or") {
+					if (size > 1) {
+						for (var i = 1; i < size; i++) {
+							showPrereq(prereq[i], "or");
+						}
+					}
+				} else {
+					for (var i = 0; i < size; i++) {
+						showPrereq(prereq[i], "and");
+					}
+				}
+			}
+		}
+	}
 
 	function generateSubjectHTML (subject) {
 		var icon = generateSubjectIconHTML(subject);
@@ -316,7 +339,7 @@ $(document).ready(function() {
 					}
 					// Valid subject
 					else {
-						document.title = subject + " course - UWaterloo Course Indexer";	
+						document.title = subject + " courses - UWaterloo Course Indexer";	
 						$searchBar.val(subject + " ").focus();
 						BACKEND.getCoursesByQuery($searchBar.val(), loadSearchResult);
 					}
