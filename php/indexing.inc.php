@@ -9,7 +9,7 @@ function clearCache() {
 	rrmdir(getcwd() . "/cache/index/");
 }
 
-function getAllSubjectIndex() {
+function getAllSubjectIndex($httpCache = false) {
 	$filename = getcwd() . "/cache/index/subjects-index";
 	$data = utilCacheGet($filename);
 	if(!$data) {
@@ -18,6 +18,9 @@ function getAllSubjectIndex() {
 		utilCacheWrite($filename, utilEncodeJson($data));
 	}
 	else {
+		if($httpCache) {
+			utilCheckCache($filename);
+		}
 		$data = utilDecodeJson($data, true);
 	}
 	return $data;
@@ -34,7 +37,7 @@ function generateAllSubjectIndex() {
 	return $courseIndex;
 }
 
-function getSubjectIndex($subject) {
+function getSubjectIndex($subject, $httpCache = false) {
 	$filename = getcwd() . "/cache/index/subject-index/" . $subject;
 	$data = utilCacheGet($filename);
 	if(!$data) {
@@ -43,6 +46,9 @@ function getSubjectIndex($subject) {
 		utilCacheWrite($filename, utilEncodeJson($data));
 	}
 	else {
+		if($httpCache) {
+			utilCheckCache($filename);
+		}
 		$data = utilDecodeJson($data, true);
 	}
 	return $data;
@@ -55,7 +61,7 @@ function generateSubjectIndex($subject) {
 	return $data;
 }
 
-function getCourseData($subject, $number) {
+function getCourseData($subject, $number, $httpCache = false) {
 	$filename = getcwd() . "/cache/index/course/" . $subject . "/" . $number;
 	$data = utilCacheGet($filename);
 	if(!$data) {
@@ -63,6 +69,9 @@ function getCourseData($subject, $number) {
 		utilCacheWrite($filename, utilEncodeJson($data));
 	}
 	else {
+		if($httpCache) {
+			utilCheckCache($filename);
+		}
 		$data = utilDecodeJson($data, true);
 	}
 	return $data;
@@ -104,7 +113,7 @@ function generateCourseData($subject, $number) {
 	return $data;
 }
 
-function getSubjectsIndex() {
+function getSubjectsIndex($httpCache = false) {
 	$filename = getcwd() . "/cache/index/subjects";
 	$data = utilCacheGet($filename);
 	if(!$data) {
@@ -113,6 +122,9 @@ function getSubjectsIndex() {
 		utilCacheWrite($filename, utilEncodeJson($data));
 	}
 	else {
+		if($httpCache) {
+			utilCheckCache($filename);
+		}
 		$data = utilDecodeJson($data, true);
 	}
 	return $data;

@@ -1,5 +1,33 @@
 <?php
 
+function utilCheckCache($filename) {
+	// Get the modification timestamp
+	$lastModified = filemtime($filename);
+	$time = gmdate('D, d M Y H:i:s', $lastModified).' GMT';
+	// Build our entity tag
+	$eTag = "ci-".dechex(crc32($filename . $lastModified));
+	$modifiedSince = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
+	$noneMatch = $_SERVER['HTTP_IF_NONE_MATCH'];
+
+	if ((strpos($noneMatch, $eTag)) && ($time == $modifiedSince)) {
+		// They already have an up to date copy so tell them
+		header('HTTP/1.1 304 Not Modified');
+		header('Cache-Control: private');
+		header("Pragma: ");
+		header('Expires: ');
+		header('Content-Type: ');
+		header('ETag: "'.$eTag.'"');
+		exit;
+	} else {
+		// We have to send them the whole page
+		header('Cache-Control: private');
+		header('Pragma: ');
+		header('Expires: ');
+		header('Last-Modified: '.$time);
+		header('ETag: "'.$eTag.'"');
+	}
+}
+
 function utilEncodeJson($data) {
 	array_walk_recursive($data, function(&$value){
 		$value = utf8_encode($value);

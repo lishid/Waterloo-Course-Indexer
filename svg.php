@@ -12,6 +12,9 @@ function getSVGs($filename, $folder) {
 		$data = json_encode($data);
 		utilCacheWrite($filename, $data);
 	}
+	else {
+		utilCheckCache($filename);
+	}
 	return $data;
 }
 
