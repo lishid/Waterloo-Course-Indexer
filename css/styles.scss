@@ -201,7 +201,7 @@ a {
 	text-align: center;
 
 	a {
-		text-decoration: none;	
+		text-decoration: none;  
 	}
 	a:hover span {
 		background-color: #AAA;
@@ -252,42 +252,39 @@ p.official-link, p.course-link {
 	text-decoration: underline;
 }
 
+
 /* experimental styles with pre-req tree */
 
 .pre-reqs {
-    width: 1000px;
-    height: 8em;
-    margin-left: -100px;
+	width: 1000px;
+	height: 8em;
+	margin-left: -100px;
 }
 
-.small, .small .header {
-    width: 15em;
-    height: 5em;
-    margin-right: 2em;
-    float: left;
+.small {
+	width: 15em;
+	height: 5em;
+	margin-right: 2em;
+	float: left;
+	
+	.title {
+		margin: 0 1em 0 6.5em; 
+		padding: 0.75em 0;
+	}
+	h2 {
+		font-size: 2.6em;
+	}
+	.icon-wrapper {
+		@include square(5em);
+	}
+	.icon {
+		margin: 0.5em;
+		@include square(4em);
+		background-repeat: no-repeat;
+		background-size: 4em 4em;
+	}
 }
 
-.small.course .title {
-    margin: 0 1em 0 6.5em; 
-    padding: 0.75em 0;
-}
-
-.small.course h2 {
-    font-size: 2.6em;
-}
-
-.small.course .icon-wrapper {
-    height: 5em;
-    width: 5em;
-}
-
-.small .icon {
-    margin: 0.5em;
-    height: 4em;
-    width: 4em;
-    background-repeat: no-repeat;
-    background-size: 4em 4em;
-}
 
 /* opened course styles */
 
