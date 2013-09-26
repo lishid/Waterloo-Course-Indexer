@@ -29,18 +29,22 @@ function utilCheckCache($filename) {
 }
 
 function utilEncodeJson($data) {
-	array_walk_recursive($data, function(&$value){
-		$value = utf8_encode($value);
-	});
+	array_walk_recursive($data, utf8Encode);
 	return json_encode($data);
+}
+
+function utf8Encode(&$value){
+	$value = utf8_encode($value);
 }
 
 function utilDecodeJson($data) {
 	$data = json_decode($data, true);
-	array_walk_recursive($data, function(&$value){
-		$value = utf8_decode($value);
-	});
+	array_walk_recursive($data, utf8Decode);
 	return $data;
+}
+
+function utf8Decode(&$value){
+	$value = utf8_decode($value);
 }
 
 function utilDownloadPage($filename, $url) {
@@ -133,28 +137,28 @@ function array_merge_assoc_recursive() {
 }
 
 function rrmdir($dir) {
-    foreach(glob($dir . '/*') as $file) {
-        if(is_dir($file))
-            rrmdir($file);
-        else
-            unlink($file);
-    }
-    rmdir($dir);
+	foreach(glob($dir . '/*') as $file) {
+		if(is_dir($file))
+			rrmdir($file);
+		else
+			unlink($file);
+	}
+	rmdir($dir);
 }
 
 function startsWith($haystack, $needle)
 {
-    return !strncmp($haystack, $needle, strlen($needle));
+	return !strncmp($haystack, $needle, strlen($needle));
 }
 
 function endsWith($haystack, $needle)
 {
-    $length = strlen($needle);
-    if ($length == 0) {
-        return true;
-    }
+	$length = strlen($needle);
+	if ($length == 0) {
+		return true;
+	}
 
-    return (substr($haystack, -$length) === $needle);
+	return (substr($haystack, -$length) === $needle);
 }
 
 function is_assoc($array) {
@@ -173,18 +177,18 @@ function trimArray($array) {
 }
 
 function strallpos($haystack, $needle, $offset = 0){ 
-    $result = array();
-    for($i = $offset; $i < strlen($haystack); $i++){ 
-        $pos = strpos($haystack , $needle , $i); 
-        if($pos !== FALSE){ 
-            $offset =  $pos; 
-            if($offset >= $i){ 
-                $i = $offset; 
-                $result[] = $offset; 
-            } 
-        } 
-    } 
-    return $result; 
+	$result = array();
+	for($i = $offset; $i < strlen($haystack); $i++){ 
+		$pos = strpos($haystack , $needle , $i); 
+		if($pos !== FALSE){ 
+			$offset =  $pos; 
+			if($offset >= $i){ 
+				$i = $offset; 
+				$result[] = $offset; 
+			} 
+		} 
+	} 
+	return $result; 
 }
 
 ?>
