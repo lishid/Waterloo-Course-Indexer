@@ -1,12 +1,12 @@
 /* Mixins */
 
-@mixin border-radius($radius) {
+@mixin border-radius ($radius) {
 	-webkit-border-radius: $radius;
 	-moz-border-radius: $radius;
 	border-radius: $radius;
 }
 
-@mixin transition($time, $effect: ease) {
+@mixin transition ($time, $effect: ease) {
 	-webkit-transition: all $time $effect;
 	-moz-transition: all $time $effect;
 	-ms-transition: all $time $effect;
@@ -14,14 +14,14 @@
 	transition: all $time $effect;
 }
 
-@mixin user-select($effect) {
-	-moz-user-select: text;
-	-webkit-user-select: text;
-	-ms-user-select: text;
-	user-select: text;
+@mixin user-select ($effect) {
+	-moz-user-select: $effect;
+	-webkit-user-select: $effect;
+	-ms-user-select: $effect;
+	user-select: $effect;
 }
 
-@mixin square($side) {
+@mixin square ($side) {
 	width: $side;
 	height: $side;
 }
@@ -51,10 +51,21 @@ header, .subject .header, .course .header, #back-to-top {
 /* header styles */
 
 header {
+	position: relative;
+	height: 11em;
+	background-image: url('../img/svg/goose.svg');
+	background-repeat: no-repeat;
+	background-size: 6em;
+	background-position: 34em 2em;
+
 	h1 {
-		margin: 1em 0 0 0;
+		width: 60%;
+		margin-top: 1em;
+		margin-left: 12.5%;
 		text-align: center;
-		font-family: "Sansita One", "Times New Roman", serif;
+		line-height: 1em;
+		font-family: "Montserrat", "Times New Roman", serif;
+		letter-spacing: 2px;
 	}
 	h3 {
 		margin: 0.5em 0 1em 0;
@@ -76,6 +87,45 @@ h3 { font-size: 2em; }
 
 a {
 	color: inherit;
+}
+
+
+/* navbar */
+nav {
+	position: absolute;
+	top: 0em;
+	right: 0em;
+	font-size: 2em;
+
+	ul {
+		margin: 0 auto;
+		list-style: none;
+		font-size: 0.9em;
+
+		li {
+			text-align: right;
+			border-top: 1px solid #111;
+			padding: 2px 10px;
+
+			&.current {
+				font-weight: bold;
+				border-right: 5px solid #111;
+			}
+
+			&:last-child {
+				border-bottom: 1px solid #111;
+			}
+
+			a {
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+footer {
+	text-align: center;
+	font-size: 1.6em;
 }
 
 #noscript {
@@ -255,20 +305,24 @@ p.official-link, p.course-link {
 
 /* experimental styles with pre-req tree */
 
-.pre-reqs {
+#prereq {
 	width: 1000px;
 	height: 8em;
 	margin-left: -100px;
 }
 
 .small {
-	width: 15em;
+	width: 150px;
 	height: 5em;
 	margin-right: 2em;
 	float: left;
 	
+	.header {	
+		width: 150px;
+		height: 5em;
+	}
 	.title {
-		margin: 0 1em 0 6.5em; 
+		margin: 0 0 0 6em; 
 		padding: 0.75em 0;
 	}
 	h2 {
