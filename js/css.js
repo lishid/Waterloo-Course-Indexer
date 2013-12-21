@@ -25,9 +25,9 @@ function loadCSSToPage(css) {
 loadAllCssGradients();
 
 function loadAllCssGradients() {
-	loadCSSToPage(generateCssGradient(".course", 0, [100, 0], [90, 0]));
-	loadCSSToPage(generateCssGradient(".course .header:hover", 0, [94, 0], [90, 0]));
-	loadCSSToPage(generateCssGradient(".course .header:active", 0, [84, 0], [92, 0]));
+	loadCSSToPage(generateCssGradient(".course, .note", 0, [100, 0], [90, 0]));
+	loadCSSToPage(generateCssGradient(".course .header:hover, .note .header:hover", 0, [94, 0], [90, 0]));
+	loadCSSToPage(generateCssGradient(".course .header:active, .note .header:active", 0, [84, 0], [92, 0]));
 	loadCssGradientSat("ART", 33, 100, 100, 10, 20, 30, 60);
 	loadCssGradientSat("REN", 33, 100, 100, 10, 20, 30, 60);
 	loadCssGradientSat("WLU", 33, 100, 100, 10, 20, 30, 60);

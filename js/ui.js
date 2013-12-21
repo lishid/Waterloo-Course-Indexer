@@ -9,6 +9,9 @@ $(document).ready(function() {
 	var $subjectResults = $("#subject-results");
 	var $courseResults = $("#course-results");
 	var $toTop = $("#back-to-top");
+	var $navbarItems = $("nav ul li");
+	var $pages = $(".page");
+	var $notes = $(".page.notes");
 
 	// State trackers
 	var loadedCourses = 0;
@@ -83,6 +86,23 @@ $(document).ready(function() {
 			});
 		});
 		loadedCourses += loaded;
+	}
+
+	function loadNotes (notesData) {
+		for (var author in notesData) {
+			$notes.append("<h2>Notes by " + author + "</h2>");
+			var current = notesData[author];
+			if (current.useFormat) {
+				for (var i = 0; i < current.courses.length; i++) {
+					var course = current.courses[i];
+					$notes.append(generateNoteHTML(course, author, current.format(course)));
+				}
+			} else {
+				for (var course in current.urls) {
+					$notes.append(generateNoteHTML(course, author, current.urls[course]));
+				}
+			}
+		}
 	}
 
 	// Expand the course without changing the hash
@@ -219,6 +239,16 @@ $(document).ready(function() {
 		return "<div class='icon-wrapper'><div class='icon icon-" + getIcon(subject) + "'></div></div>";
 	}
 
+	function generateNoteHTML (course, author, url) {	
+		var result = course.match(/([A-Za-z]+)\s*(.*)/);
+		var subject = result[1];
+		var number = result[2];
+		var courseTitle = BACKEND.getCourseIndex(subject, number);
+		var department = BACKEND.getSubjectIndex(subject).department;
+		var icon = generateSubjectIconHTML(subject);
+        return "<div class='note " + department + "'><a href='" + url + "'><div class='header'>" + icon + "<div class='title'><h2><span class='code'>" + subject + " " + number + "</span></h2><h3><span class='name'>" + courseTitle + "</span></h3></div></div></a></div>";
+	}
+
 
 	// Handlers
 
@@ -292,6 +322,18 @@ $(document).ready(function() {
 		});
 	}
 
+	function attachNavbarHandler () {
+		$navbarItems.each(function () {
+			$(this).click(function (evt) {
+				var destPageName = $(this).attr("data-name");
+				showPage(destPageName);
+				$navbarItems.removeClass("current");
+				$(this).addClass("current");
+				evt.preventDefault();
+			});
+		});
+	}
+
 	// Helper methods
 
 	// Stop spinner and show components
@@ -312,6 +354,11 @@ $(document).ready(function() {
 	// Get the svg filename of a subject from mapping
 	function getIcon (subject) {
 		return subjectToIconMap[subject] || "generic";
+	}
+
+	function showPage (pageName) {
+		$pages.hide();
+		$(".page."+pageName).show();
 	}
 
 
@@ -361,6 +408,8 @@ $(document).ready(function() {
 		work();
 		window.addEventListener("hashchange", work);
 		enableSearch();
+		loadNotes(notesData);
+		attachNavbarHandler();
 		attachScrollHandler();
 		attachCourseHandler();
 		attachBackToHomeHandler();
