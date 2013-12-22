@@ -5,6 +5,7 @@ var subjectToIconMap = {
 var notesData = {
     "Chris Thomson": {
         useFormat: true,
+        source: "http://cthomson.ca/notes",
         format: function (course) { 
             return "http://notes.cthomson.ca/dl/latest/" + course.toLowerCase() + ".pdf";
         },
@@ -12,6 +13,7 @@ var notesData = {
     },
     "Liam Horne": {
         useFormat: true,
+        source: "http://lihorne.wordpress.com/resources/",
         format: function (course) {
             return "https://csclub.uwaterloo.ca/~lihorne/" + course.toLowerCase() + "coursenotes.pdf";
         },
@@ -19,6 +21,7 @@ var notesData = {
     },
     "Tim Pei": {
         useFormat: false,
+        source: "https://csclub.uwaterloo.ca/~y5pei/",
         urls: {
             "MATH239": "http://csclub.uwaterloo.ca/~y5pei/projects/notes/Year%202B/Math%20239.htm",
             "CO250": "http://csclub.uwaterloo.ca/~y5pei/projects/notes/Year%202B/CO%20250.htm",
@@ -31,10 +34,42 @@ var notesData = {
     },
     "Anthony Zhang": {
         useFormat: true,
+        source: "http://uberi.github.io/University-Notes/",
         format: function (course) {
             return "http://uberi.github.io/University-Notes/" + course + "/" + course + ".html";
         },
         courses: [ "MATH135", "MATH137", "PHIL110A", "ECON101", "CS135" ]
+    },
+    "Janis Lazovskis": {
+        useFormat: false,
+        source: "http://www.jlazovskis.com/en/cours.html",
+        urls: {
+            "MATH145": "http://www.jlazovskis.com/docs-ugrad/m145.pdf",
+            "MATH146": "http://www.jlazovskis.com/docs-ugrad/m146.pdf",
+            "MATH245": "http://www.jlazovskis.com/docs-ugrad/m245.pdf",
+            "MATH247": "http://www.jlazovskis.com/docs-ugrad/m247.pdf",
+            "MATH249": "http://www.jlazovskis.com/docs-ugrad/m249.pdf",
+            "PMATH345": "http://www.jlazovskis.com/docs-ugrad/pm345.pdf",
+            "PMATH346": "http://www.jlazovskis.com/docs-ugrad/pm346.pdf",
+            "PMATH351": "http://www.jlazovskis.com/docs-ugrad/pm351.pdf",
+            "PMATH352": "http://www.jlazovskis.com/docs-ugrad/pm352.pdf",
+            "PMATH365": "http://www.jlazovskis.com/docs-ugrad/pm365.pdf",
+            "PMATH432": "http://www.jlazovskis.com/docs-ugrad/pm432.pdf",
+            "PMATH450": "http://www.jlazovskis.com/docs-ugrad/pm450.pdf",
+            "PMATH467": "http://www.jlazovskis.com/docs-ugrad/pm467.pdf",
+            "PMATH665": "http://www.jlazovskis.com/docs-mgrad/pm665.pdf",
+            "PMATH745": "http://www.jlazovskis.com/docs-mgrad/pm745.pdf",
+            "PMATH955": "http://www.jlazovskis.com/docs-mgrad/pm955.pdf"
+        }
+    },
+    "Sampson Chen": {
+        useFormat: false,
+        source: "http://sampsonchen.com/",
+        urls: {
+            "SMF204": "https://docs.google.com/document/d/1Y8pLt4K0TdwKYBY5I2t-LcjqK7v3nLx1if9Wfn06jXM/edit",
+            "ENGL109": "http://sampsonchen.com/2013/01/22/engl-109-lecture-notes-uwaterloo-winter-2013/",
+            "PHIL215": "http://sampsonchen.com/2012/09/13/phil-215-lecture-notes-uwaterloo-fall-2012-professor-brian-orend/"
+        }
     }
 };
 

@@ -90,8 +90,8 @@ $(document).ready(function() {
 
 	function loadNotes (notesData) {
 		for (var author in notesData) {
-			$notes.append("<h2>Notes by " + author + "</h2>");
 			var current = notesData[author];
+			$notes.append("<h3>Notes by <a href='" + current.source + "'>" + author + "</a></h3>");
 			if (current.useFormat) {
 				for (var i = 0; i < current.courses.length; i++) {
 					var course = current.courses[i];

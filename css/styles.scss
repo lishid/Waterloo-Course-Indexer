@@ -89,10 +89,6 @@ a {
 	color: inherit;
 }
 
-.note a {
-	text-decoration: none;
-}
-
 
 /* navbar */
 nav {
@@ -284,11 +280,15 @@ footer {
 }
 
 .notes {
-	.intro {
+	p {
 		font-size: 1.8em;
 	}
-	& > h2 {
+	& > h3 {
+		font-size: 2.5em;
 		margin-top: 1em;
+	}
+	.note a {
+		text-decoration: none;
 	}
 }
 
